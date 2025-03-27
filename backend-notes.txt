@@ -1,0 +1,24 @@
+backend/                     # Backend (Node.js + Express + MySQL)
+│── node_modules/             # Backend dependencies
+│── config/                   # Configuration files (DB connection, etc.)
+│   ├── db.js                 # MySQL Database connection
+│── controllers/              # Business logic for API routes
+│   ├── userController.js     # User-related API logic
+│   ├── orderController.js    # Order-related API logic
+│── middleware/               # Custom middleware (auth, logging, etc.)
+│   ├── authMiddleware.js     # Protects routes (JWT verification)
+│── models/                   # Database models (tables)
+│   ├── User.js               # User model (table structure)
+│   ├── Order.js              # Order model
+│── routes/                   # API routes
+│   ├── userRoutes.js         # Routes related to users
+│   ├── orderRoutes.js        # Routes related to orders
+│── utils/                    # Helper functions
+│   ├── generateToken.js      # JWT token generator
+│── logs/                     # API request logs
+│── .env                      # Environment variables
+│── .gitignore                # Ignore sensitive files
+│── server.js                 # Main backend entry point
+│── package.json              # Backend dependencies
+│── package-lock.json         # Backend dependency lock file
+│── README.md                 # Backend documentation

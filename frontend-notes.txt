@@ -1,0 +1,63 @@
+FOLDER STRUCTURE:
+
+frontend/
+│── src/
+│   ├── assets/             # Static images, logos, icons
+│   ├── components/         # Reusable UI components (buttons, modals, etc.)
+│   ├── pages/              # Page components (Home, Login, Dashboard)
+│   │   ├── client/         # Client-side pages (customer)
+│   │   ├── admin/          # Admin-side pages (dashboard, analytics)
+│   ├── context/            # Context API (or Redux store if used)
+│   ├── services/           # API calls (fetch data from backend)
+│   ├── utils/              # Helper functions (price calculations, authentication)
+│   ├── App.js              # Main component
+│   ├── index.js            # Entry point
+│   ├── tailwind.config.js  # Tailwind configuration
+│   ├── routes.js           # All routes configuration
+
+
+WHOLE FOLDER STRUCTURE:
+
+BREWCRAFTER-FINAL-PROJECT/
+│── backend/                     # Backend (Node.js + Express + MySQL)
+│   │── node_modules/             # Backend dependencies
+│   │── .env                      # Environment variables
+│   │── package.json              # Backend package manager file
+│   │── package-lock.json         # Backend dependency lock file
+│   └── server.js                 # Main backend entry point
+│
+│── frontend/                     # Frontend (React + Vite + Tailwind CSS)
+│   │── node_modules/             # Frontend dependencies
+│   │── public/                   # Static assets (favicons, images, etc.)
+│   │── src/                      # Source code directory
+│   │   │── assets/               # Static assets (images, icons, etc.)
+│   │   │── components/           # Reusable React components (buttons, cards, ETC)
+│   │   │── layouts/              # Page layouts/wrappers
+│   │   │── pages/                # Pages/views (whole design)
+│   │   │   │── admin/            # Admin-related pages
+│   │   │   └── client/           # Customer-facing pages
+│   │   │── services/             # API services (fetch calls, etc.)
+│   │   │── utils/                # Helper functions/constants
+│   │   │── App.jsx               # Root React component
+│   │   │── index.js              # React entry point
+│   │   │── main.jsx              # Main application entry file
+│   │   └── routes.js             # App routing configuration
+│   │── index.html                # Main HTML file (Vite)
+│   │── vite.config.js            # Vite configuration
+│   │── eslint.config.js          # Linting rules
+│   │── .gitignore                # Git ignored files
+│   │── frontend-notes.txt        # Notes/documentation
+│   │── package.json              # Frontend package manager file
+│   │── package-lock.json         # Frontend dependency lock file
+│   └── README.md                 # Project documentation
+
+
+
+so the frontend folder structure is okay now for me, help me in structuring the backend folder which is currently in this state. i have no idea what this is and how to structure it
+
+│── backend/                     # Backend (Node.js + Express + MySQL)
+│   │── node_modules/             # Backend dependencies
+│   │── .env                      # Environment variables
+│   │── package.json              # Backend package manager file
+│   │── package-lock.json         # Backend dependency lock file
+│   └── server.js                 # Main backend entry point???
