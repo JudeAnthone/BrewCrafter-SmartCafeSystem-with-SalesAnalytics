@@ -1,0 +1,16 @@
+FOLDER STRUCTURE:
+
+frontend/
+│── src/
+│   ├── assets/             # Static images, logos, icons
+│   ├── components/         # Reusable UI components (buttons, modals, etc.)
+│   ├── pages/              # Page components (Home, Login, Dashboard)
+│   │   ├── client/         # Client-side pages (customer)
+│   │   ├── admin/          # Admin-side pages (dashboard, analytics)
+│   ├── context/            # Context API (or Redux store if used)
+│   ├── services/           # API calls (fetch data from backend)
+│   ├── utils/              # Helper functions (price calculations, authentication)
+│   ├── App.js              # Main component
+│   ├── index.js            # Entry point
+│   ├── tailwind.config.js  # Tailwind configuration
+│   ├── routes.js           # All routes configuration
