@@ -17,14 +17,37 @@ frontend/
 
 
 WHOLE FOLDER STRUCTURE:
-
 BREWCRAFTER-FINAL-PROJECT/
-│── backend/                     # Backend (Node.js + Express + MySQL)
-│   │── node_modules/             # Backend dependencies
-│   │── .env                      # Environment variables
-│   │── package.json              # Backend package manager file
-│   │── package-lock.json         # Backend dependency lock file
-│   └── server.js                 # Main backend entry point
+ backend/
+│── node_modules/             # Backend dependencies
+│── .env                      # Environment variables
+│── package.json              # Backend package manager file
+│── package-lock.json         # Backend dependency lock file
+│── server.js                 # Main backend entry point
+│── config/                   # Database & server configuration
+│   ├── db.js                 # MySQL database connection
+│   └── dotenvConfig.js        # Environment variable configuration
+│── routes/                   # API routes
+│   ├── authRoutes.js         # Authentication routes (login, register)
+│   ├── orderRoutes.js        # Order-related routes
+│   ├── productRoutes.js      # Product-related routes
+│   └── userRoutes.js         # User-related routes
+│── controllers/              # Logic for handling requests
+│   ├── authController.js     # Handles authentication logic
+│   ├── orderController.js    # Order management logic
+│   ├── productController.js  # Product-related logic
+│   └── userController.js     # User-related logic
+│── models/                   # Database models/schema
+│   ├── Order.js              # Order model
+│   ├── Product.js            # Product model
+│   └── User.js               # User model
+│── middlewares/              # Middleware functions (auth, validation, etc.)
+│   ├── authMiddleware.js     # JWT authentication middleware
+│   ├── errorHandler.js       # Error handling middleware
+│── utils/                    # Utility functions (helpers)
+│   ├── generateToken.js      # JWT token generator
+│── README.md                 # Backend documentation
+           
 │
 │── frontend/                     # Frontend (React + Vite + Tailwind CSS)
 │   │── node_modules/             # Frontend dependencies
@@ -52,12 +75,3 @@ BREWCRAFTER-FINAL-PROJECT/
 │   └── README.md                 # Project documentation
 
 
-
-so the frontend folder structure is okay now for me, help me in structuring the backend folder which is currently in this state. i have no idea what this is and how to structure it
-
-│── backend/                     # Backend (Node.js + Express + MySQL)
-│   │── node_modules/             # Backend dependencies
-│   │── .env                      # Environment variables
-│   │── package.json              # Backend package manager file
-│   │── package-lock.json         # Backend dependency lock file
-│   └── server.js                 # Main backend entry point???

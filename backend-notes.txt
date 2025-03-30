@@ -1,24 +1,41 @@
-backend/                     # Backend (Node.js + Express + MySQL)
-│── node_modules/             # Backend dependencies
-│── config/                   # Configuration files (DB connection, etc.)
-│   ├── db.js                 # MySQL Database connection
-│── controllers/              # Business logic for API routes
-│   ├── userController.js     # User-related API logic
-│   ├── orderController.js    # Order-related API logic
-│── middleware/               # Custom middleware (auth, logging, etc.)
-│   ├── authMiddleware.js     # Protects routes (JWT verification)
-│── models/                   # Database models (tables)
-│   ├── User.js               # User model (table structure)
-│   ├── Order.js              # Order model
-│── routes/                   # API routes
-│   ├── userRoutes.js         # Routes related to users
-│   ├── orderRoutes.js        # Routes related to orders
+backend/
+│── node_modules/             # Stores installed dependencies (auto-generated)
+│── .env                      # Stores sensitive environment variables (DB credentials, JWT secrets, etc.)
+│── package.json              # Defines project details & dependencies
+│── package-lock.json         # Locks dependency versions for consistency
+│── server.js                 # Main entry point of your backend
+│
+│── config/                   # Configuration files
+│   ├── db.js                 # Database connection setup
+│   └── dotenvConfig.js        # Loads environment variables from .env
+│
+│── routes/                   # API route definitions (handles incoming requests)
+│   ├── authRoutes.js         # Routes for login, register
+│   ├── orderRoutes.js        # Routes for order-related actions
+│   ├── productRoutes.js      # Routes for product-related actions
+│   └── userRoutes.js         # Routes for user-related actions
+│
+│── controllers/              # Business logic for handling requests
+│   ├── authController.js     # Logic for authentication (login, register)
+│   ├── orderController.js    # Logic for order management
+│   ├── productController.js  # Logic for product-related features
+│   └── userController.js     # Logic for user management
+│
+│── models/                   # Database models/tables
+│   ├── Order.js              # Represents orders in the database
+│   ├── Product.js            # Represents products in the database
+│   └── User.js               # Represents users in the database
+│
+│── middlewares/              # Functions that run before hitting controllers
+│   ├── authMiddleware.js     # Middleware for checking JWT authentication
+│   ├── errorHandler.js       # Middleware for handling errors
+│
 │── utils/                    # Helper functions
-│   ├── generateToken.js      # JWT token generator
-│── logs/                     # API request logs
-│── .env                      # Environment variables
-│── .gitignore                # Ignore sensitive files
-│── server.js                 # Main backend entry point
-│── package.json              # Backend dependencies
-│── package-lock.json         # Backend dependency lock file
+│   ├── generateToken.js      # Generates JWT tokens for authentication
+│
 │── README.md                 # Backend documentation
+
+
+
+Backend Flow:
+Frontend Request -> Express Route -> Controller -> Database -> Response
