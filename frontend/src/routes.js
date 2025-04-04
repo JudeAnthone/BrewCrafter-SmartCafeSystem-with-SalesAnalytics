@@ -1,16 +1,11 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Home from "./pages/client/Home";
-import Login from "./pages/Login";
-import Dashboard from "./pages/admin/Dashboard";
+import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
+import React from "react";
+import App from "./App";
+import Home from "./pages/Home";
+import Menu from "./pages/Menu";
+import ClientLogin from "./pages/client/Login";   
+import AdminLogin from "./pages/admin/Login";   
 
-export default function AppRoutes() {
-  return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/admin/dashboard" element={<Dashboard />} />
-      </Routes>
-    </Router>
-  );
-}
+
+
+ 

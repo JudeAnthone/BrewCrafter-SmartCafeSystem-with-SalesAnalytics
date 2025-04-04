@@ -1,2 +1,104 @@
 @import "tailwindcss";
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,100..1000;1,100..1000&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap");
+
+
+@theme {
+  /* 🎨 Coffee-Inspired Colors */
+  --color-primary: #3e2723; /* Dark Brown */
+  
+  --color-light-100: #f8e8d0; /* Cream */
+  --color-light-200: #e4c9a7; /* Latte */
+
+  --color-gray-100: #b5a397; /* Warm Gray */
+
+  --color-dark-100: #1e1b18; /* Deep Espresso */
+  
+  --font-dm-sans: "DM Sans", sans-serif;
+
+  --breakpoint-xs: 480px;
+
+  --background-image-hero-pattern: url("/coffee-texture-bg.png"); /* Replace with a coffee-themed texture */
+}
+
+
+@layer base {
+  body {
+    font-family: "DM Sans", sans-serif;
+    font-optical-sizing: auto;
+    background: var(--color-primary);
+  }
+
+  h1 {
+    @apply mx-auto max-w-4xl text-center text-5xl font-bold leading-tight tracking-[-1%] text-light-100 sm:text-[64px] sm:leading-[76px];
+  }
+
+  h2 {
+    @apply text-2xl font-bold text-light-200 sm:text-3xl;
+  }
+
+  main {
+    @apply min-h-screen relative bg-primary;
+  }
+
+  header {
+    @apply sm:mt-10 mt-5;
+  }
+}
+
+
+@layer components {
+  .pattern {
+    
+  }
+  
+  .wrapper {
+    @apply px-5 py-12 xs:p-10 max-w-7xl mx-auto flex flex-col relative z-10;
+  }
+
+  .search {
+    @apply w-full bg-light-100/10 px-4 py-3 rounded-lg mt-10 max-w-3xl mx-auto;
+
+    & div {
+      @apply relative flex items-center;
+    }
+
+    & img {
+      @apply absolute left-2 h-5 w-5;
+    }
+
+    & input {
+      @apply w-full bg-transparent py-2 sm:pr-10 pl-10 text-base text-dark-100 placeholder-light-200 outline-hidden;
+    }
+  }
+
+  .all-products {
+    @apply space-y-9;
+
+    & ul {
+      @apply grid grid-cols-1 gap-5 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4;
+    }
+  }
+
+}
+
+@utility text-gradient {
+  @apply bg-linear-to-r from-[#e4c9a7] to-[#b5a397] bg-clip-text text-transparent;
+}
+
+@utility fancy-text {
+  -webkit-text-stroke: 5px rgba(232, 202, 172, 0.5); /* Light coffee outline */
+  font-size: 190px;
+  font-family: "Bebas Neue", sans-serif;
+}
+
+@utility hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 
