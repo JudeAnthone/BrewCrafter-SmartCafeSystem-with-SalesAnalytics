@@ -163,3 +163,26 @@ const handleOrderSubmit = async () => {
     setError('Failed to place order');
   }
 };
+
+__________________________________________________________________________________________
+How the flow looks overall:
+
+You design the Menu.jsx frontend.
+
+Backend API (GET /api/menu) sends menu details (name, price, image_url).
+
+Frontend Menu.jsx fetches the menu.
+
+The img tag uses item.image_url to display the image.
+
+Where will the menu details be stored later?
+✅ Backend (Node.js + Express) will have an API route like:
+GET /api/menu
+✅ This API will fetch menu data from your MySQL database.
+
+✅ Database (MySQL) will have a menu table like this:
+
+id	name	price	image_url
+1	Caramel Latte	120	/uploads/caramel-latte.jpg
+2	Espresso	90	/uploads/espresso.jpg
+3	Matcha Latte	130	/uploads/matcha-latte.jpg

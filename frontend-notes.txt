@@ -59,3 +59,4 @@ BREWCRAFTER-FINAL-PROJECT/
 │   └── README.md                 # Project documentation
 
 
+all the reusable imports" framer motion, daisyUI, shadcn, material UI
