@@ -46,7 +46,8 @@ const Home = () => {
 						Immerse yourself in a world where coffee becomes art. Craft your coffee
 						experience, just the way you like it.
 					</motion.p>
-{/* SECTION 2 reusable button*/}
+					
+{/* SECTION 1 reusable button*/}
 					<Buttons 
 					text="Explore Menu"
 					bgColor="bg-[#cc6d2d]"
