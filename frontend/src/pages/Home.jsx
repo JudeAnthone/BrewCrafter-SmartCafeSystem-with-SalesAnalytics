@@ -4,6 +4,7 @@ import CraftImage from "../assets/food-sample.png";
 import { motion } from "framer-motion";
 import Divider from "../components/Divider";
 import Buttons from "../components/Buttons";
+import { useNavigate } from "react-router-dom";	
 
 
 const Home = () => {
@@ -17,7 +18,7 @@ const Home = () => {
 		},
 	};
     
-	
+	const navigate = useNavigate();
 	
 	return (
 		<div className="overflow-hidden">
@@ -57,7 +58,7 @@ const Home = () => {
 					bgColor="bg-[#cc6d2d]"
 					hoverColor="hover:bg-[#f8e8d0]"
 					textColor="text-[#3e2723]"
-					onClick={() => console.log("Explore Menu clicked!")}
+					onClick={() => navigate("/menu")}
 					/>
 					
 				</motion.div>
@@ -123,7 +124,7 @@ const Home = () => {
 					bgColor="bg-[#cc6d2d]"
 					hoverColor="hover:bg-[#f8e8d0]"
 					textColor="text-[#3e2723]"
-					onClick={() => console.log("Craft button is clicked!")}
+					onClick={() => navigate("/craft")}
 					/>
 				</motion.div>
                 

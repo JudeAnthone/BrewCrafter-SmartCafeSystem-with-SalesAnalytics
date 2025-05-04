@@ -27,7 +27,7 @@ const Cart = () => {
 	const updateQuantity = (itemId, newQuantity) => {
 		
 		if (newQuantity <= 0) { // if newQuantity is 0 or less, the item is removed from the cart (cartItems.filter)
-			setCartItems(cartItems.filter((item) => item.id !== itemId)); // if it's doesn't match, the items is kept. Otherwise it's removed. 
+			setCartItems(cartItems.filter((item) => item.id !== itemId)); // if true, the items is kept. If False it is removed. 
 			
 			/*
 			If the newQuantity is greater than 0 (> 0)
@@ -40,6 +40,7 @@ const Cart = () => {
 				)
 			);
 		}
+		
 		localStorage.setItem("cart", JSON.stringify(cartItems));
 	};
 
@@ -67,27 +68,36 @@ const Cart = () => {
 	}
 
 	
-	
+	//FRONT END RENDERING
 	return (
-		<div className="max-w-7xl mx-auto px-4 py-8">
-			<h1 className="text-3xl font-bold text-[#3e2723] mb-8">Your Cart</h1>
+		<div className="max-w-7xl mx-auto px-4 py-8"> {/* Main Wrapper */}
+		
+			<h1 className="text-3xl font-bold text-[#3e2723] mb-8">Your Cart</h1> {/* Page Title */}
 
-			<div className="bg-white rounded-lg shadow-md p-6 mb-8">
+
+			{/* Cart Items selection box */}
+			<div className="bg-white rounded-lg shadow-md p-6 mb-8"> {/* Inner Wrapper for Cart Items - white BG */}
+				
 				{cartItems.map((item) => (
-					<div
-						key={item.id}
+					
+					<div  // individual cart item wrapper
+						key={item.id} // Individual cart items
 						className="flex items-center py-4 border-b border-gray-200 last:border-0"
 					>
-						<div className="h-20 w-20 flex-shrink-0 overflow-hidden rounded-md">
+						 {/* Item Image */}
+						<div className="h-20 w-20 flex-shrink-0 overflow-hidden rounded-md"> 
 							<img
 								src={item.image}
 								alt={item.name}
 								className="h-full w-full object-cover"
 							/>
-						</div>
+						</div> 
 						
 						
-						<div className="ml-6 flex-1">
+						{/* Item Details - name and total price */}
+						<div className="ml-6 flex-1"> {/* Div for Item Details */}
+							
+							{/* Name and total price */}
 							<div className="flex justify-between">
 								<h3 className="text-lg font-medium text-[#3e2723]">{item.name}</h3>
 								<p className="text-lg font-medium text-[#3e2723]">
@@ -96,7 +106,9 @@ const Cart = () => {
 							</div>
 							
 							
+							{/* Quantity controls */}
 							<div className="flex items-center mt-2">
+								{/* Minus button*/}
 								<button
 									className="px-3 py-1 bg-gray-100 rounded-l-md hover:bg-gray-200"
 									onClick={() => updateQuantity(item.id, item.quantity - 1)}
@@ -105,45 +117,53 @@ const Cart = () => {
 								</button>
 								
 								<span className="px-4 py-1 bg-gray-100">{item.quantity}</span>
+								
+								{/* Add button*/}
 								<button
 									className="px-3 py-1 bg-gray-100 rounded-r-md hover:bg-gray-200"
-									onClick={() => updateQuantity(item.id, item.quantity + 1)}
+									onClick={() => updateQuantity(item.id, item.quantity + 1)} 
 								>
 									+
 								</button>
 								
+								{/* Remove item button*/}
 								<button
 									className="ml-4 text-red-500 hover:text-red-700"
 									onClick={() => updateQuantity(item.id, 0)}
 								>
 									Remove
 								</button>
+								
 							</div>
 							
 						</div>
 					</div>
 				))}
+				
 			</div>
 
 
 
+			{/* Subtotal, total, price, checkout Container */}
 			<div className="bg-white rounded-lg shadow-md p-6">
 				<div className="flex justify-between mb-2">
 					<p className="text-gray-600">Subtotal</p>
 					<p className="font-medium">₱{calculateTotal()}</p>
 				</div>
-				
+
 				<div className="border-t border-gray-200 my-4"></div>
+
 				<div className="flex justify-between mb-6">
 					<p className="text-lg font-medium text-[#3e2723]">Total</p>
 					<p className="text-lg font-bold text-[#3e2723]">₱{calculateTotal()}</p>
 				</div>
 				
+				
 				<button className="w-full bg-[#3e2723] text-white py-3 rounded-lg hover:bg-[#5d4037] transition-colors font-medium">
 					Proceed to Checkout
 				</button>
-				
 			</div>
+			
 		</div>
 	);
 };
