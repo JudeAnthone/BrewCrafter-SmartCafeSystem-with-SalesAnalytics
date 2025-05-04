@@ -171,8 +171,9 @@ const Menu = () => {
 	// Function to add items to the cart
 	//item represents the menuItem that the user wants to add to the cart
 	const addToCart = (item) => {
-		const existingItem = cartItems.find((cartItem) => cartItem.id === item.id); /* checks if the item already exists in the cart. if they are the same ID, 
-																					it means the item is already in the cart (existing)*/  
+		const existingItem = cartItems.find((cartItem) => cartItem.id === item.id); /* this functions checks if the item already exists in the cart. if they are the same ID, 
+																					it means the item is already in the cart (existing)
+																					comparing cartItem.id === item.id */  
 																		
 		if (existingItem) { // Checks if the item already exists in the cart. If it does, UPDATE the quantity
 			setCartItems(
@@ -246,7 +247,7 @@ const Menu = () => {
 				
 				
 				{/* Item count */}
-				{/* Displays the item numbers available on the celected category */}
+				{/* Displays the item numbers available on the selected category */}
 				<p className="text-center text-[#5d4037] mb-8">
 					Showing {itemCount} {activeCategory !== "all" ? activeCategory : ""} Items
 				</p>
@@ -272,7 +273,7 @@ const Menu = () => {
 							</div>
 							
 							
-							{/* Content sections - item name, category, description, prince and buttons. */}
+							{/* Content sections - item name, category, description, price and buttons. */}
 							<div className="p-5"> {/* padding of 5 per content */}
 								
 								{/* Item name and category */}

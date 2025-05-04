@@ -18,6 +18,7 @@ const Home = () => {
 	};
     
 	
+	
 	return (
 		<div className="overflow-hidden">
             
@@ -32,12 +33,14 @@ const Home = () => {
 					viewport={{ once: true, amount: 0.3 }}
 					transition={{ staggerChildren: 0.2 }}
 				>
+					
 					<motion.h1
 						className="text-5xl md:text-6xl font-bold text-[#3e2723] leading-tight"
 						variants={textVariants}
 					>
 						Brew and Craft Your <span className="text-[#cc6d2d]">Perfect</span> Cup!
 					</motion.h1>
+
 
 					<motion.p
 						className="text-[#5d4037] text-xl leading-relaxed"
@@ -47,7 +50,8 @@ const Home = () => {
 						experience, just the way you like it.
 					</motion.p>
 					
-{/* SECTION 1 reusable button*/}
+					
+					{/* SECTION 1 reusable button*/}
 					<Buttons 
 					text="Explore Menu"
 					bgColor="bg-[#cc6d2d]"
@@ -58,7 +62,7 @@ const Home = () => {
 					
 				</motion.div>
 
-				{/* SECTION 1 img-div*/}
+					{/* SECTION 1 img-div*/}
 				<motion.div
 					className="mt-12 md:mt-0 md:ml-16"
 					animate={{ y: [0, -10, 0], x: [0, 5, 0] }}
@@ -70,11 +74,13 @@ const Home = () => {
 					}}
 					initial={{ opacity: 1, x: 0 }}
 				>
+					
 					<img
 						src={HeroImage}
 						alt="Coffee Hero"
 						className="w-[320px] md:w-[480px] drop-shadow-xl"
 					/>
+					
 				</motion.div>
 			</section>
             
@@ -86,7 +92,7 @@ const Home = () => {
 			{/* SECTION 2 - Image Left, Text Right */}
 			<section className="flex flex-col md:flex-row-reverse items-center justify-center min-h-[90vh] bg-[#f8f4f0] px-6 md:px-12 py-16">
                 
-				{/* SECTION 2 text-div*/}
+					{/* SECTION 2 text-div*/}
 				<motion.div
 					className="text-center md:text-left space-y-8 max-w-lg"
 					initial="hidden"
@@ -101,6 +107,7 @@ const Home = () => {
 						Experience <span className="text-[#cc6d2d]">Art</span> in Every Sip
 					</motion.h1>
 
+
 					<motion.p
 						className="text-[#5d4037] text-xl leading-relaxed"
 						variants={textVariants}
@@ -109,7 +116,8 @@ const Home = () => {
 						moment into an unforgettable craft experience.
 					</motion.p>
 
-	{/* SECTION 2 reusable button*/}
+
+					{/* SECTION 2 reusable button*/}
 					<Buttons 
 					text="Start Crafting"
 					bgColor="bg-[#cc6d2d]"
@@ -117,7 +125,6 @@ const Home = () => {
 					textColor="text-[#3e2723]"
 					onClick={() => console.log("Craft button is clicked!")}
 					/>
-					
 				</motion.div>
                 
 
@@ -135,6 +142,7 @@ const Home = () => {
 					whileInView={{ opacity: 1, x: 0 }}
 					viewport={{ once: true }}
 				>
+					
 					<img
 						src={CraftImage}
 						alt="craft-content-img"

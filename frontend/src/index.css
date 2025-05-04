@@ -2,7 +2,6 @@
 @plugin "daisyui";
 @import "tw-animate-css";
 
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=DM+Sans:wght@400;700&display=swap');
 
 @custom-variant dark (&:is(.dark *));
 
@@ -11,7 +10,7 @@
 /* Custom Global Styles */
 :root {
   /* Colors */
-  --color-primary: #3e2723; /* Dark Brown */
+  --color-primary: #3e2723; /* Dark Brown - text */ 
   --color-light-100: #f8e8d0; /* Cream */
   --color-light-200: #e4c9a7; /* Latte */
   --color-gray-100: #b5a397; /* Warm Gray */
