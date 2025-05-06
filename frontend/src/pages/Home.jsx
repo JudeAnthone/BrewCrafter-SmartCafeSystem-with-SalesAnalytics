@@ -24,7 +24,11 @@ const Home = () => {
 		<div className="overflow-hidden">
             
 			{/* SECTION 1 - Text Left, Image Right */}
-			<section className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-center min-h-[90vh] px-6 md:px-12 py-16">
+			<section
+			 className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-center min-h-[90vh] px-6 md:px-12 py-16"
+			 id="hero-section"
+			 aria-label="Hero Section"
+			 >
                 
 				{/* SECTION 1 text-div*/}
 				<motion.div
@@ -101,12 +105,12 @@ const Home = () => {
 					viewport={{ once: true, amount: 0.3 }}
 					transition={{ staggerChildren: 0.2 }}
 				>
-					<motion.h1
+					<motion.h2
 						className="text-5xl md:text-6xl font-bold text-[#3e2723] leading-tight"
 						variants={textVariants}
 					>
 						Experience <span className="text-[#cc6d2d]">Art</span> in Every Sip
-					</motion.h1>
+					</motion.h2>
 
 
 					<motion.p

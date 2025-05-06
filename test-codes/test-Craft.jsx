@@ -17,6 +17,8 @@ const Craft = () => {
 		price: 0,
 	});
 
+	
+	
 	// Calculate price whenever craftedDrink changes
 	useEffect(() => {
 		/*  */
@@ -40,14 +42,14 @@ const Craft = () => {
 
 		// Add-on prices
 		const milkPrices = {
-			"Whole Milk": 0,
+			"Whole Milk": 10,
 			"Almond Milk": 15,
 			"Oat Milk": 15,
 			"Coconut Milk": 15,
 			"Soy Milk": 10,
 			None: 0,
 		};
-
+		// Sweetener prices
 		const sweetenerPrices = {
 			Sugar: 0,
 			Honey: 5,
@@ -59,7 +61,7 @@ const Craft = () => {
 		const toppingPrice = 10; // Per topping
 		const extraPrice = 15; // Per extra
 
-		// Calculate total price
+		// Calculation of total price
 		if (craftedDrink.base && basePrices[craftedDrink.base]) {
 			totalPrice += basePrices[craftedDrink.base];
 		}
@@ -92,6 +94,7 @@ const Craft = () => {
 		craftedDrink.extras,
 	]);
 
+	
 	const nextStep = () => {
 		setCurrentStep((prevStep) => Math.min(prevStep + 1, 7));
 	};
@@ -115,6 +118,8 @@ const Craft = () => {
 		});
 	};
 
+	
+	
 	const addToCart = () => {
 		// Generate a unique ID for the crafted drink
 		const craftedDrinkItem = {
@@ -154,7 +159,9 @@ const Craft = () => {
 		// Go back to step 1
 		setCurrentStep(1);
 	};
-
+	
+	
+// Buy now button navigation
 	const buyNow = () => {
 		addToCart();
 		navigate("/cart");
@@ -171,6 +178,7 @@ const Craft = () => {
 		"Soy Milk",
 		"None",
 	];
+	
 	const sweetenerOptions = ["Sugar", "Honey", "Maple Syrup", "Stevia", "None"];
 	const toppingOptions = [
 		"Whipped Cream",
@@ -180,6 +188,7 @@ const Craft = () => {
 		"Cocoa Powder",
 		"Sprinkles",
 	];
+	
 	const extraOptions = [
 		"Extra Shot",
 		"Vanilla Syrup",
@@ -188,6 +197,7 @@ const Craft = () => {
 		"Chocolate Syrup",
 		"Mint Syrup",
 	];
+	
 	const temperatureOptions = ["Hot", "Iced", "Blended"];
 
 	// Calculate progress percentage
@@ -202,6 +212,7 @@ const Craft = () => {
 						Create your perfect beverage by selecting your preferred ingredients
 					</p>
 				</div>
+				
 
 				{/* Progress bar */}
 				<div className="mb-8">
@@ -217,8 +228,10 @@ const Craft = () => {
 					</div>
 				</div>
 
+
 				{/* Craft Form */}
 				<div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
+					
 					{/* Step 1: Choose Base */}
 					{currentStep === 1 && (
 						<div className="animate-fadeIn">
@@ -282,6 +295,7 @@ const Craft = () => {
 							</div>
 						</div>
 					)}
+					
 
 					{/* Step 2: Choose Size */}
 					{currentStep === 2 && (
@@ -330,6 +344,7 @@ const Craft = () => {
 							</div>
 						</div>
 					)}
+					
 
 					{/* Step 3: Milk Options */}
 					{currentStep === 3 && (
@@ -370,6 +385,7 @@ const Craft = () => {
 							</div>
 						</div>
 					)}
+					
 
 					{/* Step 4: Sweetener Options */}
 					{currentStep === 4 && (
@@ -416,6 +432,7 @@ const Craft = () => {
 						</div>
 					)}
 
+
 					{/* Step 5: Toppings */}
 					{currentStep === 5 && (
 						<div className="animate-fadeIn">
@@ -454,6 +471,7 @@ const Craft = () => {
 						</div>
 					)}
 
+
 					{/* Step 6: Extras */}
 					{currentStep === 6 && (
 						<div className="animate-fadeIn">
@@ -491,6 +509,7 @@ const Craft = () => {
 							</div>
 						</div>
 					)}
+
 
 					{/* Step 7: Temperature and Name */}
 					{currentStep === 7 && (
@@ -544,6 +563,7 @@ const Craft = () => {
 							</div>
 						</div>
 					)}
+					
 
 					{/* Navigation buttons */}
 					<div className="flex justify-between mt-8">
@@ -623,6 +643,7 @@ const Craft = () => {
 						)}
 					</div>
 				</div>
+				
 
 				{/* Drink Preview */}
 				<div className="bg-white rounded-2xl shadow-lg p-6">
