@@ -23,7 +23,15 @@ dist-ssr
 *.sln
 *.sw?
 
+# private files
 **/.env
 **/.env.local
 **/.env.production
 .env
+
+#NOTES FILES
+backend-notes.txt
+flow.txt
+folder-structure.txt
+frontend-notes.txt
+
