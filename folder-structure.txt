@@ -1,0 +1,34 @@
+✅ Final Review of Folder Structure
+📌 Backend (backend/)
+server.js → Main entry point for the backend (Express server).
+
+config/ → Manages database (db.js) and environment variables (dotenvConfig.js).
+
+routes/ → Defines API endpoints for authentication, orders, products, and users.
+
+controllers/ → Contains business logic (handles requests and interacts with models).
+
+models/ → Defines database schemas (Users, Orders, Products).
+
+middlewares/ → Manages authentication (authMiddleware.js) and error handling (errorHandler.js).
+
+utils/ → Helper functions (like generateToken.js for JWT authentication).
+
+
+
+📌 Frontend (frontend/)
+components/ → Reusable UI elements (buttons, modals, etc.).
+
+layouts/ → Page structures (navbar, sidebar, footer).
+
+pages/ → Individual pages, divided into admin/ and client/.
+
+services/ → Handles API calls (fetching orders, products, etc.).
+
+utils/ → Helper functions (formatting, validations).
+
+routes.js → Handles React Router navigation.
+
+App.jsx → Main React component tying everything together.
+
+ 

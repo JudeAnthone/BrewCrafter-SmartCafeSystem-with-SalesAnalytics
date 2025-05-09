@@ -29,12 +29,4 @@ dist-ssr
 **/.env.production
 .env
 
-#NOTES FILES
-backend-notes.txt
-flow.txt
-folder-structure.txt
-frontend-notes.txt
-
-# test folder
-test-codes/
-
+ 
