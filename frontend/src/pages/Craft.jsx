@@ -5,6 +5,8 @@ const Craft = () => {
 	const navigate = useNavigate();
 	const [notification, setNotification] = useState(null);
 	const [currentStep, setCurrentStep] = useState(1);
+	
+	// custome drink details 
 	const [craftedDrink, setCraftedDrink] = useState({
 		base: "",
 		size: "",
@@ -18,8 +20,8 @@ const Craft = () => {
 	});
 
 	
-	
-	// Calculate price whenever craftedDrink changes
+
+	// Price calculation with useEffect whenever craftedDrink changes
 	useEffect(() => {
 		
 		let totalPrice = 0;
@@ -49,6 +51,7 @@ const Craft = () => {
 			"Soy Milk": 10,
 			None: 0,
 		};
+		
 		// Sweetener prices
 		const sweetenerPrices = {
 			Sugar: 0,
@@ -58,32 +61,39 @@ const Craft = () => {
 			None: 0,
 		};
 
+		// toppings and extras
 		const toppingPrice = 10; // Per topping
 		const extraPrice = 15; // Per extra
 
-		// Calculation of total price
-		if (craftedDrink.base && basePrices[craftedDrink.base]) {
-			totalPrice += basePrices[craftedDrink.base];
+		// Price calculation logic
+		if (craftedDrink.base && basePrices[craftedDrink.base]) { // base price, if selected:
+			totalPrice += basePrices[craftedDrink.base]; // do this 
 		}
 
+		// size multiplier
 		if (craftedDrink.size && sizeMultipliers[craftedDrink.size]) {
 			totalPrice *= sizeMultipliers[craftedDrink.size];
 		}
 
+		// milk price
 		if (craftedDrink.milk && milkPrices[craftedDrink.milk]) {
 			totalPrice += milkPrices[craftedDrink.milk];
 		}
 
+		// sweetener price
 		if (craftedDrink.sweetener && sweetenerPrices[craftedDrink.sweetener]) {
 			totalPrice += sweetenerPrices[craftedDrink.sweetener];
 		}
 
+		// toppings and extras
 		totalPrice += craftedDrink.toppings.length * toppingPrice;
 		totalPrice += craftedDrink.extras.length * extraPrice;
 
 		// Round to nearest whole number
 		totalPrice = Math.round(totalPrice);
 
+		
+		// updates the craftedDrink with its new prices 
 		setCraftedDrink((prev) => ({ ...prev, price: totalPrice }));
 	}, [
 		craftedDrink.base,
@@ -118,7 +128,6 @@ const Craft = () => {
 		});
 	};
 
-	
 	
 	const addToCart = () => {
 		// Generate a unique ID for the crafted drink
