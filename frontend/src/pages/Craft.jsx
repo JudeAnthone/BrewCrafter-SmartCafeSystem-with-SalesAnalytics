@@ -21,7 +21,7 @@ const Craft = () => {
 	
 	// Calculate price whenever craftedDrink changes
 	useEffect(() => {
-		/*  */
+		
 		let totalPrice = 0;
 
 		// Base prices
@@ -203,6 +203,9 @@ const Craft = () => {
 	// Calculate progress percentage
 	const progressPercentage = (currentStep / 7) * 100;
 
+	
+	
+	// FRONT END - RENDERING
 	return (
 		<div className="bg-[#f8f4e5] min-h-screen py-8">
 			<div className="max-w-4xl mx-auto px-4">
