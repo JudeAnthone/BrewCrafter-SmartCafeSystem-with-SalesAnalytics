@@ -111,28 +111,23 @@ const Craft = () => {
         setCurrentStep((prevStep) => Math.min(prevStep + 1, 7)); // Maximum of 7 step in drink customization process 
     };
 
-    
     // Previous step process
     const prevStep = () => {
         setCurrentStep((prevStep) => Math.max(prevStep - 1, 1)); // Ensures that the step doesn't go below 1
     };
 
-    
-    // Handles changes in the input and dropdown fields
     const handleChange = (e) => {
         const { name, value } = e.target;
         setCraftedDrink((prev) => ({ ...prev, [name]: value }));
     };
 
-    
-    // multi-select function for selecting or deselecting the options that can be repeated (toppings, add-ons and extras)
     const handleCheckboxChange = (category, item) => {
         setCraftedDrink((prev) => {
-            const updatedArray = prev[category].includes(item) //Checks if that item (user clicked item) is already in the array (i.e., checkbox was already selected)
-                ? prev[category].filter((i) => i !== item) // If yes → remove it
-                : [...prev[category], item]; // If no → add it
+            const updatedArray = prev[category].includes(item)
+                ? prev[category].filter((i) => i !== item)
+                : [...prev[category], item];
 
-            return { ...prev, [category]: updatedArray }; // Returning to the updated state
+            return { ...prev, [category]: updatedArray };
         });
     };
 
