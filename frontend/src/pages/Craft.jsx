@@ -150,17 +150,18 @@ const Craft = () => {
         };
 
         // Get existing cart from localStorage
-        const existingCart = JSON.parse(localStorage.getItem("cart") || "[]"); // if no cart exist, default is empty array "[]"
-        const updatedCart = [...existingCart, craftedDrinkItem];
+        const existingCart = JSON.parse(localStorage.getItem("cart") || "[]"); // if no cart exist, initialize an empty array "[]"
+        const updatedCart = [...existingCart, craftedDrinkItem]; // combines the existing cart items with the new drink object 
 
         // Update localStorage
-        localStorage.setItem("cart", JSON.stringify(updatedCart));
+        localStorage.setItem("cart", JSON.stringify(updatedCart)); // updatedCart back in the localStorage
 
         // Show notification
-        setNotification("Custom drink added to cart!");
-        setTimeout(() => setNotification(null), 2000);
+        setNotification("Your Custom Drink is added to the Cart!");
+        setTimeout(() => setNotification(null), 3000);
 
-        // Reset form
+        // Reset form - reset the craftedDrink state to its initial values (empty arrays and fields) 
+        // after the customization process
         setCraftedDrink({
             base: "",
             size: "",
@@ -173,7 +174,7 @@ const Craft = () => {
             price: 0,
         });
 
-        // Go back to step 1
+        // reset all the step to step 1 after all the customization process
         setCurrentStep(1);
     };
     
@@ -184,9 +185,15 @@ const Craft = () => {
         navigate("/cart");
     };
 
-    // Options for the form
+    
+    // Options for the customization
+    // STEP 1
     const drinkBases = ["Espresso", "Cold Brew", "Matcha", "Tea", "Chocolate"];
+    
+    // STEP 2
     const drinkSizes = ["Small", "Medium", "Large"];
+    
+    // STEP 3
     const milkOptions = [
         "Whole Milk",
         "Almond Milk",
@@ -196,7 +203,10 @@ const Craft = () => {
         "None",
     ];
     
+    // STEP 4
     const sweetenerOptions = ["Sugar", "Honey", "Maple Syrup", "Stevia", "None"];
+    
+    // STEP 5
     const toppingOptions = [
         "Whipped Cream",
         "Chocolate Drizzle",
@@ -206,6 +216,7 @@ const Craft = () => {
         "Sprinkles",
     ];
     
+    // STEP 6
     const extraOptions = [
         "Extra Shot",
         "Vanilla Syrup",
@@ -215,6 +226,7 @@ const Craft = () => {
         "Mint Syrup",
     ];
     
+    // STEP 7
     const temperatureOptions = ["Hot", "Iced", "Blended"];
 
     // Calculate progress percentage
