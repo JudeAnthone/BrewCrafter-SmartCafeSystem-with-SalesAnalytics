@@ -150,7 +150,7 @@ const Craft = () => {
         };
 
         // Get existing cart from localStorage
-        const existingCart = JSON.parse(localStorage.getItem("cart") || "[]");
+        const existingCart = JSON.parse(localStorage.getItem("cart") || "[]"); // if no cart exist, default is empty array "[]"
         const updatedCart = [...existingCart, craftedDrinkItem];
 
         // Update localStorage
