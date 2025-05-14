@@ -236,8 +236,10 @@ const Craft = () => {
     
     // FRONT END - RENDERING
     return (
-        <div className="bg-[#f8f4e5] min-h-screen py-8">
-            <div className="max-w-4xl mx-auto px-4">
+        <div className="bg-[#f8f4e5] min-h-screen py-8"> {/* Main/Outer Container*/}
+            <div className="max-w-4xl mx-auto px-4"> {/* Inner Container */}
+                
+                {/* Header Section */}
                 <div className="text-center mb-8">
                     <h1 className="text-4xl font-bold text-[#3e2723] mb-2">Craft Your Own Drink</h1>
                     <p className="text-[#5d4037] max-w-2xl mx-auto">
@@ -254,6 +256,8 @@ const Craft = () => {
                             style={{ width: `${progressPercentage}%` }}
                         ></div>
                     </div>
+                    
+                    {/* Start - Finish label */}
                     <div className="flex justify-between mt-2 text-sm text-[#5d4037]">
                         <span>Start</span>
                         <span>Finish</span>
@@ -262,18 +266,21 @@ const Craft = () => {
 
 
                 {/* Craft Form */}
+                {/* Container for the 1 to 7 steps */}
                 <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
                     
                     {/* Step 1: Choose Base */}
                     {currentStep === 1 && (
-                        <div className="animate-fadeIn">
+                        <div className="animate-fadeIn"> {/* Step 1 Container */}
                             <h2 className="text-2xl font-semibold text-[#3e2723] mb-4">
                                 Choose Your Base
                             </h2>
+                            
                             <p className="text-gray-600 mb-6">
                                 Select the foundation of your drink
                             </p>
 
+                            {/* Container for options of base */}
                             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                                 {drinkBases.map((base) => (
                                     <label
@@ -292,6 +299,8 @@ const Craft = () => {
                                             onChange={handleChange}
                                             className="sr-only"
                                         />
+                                        
+                                         {/* Container for each content */}
                                         <div className="flex flex-col items-center text-center">
                                             <span className="text-lg font-medium text-[#3e2723]">
                                                 {base}
@@ -301,21 +310,25 @@ const Craft = () => {
                                                     Rich, strong coffee shot
                                                 </span>
                                             )}
+                                            
                                             {base === "Cold Brew" && (
                                                 <span className="text-sm text-gray-500">
                                                     Smooth, less acidic coffee
                                                 </span>
                                             )}
+                                            
                                             {base === "Matcha" && (
                                                 <span className="text-sm text-gray-500">
                                                     Earthy green tea powder
                                                 </span>
                                             )}
+                                            
                                             {base === "Tea" && (
                                                 <span className="text-sm text-gray-500">
                                                     Black, green, or herbal
                                                 </span>
                                             )}
+                                            
                                             {base === "Chocolate" && (
                                                 <span className="text-sm text-gray-500">
                                                     Rich cocoa base
@@ -676,6 +689,7 @@ const Craft = () => {
                     </div>
                 </div>
                 
+
 
                 {/* Drink Preview */}
                 <div className="bg-white rounded-2xl shadow-lg p-6">
