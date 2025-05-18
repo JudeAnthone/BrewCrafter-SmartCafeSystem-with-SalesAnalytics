@@ -397,3 +397,261 @@ Phase	What You Do	Why
 4	Build REST APIs (CRUD)	Dynamic data handling
 5	Connect Frontend to Backend	Real app working
 6	Testing + Final fixes	Make sure it's bug-free
+
+
+MENU: 
+
+[
+  // Existing
+  {
+    id: 1,
+    name: "Caramel Latte",
+    description: "Sweet espresso with caramel syrup and steamed milk.",
+    price: 120,
+    image: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&h=300&q=80",
+    category: "coffee",
+  },
+  {
+    id: 2,
+    name: "Vanilla Cold Brew",
+    description: "Smooth cold brew coffee infused with vanilla flavor.",
+    price: 110,
+    image: "https://images.unsplash.com/photo-1578681326003-c293a15615f5?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&h=300&q=80",
+    category: "coffee",
+  },
+  {
+    id: 3,
+    name: "Mocha Espresso",
+    description: "Rich espresso with chocolate and steamed milk.",
+    price: 130,
+    image: "https://images.unsplash.com/photo-1582202737800-8ab9a8012367?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&h=300&q=80",
+    category: "coffee",
+  },
+  {
+    id: 4,
+    name: "Classic Americano",
+    description: "Espresso shots diluted with hot water for a rich flavor.",
+    price: 100,
+    image: "https://images.unsplash.com/photo-1551030173-122aabc4489c?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&h=300&q=80",
+    category: "coffee",
+  },
+  {
+    id: 5,
+    name: "Hazelnut Cappuccino",
+    description: "Espresso with steamed milk, foam, and hazelnut syrup.",
+    price: 135,
+    image: "https://images.unsplash.com/photo-1534687941688-651ccaafbff8?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&h=300&q=80",
+    category: "coffee",
+  },
+  {
+    id: 6,
+    name: "Flat White",
+    description: "Espresso with velvety steamed milk and microfoam.",
+    price: 125,
+    image: "https://images.unsplash.com/photo-1517701604599-bb29b565090c?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&h=300&q=80",
+    category: "coffee",
+  },
+  // New
+  {
+    id: 16,
+    name: "Spanish Latte",
+    description: "Espresso with sweetened condensed milk and steamed milk.",
+    price: 140,
+    image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&h=300&q=80",
+    category: "coffee",
+  },
+  {
+    id: 17,
+    name: "Macchiato",
+    description: "Espresso topped with a dollop of foamed milk.",
+    price: 115,
+    image: "https://images.unsplash.com/photo-1464983953574-0892a716854b?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&h=300&q=80",
+    category: "coffee",
+  },
+  {
+    id: 18,
+    name: "Affogato",
+    description: "Espresso poured over a scoop of vanilla ice cream.",
+    price: 150,
+    image: "https://images.unsplash.com/photo-1502741338009-cac2772e18bc?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&h=300&q=80",
+    category: "coffee",
+  },
+  {
+    id: 19,
+    name: "Irish Coffee",
+    description: "Coffee with Irish whiskey, sugar, and cream.",
+    price: 170,
+    image: "https://images.unsplash.com/photo-1519864600265-abb23847ef2c?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&h=300&q=80",
+    category: "coffee",
+  },
+  {
+    id: 20,
+    name: "Café Mocha",
+    description: "Espresso with chocolate syrup, steamed milk, and whipped cream.",
+    price: 145,
+    image: "https://images.unsplash.com/photo-1504674900247-ec6b0b1b798e?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&h=300&q=80",
+    category: "coffee",
+  },
+]
+
+[
+  // Existing
+  {
+    id: 7,
+    name: "Matcha Frappe",
+    description: "Creamy matcha green tea blended with ice and milk.",
+    price: 140,
+    image: "https://images.unsplash.com/photo-1644681584421-c8e5aea022f0?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&h=300&q=80",
+    category: "frappe",
+  },
+  {
+    id: 8,
+    name: "Caramel Frappe",
+    description: "Coffee blended with ice, milk, and rich caramel sauce.",
+    price: 145,
+    image: "https://images.unsplash.com/photo-1529892485617-25f63cd7b1e9?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&h=300&q=80",
+    category: "frappe",
+  },
+  {
+    id: 9,
+    name: "Chocolate Chip Frappe",
+    description: "Chocolate frappe loaded with chocolate chips and whipped cream.",
+    price: 155,
+    image: "https://images.unsplash.com/photo-1577805947697-89e18249d767?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&h=300&q=80",
+    category: "frappe",
+  },
+  {
+    id: 10,
+    name: "Oreo Cookie Frappe",
+    description: "Vanilla base blended with crushed Oreo cookies and ice.",
+    price: 160,
+    image: "https://images.unsplash.com/photo-1572490122747-3968b75cc699?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&h=300&q=80",
+    category: "frappe",
+  },
+  // New
+  {
+    id: 21,
+    name: "Mocha Frappe",
+    description: "Coffee, chocolate, and ice blended to perfection.",
+    price: 150,
+    image: "https://images.unsplash.com/photo-1504674900247-ec6b0b1b798e?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&h=300&q=80",
+    category: "frappe",
+  },
+  {
+    id: 22,
+    name: "Java Chip Frappe",
+    description: "Coffee blended with chocolate chips and topped with whipped cream.",
+    price: 155,
+    image: "https://images.unsplash.com/photo-1464306076886-debca5e8a6b0?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&h=300&q=80",
+    category: "frappe",
+  },
+  {
+    id: 23,
+    name: "White Chocolate Frappe",
+    description: "White chocolate and coffee blended with ice and milk.",
+    price: 160,
+    image: "https://images.unsplash.com/photo-1504674900247-ec6b0b1b798e?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&h=300&q=80",
+    category: "frappe",
+  },
+  {
+    id: 24,
+    name: "Strawberry Frappe",
+    description: "Strawberries blended with ice, milk, and a touch of sweetness.",
+    price: 145,
+    image: "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&h=300&q=80",
+    category: "frappe",
+  },
+  {
+    id: 25,
+    name: "Salted Caramel Frappe",
+    description: "Caramel frappe with a hint of sea salt, topped with whipped cream.",
+    price: 155,
+    image: "https://images.unsplash.com/photo-1504674900247-ec6b0b1b798e?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&h=300&q=80",
+    category: "frappe",
+  },
+]
+
+[
+  // Existing
+  {
+    id: 11,
+    name: "Strawberry Smoothie",
+    description: "Fresh strawberries blended with yogurt and ice.",
+    price: 150,
+    image: "https://images.unsplash.com/photo-1638176066298-2756703a89c4?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&h=300&q=80",
+    category: "smoothie",
+  },
+  {
+    id: 12,
+    name: "Mango Passion Smoothie",
+    description: "Tropical blend of mangoes and passion fruit.",
+    price: 155,
+    image: "https://images.unsplash.com/photo-1623065422902-30a2d299bbe4?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&h=300&q=80",
+    category: "smoothie",
+  },
+  {
+    id: 13,
+    name: "Berry Blast Smoothie",
+    description: "Mixed berries with Greek yogurt and honey.",
+    price: 160,
+    image: "https://images.unsplash.com/photo-1610970881699-44a5587cabec?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&h=300&q=80",
+    category: "smoothie",
+  },
+  {
+    id: 14,
+    name: "Green Detox Smoothie",
+    description: "Spinach, kale, banana, and pineapple health blend.",
+    price: 165,
+    image: "https://images.unsplash.com/photo-1638439430466-b2bb7fdc1d67?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&h=300&q=80",
+    category: "smoothie",
+  },
+  {
+    id: 15,
+    name: "Banana Peanut Butter Smoothie",
+    description: "Creamy blend of bananas, peanut butter, and Greek yogurt.",
+    price: 160,
+    image: "https://images.unsplash.com/photo-1626222337147-1ae3a3bc2c18?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&h=300&q=80",
+    category: "smoothie",
+  },
+  // New
+  {
+    id: 26,
+    name: "Pineapple Coconut Smoothie",
+    description: "Pineapple and coconut blended with yogurt and ice.",
+    price: 155,
+    image: "https://images.unsplash.com/photo-1502741338009-cac2772e18bc?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&h=300&q=80",
+    category: "smoothie",
+  },
+  {
+    id: 27,
+    name: "Avocado Smoothie",
+    description: "Creamy avocado blended with milk and honey.",
+    price: 170,
+    image: "https://images.unsplash.com/photo-1504674900247-ec6b0b1b798e?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&h=300&q=80",
+    category: "smoothie",
+  },
+  {
+    id: 28,
+    name: "Peach Mango Smoothie",
+    description: "Juicy peaches and mangoes blended with yogurt.",
+    price: 160,
+    image: "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&h=300&q=80",
+    category: "smoothie",
+  },
+  {
+    id: 29,
+    name: "Chocolate Banana Smoothie",
+    description: "Banana and chocolate blended with milk and ice.",
+    price: 165,
+    image: "https://images.unsplash.com/photo-1502741338009-cac2772e18bc?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&h=300&q=80",
+    category: "smoothie",
+  },
+  {
+    id: 30,
+    name: "Blueberry Yogurt Smoothie",
+    description: "Blueberries blended with yogurt and honey.",
+    price: 160,
+    image: "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&h=300&q=80",
+    category: "smoothie",
+  },
+]
