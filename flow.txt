@@ -113,26 +113,23 @@ class Order {
 }
 
 
-
-
 6. Database Updates
 
 sql
--- orders table
+-- orders table - this is the users informations
 +----+---------+-------------+---------------------+
 | id | user_id | total_price | created_at          |
 +----+---------+-------------+---------------------+
 | 1  | NULL    | 4.25        | 2023-10-05 14:30:00 |
 +----+---------+-------------+---------------------+
 
--- order_items table
+-- order_items table - this is the product informations that the user ordered 
 +----------+------------+----------+
 | order_id | product_id | quantity |
 +----------+------------+----------+
 | 1        | 1 (espresso) | 1       |
 | 1        | 3 (whipped) | 1       |
 +----------+------------+----------+
-
 
 
 
@@ -146,8 +143,6 @@ json
   "status": "preparing",
   "estimatedWait": "5 minutes"
 }
-
-
 
 
 8. Frontend Order Confirmation
@@ -176,7 +171,7 @@ You design the Menu.jsx frontend.
 
 Backend API (GET /api/menu) sends menu details (name, price, image_url).
 
-Frontend Menu.jsx fetches the menu.
+Frontend Menu.jsx fetches the menu. 
 
 The img tag uses item.image_url to display the image.
 
@@ -235,7 +230,7 @@ Current Status: You'll start this after your frontend/admin-frontend are ready f
 🔗 4. How It Connects
 
 Frontend	Talks To	Backend
-frontend/ (Customer Site)	→ API calls (axios)	backend/ (Node + Express)
+frontend/ (Customer Side)	→ API calls (axios)	backend/ (Node + Express)
 admin-frontend/ (Admin Panel)	→ API calls (axios)	backend/ (Node + Express)
 
 
@@ -253,7 +248,7 @@ BACK END PROCESS:
 ✅Connect to your MySQL database
 -Create a connection file to connect Node.js to MySQL (using mysql2 package).
 -Build your database tables: Products, Users, Orders, Admins, etc.
-
+documentation: https://www.w3schools.com/nodejs/nodejs_mysql.asp
 
 
 ✅Set up routes and controllers
@@ -313,7 +308,7 @@ Admin Login, View Products, Add/Edit/Delete Products, View Orders, View Sales.
 -Or just run it locally if your school only requires local hosting.
 
 ✅ Database:
--Host MySQL database or run it locally (ex: XAMPP, MySQL Workbench, or online db hosting).
+-Host MySQL database or run it locally (heidi).
 
 
 __________________________________________________________________________________________________________________________________________________________________
@@ -333,7 +328,6 @@ Finalize your Database Schema
 Create the tables manually in MySQL Workbench or with SQL scripts.
 
 Insert some sample data for testing (like products for the Menu).
-
 
 
 ✅ Step 2: Start Coding the Backend
