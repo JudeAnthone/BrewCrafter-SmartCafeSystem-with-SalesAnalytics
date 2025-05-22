@@ -39,3 +39,55 @@ backend/
 
 Backend Flow:
 Frontend Request -> Express Route -> Controller -> Database -> Response
+
+
+________________________________________________________________________________________________________________________
+
+SUGGESTED BACKEND FOLDER STRUCTURE WITH THE ADMIN PART! MAY 20, 2025
+backend/
+├── config/
+│   ├── db.js
+│   └── dotenvConfig.js
+│
+├── controllers/
+│   ├── adminAuthController.js
+│   ├── analyticsController.js
+│   ├── inventoryController.js
+│   ├── orderController.js
+│   ├── productController.js
+│   └── userController.js
+│
+├── middlewares/
+│   ├── authMiddleware.js         // Role check (admin/customer)
+│   └── errorHandler.js
+│
+├── models/
+│   ├── Order.js
+│   ├── Product.js
+│   ├── User.js
+│   └── Inventory.js
+│
+├── routes/
+│   ├── adminAuthRoutes.js
+│   ├── analyticsRoutes.js
+│   ├── inventoryRoutes.js
+│   ├── orderRoutes.js
+│   ├── productRoutes.js
+│   └── userRoutes.js
+│
+├── utils/
+│   ├── generateToken.js
+│   └── roleUtils.js              // optional: isAdmin, isCustomer, etc.
+│
+├── validations/                 // (optional)
+│   ├── userValidation.js
+│   ├── productValidation.js
+│   └── orderValidation.js
+│
+├── env/
+│   └── .env                     // database, port, jwt, etc.
+│
+├── package.json
+├── package-lock.json
+├── README.md
+└── server.js
