@@ -1,14 +1,17 @@
-import React from 'react'
-import Sidebar from './Sidebar'
-import { Outlet } from 'react-router-dom'
+import Sidebar from "./Sidebar";
+import Topbar from "./Topbar"; // Optional, import if you created it
+import { Outlet } from "react-router-dom";
 
-export default function AdminLayout(){
-  return(
-    <div className="flex">
+export default function AdminLayout() {
+  return (
+    <div className="flex h-screen bg-[#f8f4e5]">
       <Sidebar />
-      <main className="flex-1 p-6 bg-white min-h-screen">
-        <Outlet />
-      </main>
+      <div className="flex-1 flex flex-col overflow-hidden">
+        <Topbar /> {/* Optional, comment out if not using */}
+        <main className="flex-1 p-6 overflow-y-auto">
+          <Outlet />
+        </main>
+      </div>
     </div>
-  )
+  );
 }
