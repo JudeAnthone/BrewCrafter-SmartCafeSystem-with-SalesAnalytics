@@ -1,15 +1,14 @@
 import React from 'react'
 import { motion } from 'framer-motion'; 
 
-const Buttons = ({text, bgColor, hoverColor, textColor, onClick}) => {
+const Buttons = ({ text, bgColor, hoverColor, textColor, onClick, extraClasses = "" }) => {
   return (
-    <motion.button
-    className={`font-semibold py-3 px-8 rounded-lg transition-all duration-300 shadow-md ${bgColor} ${hoverColor} ${textColor}`}
-    whileHover={{ scale: 1.05 }}
-    onClick={onClick}
+    <button
+      className={`${bgColor} ${hoverColor} ${textColor} font-semibold py-3 px-8 rounded-full transition duration-300 ${extraClasses}`}
+      onClick={onClick}
     >
       {text}
-    </motion.button>
-  )
-}
+    </button>
+  );
+};
 export default Buttons;
