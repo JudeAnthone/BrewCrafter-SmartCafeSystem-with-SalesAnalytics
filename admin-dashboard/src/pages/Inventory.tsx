@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react'; // Remove unused useEffect
 import {
   Search,
   PlusCircle,
@@ -9,8 +9,8 @@ import {
   ChevronUp,
   X,
   Edit,
-  Trash2,
-  Check
+  Trash2
+  // Remove unused Check import
 } from 'lucide-react';
 
 // Define TypeScript interfaces
@@ -163,18 +163,20 @@ const Inventory = () => {
     direction: 'asc'
   });
 
-  // Count low stock and out of stock items for summary
-  const lowStockItems = mockInventoryItems.filter(item => item.status === 'Low Stock').length;
-  const outOfStockItems = mockInventoryItems.filter(item => item.status === 'Out of Stock').length;
-  const totalItems = mockInventoryItems.length;
-  const totalValue = mockInventoryItems.reduce((total, item) => total + (item.price * item.quantity), 0);
+  // Add state to manage inventory items
+  const [inventoryItems, setInventoryItems] = useState<InventoryItem[]>(mockInventoryItems);
+  
+  // Count low stock and out of stock items for summary using the state
+  const lowStockItems = inventoryItems.filter(item => item.status === 'Low Stock').length;
+  const outOfStockItems = inventoryItems.filter(item => item.status === 'Out of Stock').length;
+  const totalItems = inventoryItems.length;
+  const totalValue = inventoryItems.reduce((total, item) => total + (item.price * item.quantity), 0);
 
-  // Generate unique categories from data
-  const categories = ['All', ...new Set(mockInventoryItems.map(item => item.category))];
+  // Generate unique categories from state data
+  const categories = ['All', ...new Set(inventoryItems.map(item => item.category))];
 
   // Generate unique statuses from data
   const statuses = ['All', 'In Stock', 'Low Stock', 'Out of Stock'];
-
   // Handle sort
   const requestSort = (key: keyof InventoryItem) => {
     let direction: 'asc' | 'desc' = 'asc';
@@ -182,18 +184,31 @@ const Inventory = () => {
       direction = 'desc';
     }
     setSortConfig({ key, direction });
-  };
-
-  // Apply sort
-  const sortedItems = [...mockInventoryItems].sort((a, b) => {
+  };  // Apply sort to the state items
+  const sortedItems = [...inventoryItems].sort((a, b) => {
     if (sortConfig.key === null) return 0;
     
-    if (a[sortConfig.key] < b[sortConfig.key]) {
-      return sortConfig.direction === 'asc' ? -1 : 1;
+    // Type safe way to access property values
+    const aValue = a[sortConfig.key];
+    const bValue = b[sortConfig.key];
+    
+    // Handle string comparisons (case insensitive)
+    if (typeof aValue === 'string' && typeof bValue === 'string') {
+      return sortConfig.direction === 'asc' 
+        ? aValue.localeCompare(bValue) 
+        : bValue.localeCompare(aValue);
     }
-    if (a[sortConfig.key] > b[sortConfig.key]) {
-      return sortConfig.direction === 'asc' ? 1 : -1;
+    
+    // Handle number comparisons
+    if (typeof aValue === 'number' && typeof bValue === 'number') {
+      if (aValue < bValue) {
+        return sortConfig.direction === 'asc' ? -1 : 1;
+      }
+      if (aValue > bValue) {
+        return sortConfig.direction === 'asc' ? 1 : -1;
+      }
     }
+    
     return 0;
   });
 
@@ -248,23 +263,80 @@ const Inventory = () => {
     setCurrentItem(item);
     setShowForm(true);
   };
-
-  // Save an inventory item (placeholder)
+  // Save an inventory item implementation
   const handleSaveItem = () => {
+    if (!currentItem) {
+      // Add new item
+      const nameInput = document.querySelector<HTMLInputElement>('input[required]:first-of-type');
+      const categorySelect = document.querySelector<HTMLSelectElement>('select');
+      const quantityInput = document.querySelectorAll<HTMLInputElement>('input[type="number"]')[0];
+      const unitInput = document.querySelectorAll<HTMLInputElement>('input[type="text"]')[1];
+      const minLevelInput = document.querySelectorAll<HTMLInputElement>('input[type="number"]')[1];
+      const supplierInput = document.querySelectorAll<HTMLInputElement>('input[type="text"]')[2];
+      const lastRestockedInput = document.querySelectorAll<HTMLInputElement>('input[type="date"]')[0];
+      const priceInput = document.querySelectorAll<HTMLInputElement>('input[type="number"]')[2];
+      const locationInput = document.querySelectorAll<HTMLInputElement>('input[type="text"]')[3];
+      const expiryDateInput = document.querySelectorAll<HTMLInputElement>('input[type="date"]')[1];
+      
+      const categoryValue = categorySelect?.value as 'Coffee Beans' | 'Milk' | 'Syrups' | 'Tea' | 'Fruits' | 'Pastries' | 'Supplies';
+      
+      const newItem: InventoryItem = {
+        id: `INV-${String(inventoryItems.length + 1).padStart(3, '0')}`,
+        name: nameInput?.value || 'New Item',
+        category: categoryValue || 'Supplies',
+        quantity: parseInt(quantityInput?.value || '0', 10),
+        unit: unitInput?.value || 'pcs',
+        minLevel: parseInt(minLevelInput?.value || '0', 10),
+        supplierName: supplierInput?.value || 'Unknown Supplier',
+        lastRestocked: lastRestockedInput?.value || new Date().toISOString().split('T')[0],
+        price: parseFloat(priceInput?.value || '0'),
+        status: 'In Stock',
+        location: locationInput?.value || undefined,
+        expiryDate: expiryDateInput?.value || undefined
+      };
+      
+      setInventoryItems([...inventoryItems, newItem]);
+    } else {
+      // Update existing item
+      const nameInput = document.querySelector<HTMLInputElement>('input[required]:first-of-type');
+      const categorySelect = document.querySelector<HTMLSelectElement>('select');
+      const quantityInput = document.querySelectorAll<HTMLInputElement>('input[type="number"]')[0];
+      const unitInput = document.querySelectorAll<HTMLInputElement>('input[type="text"]')[1];
+      const minLevelInput = document.querySelectorAll<HTMLInputElement>('input[type="number"]')[1];
+      const supplierInput = document.querySelectorAll<HTMLInputElement>('input[type="text"]')[2];
+      const lastRestockedInput = document.querySelectorAll<HTMLInputElement>('input[type="date"]')[0];
+      const priceInput = document.querySelectorAll<HTMLInputElement>('input[type="number"]')[2];
+      const locationInput = document.querySelectorAll<HTMLInputElement>('input[type="text"]')[3];
+      const expiryDateInput = document.querySelectorAll<HTMLInputElement>('input[type="date"]')[1];
+      
+      const categoryValue = categorySelect?.value as 'Coffee Beans' | 'Milk' | 'Syrups' | 'Tea' | 'Fruits' | 'Pastries' | 'Supplies';
+      
+      const updatedItems = inventoryItems.map(item => 
+        item.id === currentItem.id 
+          ? { ...currentItem, 
+              name: nameInput?.value || currentItem.name,
+              category: categoryValue || currentItem.category,
+              quantity: parseInt(quantityInput?.value || '0', 10),
+              unit: unitInput?.value || currentItem.unit,
+              minLevel: parseInt(minLevelInput?.value || '0', 10),
+              supplierName: supplierInput?.value || currentItem.supplierName,
+              lastRestocked: lastRestockedInput?.value || currentItem.lastRestocked,
+              price: parseFloat(priceInput?.value || '0'),
+              location: locationInput?.value || currentItem.location,
+              expiryDate: expiryDateInput?.value || currentItem.expiryDate
+            } 
+          : item
+      );
+      setInventoryItems(updatedItems);
+    }
+    
     setShowForm(false);
-    // In a real app, you would save to your backend here
   };
 
-  // Delete an inventory item (placeholder)
+  // Delete an inventory item implementation
   const handleDeleteItem = (id: string) => {
-    console.log("Delete item:", id);
-    // In a real app, you would delete from your backend here
-  };
-
-  // Update stock (placeholder)
-  const handleUpdateStock = (id: string, newQuantity: number) => {
-    console.log("Update stock for item:", id, "to", newQuantity);
-    // In a real app, you would update your backend here
+    const updatedItems = inventoryItems.filter(item => item.id !== id);
+    setInventoryItems(updatedItems);
   };
 
   // Format price to currency

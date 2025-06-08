@@ -1,5 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 // Create context
 const AuthContext = createContext();
@@ -8,6 +9,7 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [pendingEmail, setPendingEmail] = useState(null); // For OTP step
   const navigate = useNavigate();
   
   // Check if user is already logged in from localStorage
@@ -20,34 +22,65 @@ export const AuthProvider = ({ children }) => {
     setLoading(false);
   }, []);
 
-  // Login function - stores user in localStorage and state
-  const login = (userData) => {
-    console.log("Login function called with:", userData);
-    localStorage.setItem('brewCrafterUser', JSON.stringify(userData));
-    setCurrentUser(userData);
-    navigate('/profile');
+  
+  // Register function - calls backend
+  const register = async (formData) => {
+    const res = await axios.post('http://localhost:5000/api/auth/register', {
+      user_name: formData.name,
+      user_email: formData.email,
+      user_password: formData.password,
+      user_phone: formData.phone || '',
+      user_address: formData.address || ''
+    });
+    setPendingEmail(formData.email); // Save for OTP step
+    return res.data;
   };
 
-  // Register function - creates a new user
-  const register = (userData) => {
-    console.log("Register function called with:", userData);
-    const newUser = {
-      ...userData,
-      id: Date.now(),
-      createdAt: new Date().toISOString(),
-    };
-    localStorage.setItem('brewCrafterUser', JSON.stringify(newUser));
-    setCurrentUser(newUser);
-    navigate('/profile');
+  // OTP verification function
+  const verifyOtp = async (otp) => {
+    const res = await axios.post('http://localhost:5000/api/auth/verify', {
+      email: pendingEmail,
+      otp
+    });
+    // Save user/token after verification
+    localStorage.setItem('brewCrafterToken', res.data.token);
+    // Save user_id for use in cart/craft
+    if (res.data.user && res.data.user.id) {
+      localStorage.setItem('user_id', res.data.user.id);
+    }
+    setCurrentUser(res.data.user || { email: pendingEmail });
+    setPendingEmail(null);
+    return res.data;
   };
+
+  // Login function - calls backend
+  const login = async (formData) => {
+    const res = await axios.post('http://localhost:5000/api/auth/login', {
+      email: formData.email,
+      password: formData.password
+    });
+    localStorage.setItem('brewCrafterUser', JSON.stringify(res.data.user));
+    localStorage.setItem('brewCrafterToken', res.data.token);
+    // Save user_id for use in cart/craft
+    if (res.data.user && res.data.user.id) {
+      localStorage.setItem('user_id', res.data.user.id);
+    }
+    setCurrentUser(res.data.user);
+    navigate('/profile');
+    return res.data;
+  };
+  
 
   // Logout function - removes user from localStorage and state
   const logout = () => {
     console.log("Logout function called");
     localStorage.removeItem('brewCrafterUser');
+    localStorage.removeItem('brewCrafterToken');
+    localStorage.removeItem('user_id'); // <-- Remove user_id on logout
     setCurrentUser(null);
     navigate('/login');
   };
+  
 
   // Password reset - placeholder function
   const resetPassword = (email) => {
@@ -60,7 +93,7 @@ export const AuthProvider = ({ children }) => {
     console.log("Updating profile with:", updatedData);
     const updatedUser = {
       ...currentUser,
-      ...updatedData
+      ...updatedData // merging the current and updated data of the user
     };
     localStorage.setItem('brewCrafterUser', JSON.stringify(updatedUser));
     setCurrentUser(updatedUser);
@@ -69,17 +102,19 @@ export const AuthProvider = ({ children }) => {
   // Create the value object to be provided by the context
   const value = {
     currentUser,
-    login,
     register,
+    verifyOtp,
+    login,
     logout,
     resetPassword,
     updateProfile,
-    loading
+    loading,
+    pendingEmail,
+    setPendingEmail
   };
 
   return (
     <AuthContext.Provider value={value}>
-      {/* Only render children once loading is complete */}
       {!loading ? children : (
         <div className="h-screen flex items-center justify-center">
           <div className="animate-pulse text-[#3e2723] text-xl font-bold">
@@ -90,6 +125,7 @@ export const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   );
 };
+
 
 // Custom hook to use the auth context
 export const useAuth = () => {

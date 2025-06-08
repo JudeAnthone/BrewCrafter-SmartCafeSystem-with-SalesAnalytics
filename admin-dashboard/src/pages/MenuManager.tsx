@@ -1,177 +1,104 @@
-import React, { useState } from 'react';
-import { Search, Filter, PlusCircle, Edit, Trash2, Coffee, CupSoda, Cookie, Eye, X } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { PlusCircle, Edit, Trash2, X } from 'lucide-react';
 
-// Define TypeScript interfaces for menu items
 interface MenuItem {
   id: string;
-  name: string;
-  price: number;
-  category: 'Coffee' | 'Tea' | 'Cold Drinks' | 'Pastries' | 'Add-ons' | 'Custom Drinks';
-  description: string;
-  image?: string;
-  isPopular: boolean;
-  isAvailable: boolean;
+  product_name: string;
+  product_price: number;
+  category_id: number; // FIX: should be number, not string
+  product_description: string;
+  image_url?: string;
+  is_popular: boolean;
+  is_available: boolean;
   ingredients?: string[];
-  tags?: string[];
-  nutritionalInfo?: {
-    calories: number;
-    protein: number;
-    carbs: number;
-    fat: number;
-  };
 }
 
-// Mock data for menu items
-const mockMenuItems: MenuItem[] = [
-  {
-    id: '001',
-    name: 'Espresso',
-    price: 120,
-    category: 'Coffee',
-    description: 'Rich and aromatic coffee shot',
-    isPopular: true,
-    isAvailable: true,
-    ingredients: ['Coffee beans', 'Water'],
-    tags: ['Hot', 'Caffeine', 'Classic']
-  },
-  {
-    id: '002',
-    name: 'Cappuccino',
-    price: 150,
-    category: 'Coffee',
-    description: 'Espresso with steamed milk and foam',
-    isPopular: true,
-    isAvailable: true,
-    ingredients: ['Coffee beans', 'Milk', 'Water'],
-    tags: ['Hot', 'Caffeine', 'Milk']
-  },
-  {
-    id: '003',
-    name: 'Matcha Latte',
-    price: 160,
-    category: 'Tea',
-    description: 'Premium matcha with steamed milk',
-    isPopular: true,
-    isAvailable: true,
-    ingredients: ['Matcha powder', 'Milk', 'Water'],
-    tags: ['Hot', 'Tea']
-  },
-  {
-    id: '004',
-    name: 'Iced Americano',
-    price: 135,
-    category: 'Cold Drinks',
-    description: 'Chilled espresso with cold water',
-    isPopular: false,
-    isAvailable: true,
-    ingredients: ['Coffee beans', 'Water', 'Ice'],
-    tags: ['Cold', 'Caffeine', 'Classic']
-  },
-  {
-    id: '005',
-    name: 'Chocolate Croissant',
-    price: 95,
-    category: 'Pastries',
-    description: 'Buttery croissant with chocolate filling',
-    isPopular: true,
-    isAvailable: true,
-    ingredients: ['Flour', 'Butter', 'Chocolate', 'Sugar'],
-    tags: ['Breakfast', 'Sweet']
-  },
-  {
-    id: '006',
-    name: 'Extra Espresso Shot',
-    price: 40,
-    category: 'Add-ons',
-    description: 'Extra shot of espresso',
-    isPopular: false,
-    isAvailable: true,
-    ingredients: ['Coffee beans', 'Water'],
-    tags: ['Add-on', 'Caffeine']
-  },
-  {
-    id: '007',
-    name: 'Custom Caramel Frappuccino',
-    price: 180,
-    category: 'Custom Drinks',
-    description: 'Personalized caramel blended ice drink',
-    isPopular: false,
-    isAvailable: true,
-    ingredients: ['Coffee', 'Milk', 'Caramel syrup', 'Ice', 'Whipped cream'],
-    tags: ['Cold', 'Sweet', 'Custom']
-  }
-];
-
-// Categories and their icons
 const categories = [
-  { name: 'All', count: 0, icon: <Coffee size={16} /> },
-  { name: 'Coffee', count: 0, icon: <Coffee size={16} /> },
-  { name: 'Tea', count: 0, icon: <CupSoda size={16} /> },
-  { name: 'Cold Drinks', count: 0, icon: <CupSoda size={16} /> },
-  { name: 'Pastries', count: 0, icon: <Cookie size={16} /> },
-  { name: 'Add-ons', count: 0, icon: <PlusCircle size={16} /> },
-  { name: 'Custom Drinks', count: 0, icon: <Coffee size={16} /> }
+  { name: 'Coffee', value: 1 },
+  { name: 'Frappe', value: 2 },
+  { name: 'Smoothie', value: 3 }
 ];
 
 const MenuManager = () => {
-  // State for filters
+  const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [categoryFilter, setCategoryFilter] = useState('All');
+  const [categoryFilter, setCategoryFilter] = useState<'All' | number>('All');
   const [showForm, setShowForm] = useState(false);
   const [currentItem, setCurrentItem] = useState<MenuItem | null>(null);
 
-  // Count items by category
-  const categoryCounts = categories.map(category => {
-    return {
-      ...category,
-      count: category.name === 'All' 
-        ? mockMenuItems.length 
-        : mockMenuItems.filter(item => item.category === category.name).length
-    };
-  });
+  // Fetch menu items from backend
+  useEffect(() => {
+    fetchMenuItems();
+  }, []);
+
+  const fetchMenuItems = async () => {
+    const res = await axios.get('http://localhost:5000/api/products');
+    setMenuItems(res.data);
+  };
 
   // Filter menu items
-  const filteredItems = mockMenuItems.filter(item => {
-    // Search filter
-    const matchesSearch = 
-      searchTerm === '' || 
-      item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (item.tags && item.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase())));
-    
-    // Category filter
-    const matchesCategory = categoryFilter === 'All' || item.category === categoryFilter;
-    
+  const filteredItems = menuItems.filter(item => {
+    const matchesSearch =
+      searchTerm === '' ||
+      item.product_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.product_description.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory =
+      categoryFilter === 'All' || item.category_id === categoryFilter;
     return matchesSearch && matchesCategory;
   });
 
-  // Handler for edit item
+  // Handlers
   const handleEditItem = (item: MenuItem) => {
     setCurrentItem(item);
     setShowForm(true);
   };
 
-  // Handler for new item
   const handleNewItem = () => {
     setCurrentItem(null);
     setShowForm(true);
   };
 
-  // For simplicity, these are just placeholder functions in the UI mockup
-  const handleSaveItem = () => {
-    // Save logic would go here
-    setShowForm(false);
+  const handleSaveItem = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+
+    // If editing, append the id for PUT
+    let url = 'http://localhost:5000/api/products';
+    let method: 'post' | 'put' = 'post';
+    if (currentItem) {
+      url += `/${currentItem.id}`;
+      method = 'put';
+    }
+
+    // If editing, add a hidden _method override for PUT (if needed by backend)
+    // formData.append('_method', method);
+
+    // Ingredients: convert to JSON string for backend
+    const ingredients = formData.get('ingredients') as string;
+    formData.set('ingredients', JSON.stringify(ingredients.split(',').map(i => i.trim())));
+
+    try {
+      await axios({
+        method,
+        url,
+        data: formData,
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      setShowForm(false);
+      fetchMenuItems();
+    } catch (err) {
+      alert('Failed to save item.');
+    }
   };
 
-  const handleDeleteItem = (id: string) => {
-    // Delete logic would go here
-    console.log("Delete item:", id);
+  const handleDeleteItem = async (id: string) => {
+    await axios.delete(`http://localhost:5000/api/products/${id}`);
+    fetchMenuItems();
   };
 
-  // Format price to Philippine Peso
-  const formatPrice = (price: number) => {
-    return `₱${price.toLocaleString()}`;
-  };
+  const formatPrice = (price: number) => `₱${price.toLocaleString()}`;
 
   return (
     <div>
@@ -188,21 +115,28 @@ const MenuManager = () => {
 
       {/* Category Tabs */}
       <div className="flex overflow-x-auto pb-2 mb-6">
-        {categoryCounts.map((category) => (
+        <button
+          key="All"
+          onClick={() => setCategoryFilter('All')}
+          className={`flex items-center px-4 py-2 mr-2 rounded-lg whitespace-nowrap ${
+            categoryFilter === 'All'
+              ? 'bg-[#3e2723] text-white'
+              : 'bg-white border border-[#e4c9a7] text-[#5d4037] hover:bg-[#f8e8d0]'
+          }`}
+        >
+          All
+        </button>
+        {categories.map((category) => (
           <button
-            key={category.name}
-            onClick={() => setCategoryFilter(category.name)}
+            key={category.value}
+            onClick={() => setCategoryFilter(category.value)}
             className={`flex items-center px-4 py-2 mr-2 rounded-lg whitespace-nowrap ${
-              categoryFilter === category.name
+              categoryFilter === category.value
                 ? 'bg-[#3e2723] text-white'
                 : 'bg-white border border-[#e4c9a7] text-[#5d4037] hover:bg-[#f8e8d0]'
             }`}
           >
-            <span className="mr-2">{category.icon}</span>
             {category.name}
-            <span className="ml-2 px-1.5 py-0.5 text-xs rounded-full bg-opacity-20 bg-white text-current">
-              {category.count}
-            </span>
           </button>
         ))}
       </div>
@@ -210,11 +144,10 @@ const MenuManager = () => {
       {/* Search */}
       <div className="mb-6">
         <div className="relative">
-          <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#b5a397]" />
           <input
             type="text"
             placeholder="Search menu items..."
-            className="w-full pl-10 pr-4 py-3 border border-[#e4c9a7] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3e2723]/20 bg-white"
+            className="w-full pl-4 pr-4 py-3 border border-[#e4c9a7] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3e2723]/20 bg-white"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -226,65 +159,47 @@ const MenuManager = () => {
         {filteredItems.length > 0 ? (
           filteredItems.map((item) => (
             <div key={item.id} className="bg-white rounded-lg shadow-sm border border-[#e4c9a7] overflow-hidden">
-              {/* Item Image or Placeholder */}
               <div className="h-40 bg-[#f8e8d0] relative">
-                {item.image ? (
-                  <img 
-                    src={item.image} 
-                    alt={item.name} 
+                {item.image_url ? (
+                  <img
+                    src={item.image_url}
+                    alt={item.product_name}
                     className="w-full h-full object-cover"
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center">
-                    {item.category === 'Coffee' && <Coffee size={40} className="text-[#b5a397]" />}
-                    {item.category === 'Tea' && <CupSoda size={40} className="text-[#b5a397]" />}
-                    {item.category === 'Cold Drinks' && <CupSoda size={40} className="text-[#b5a397]" />}
-                    {item.category === 'Pastries' && <Cookie size={40} className="text-[#b5a397]" />}
-                    {(item.category === 'Add-ons' || item.category === 'Custom Drinks') && <Coffee size={40} className="text-[#b5a397]" />}
+                    <PlusCircle size={40} className="text-[#b5a397]" />
                   </div>
                 )}
-                {item.isPopular && (
+                {item.is_popular && (
                   <div className="absolute top-2 left-2 bg-[#3e2723] text-white text-xs px-2 py-1 rounded-full">
                     Popular
                   </div>
                 )}
-                {!item.isAvailable && (
+                {!item.is_available && (
                   <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
                     <span className="text-white font-medium">Out of Stock</span>
                   </div>
                 )}
               </div>
-              
-              {/* Item Content */}
               <div className="p-4">
                 <div className="flex justify-between items-start mb-2">
-                  <h3 className="text-lg font-semibold text-[#3e2723]">{item.name}</h3>
-                  <span className="font-bold text-[#3e2723]">{formatPrice(item.price)}</span>
+                  <h3 className="text-lg font-semibold text-[#3e2723]">{item.product_name}</h3>
+                  <span className="font-bold text-[#3e2723]">{formatPrice(item.product_price)}</span>
                 </div>
-                
-                <p className="text-sm text-[#5d4037] mb-3 line-clamp-2">{item.description}</p>
-                
-                <div className="flex flex-wrap gap-1 mb-3">
-                  {item.tags && item.tags.map((tag, index) => (
-                    <span 
-                      key={index}
-                      className="text-xs bg-[#f8e8d0] text-[#5d4037] px-2 py-0.5 rounded-full"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-                
+                <p className="text-sm text-[#5d4037] mb-3 line-clamp-2">{item.product_description}</p>
                 <div className="flex justify-between items-center">
-                  <span className="text-xs text-[#b5a397]">{item.category}</span>
+                  <span className="text-xs text-[#b5a397]">
+                    {categories.find(cat => cat.value === item.category_id)?.name || item.category_id}
+                  </span>
                   <div className="flex space-x-1">
-                    <button 
+                    <button
                       onClick={() => handleEditItem(item)}
                       className="p-1.5 bg-[#f8e8d0] text-[#3e2723] rounded-md hover:bg-[#e4c9a7]"
                     >
                       <Edit size={16} />
                     </button>
-                    <button 
+                    <button
                       onClick={() => handleDeleteItem(item.id)}
                       className="p-1.5 bg-[#f8e8d0] text-red-600 rounded-md hover:bg-red-100"
                     >
@@ -298,7 +213,7 @@ const MenuManager = () => {
         ) : (
           <div className="col-span-full p-8 text-center bg-white rounded-lg border border-[#e4c9a7]">
             <p className="text-[#5d4037] mb-2">No menu items found matching your search.</p>
-            <button 
+            <button
               onClick={() => {
                 setSearchTerm('');
                 setCategoryFilter('All');
@@ -319,156 +234,147 @@ const MenuManager = () => {
               <h2 className="text-xl font-bold text-[#3e2723]">
                 {currentItem ? 'Edit Item' : 'Add New Item'}
               </h2>
-              <button 
+              <button
                 onClick={() => setShowForm(false)}
                 className="text-[#5d4037] hover:text-[#3e2723]"
               >
                 <X size={20} />
               </button>
             </div>
-            
             <div className="p-6">
-              <form className="space-y-6">
-                {/* Basic Info */}
+              <form className="space-y-6" onSubmit={handleSaveItem}>
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-[#5d4037] mb-1">
                       Name
                     </label>
-                    <input 
-                      type="text" 
+                    <input
+                      type="text"
+                      name="product_name"
                       className="w-full p-2 border border-[#e4c9a7] rounded-md focus:outline-none focus:ring-2 focus:ring-[#3e2723]/20"
-                      defaultValue={currentItem?.name}
+                      defaultValue={currentItem?.product_name}
+                      required
                     />
                   </div>
-                  
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-[#5d4037] mb-1">
                         Price (₱)
                       </label>
-                      <input 
-                        type="number" 
+                      <input
+                        type="number"
+                        name="product_price"
                         className="w-full p-2 border border-[#e4c9a7] rounded-md focus:outline-none focus:ring-2 focus:ring-[#3e2723]/20"
-                        defaultValue={currentItem?.price}
+                        defaultValue={currentItem?.product_price}
+                        required
                       />
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-[#5d4037] mb-1">
                         Category
                       </label>
-                      <select 
+                      <select
+                        name="category_id"
                         className="w-full p-2 border border-[#e4c9a7] rounded-md focus:outline-none focus:ring-2 focus:ring-[#3e2723]/20"
-                        defaultValue={currentItem?.category}
+                        defaultValue={currentItem?.category_id}
+                        required
                       >
-                        <option value="Coffee">Coffee</option>
-                        <option value="Tea">Tea</option>
-                        <option value="Cold Drinks">Cold Drinks</option>
-                        <option value="Pastries">Pastries</option>
-                        <option value="Add-ons">Add-ons</option>
-                        <option value="Custom Drinks">Custom Drinks</option>
+                        {categories.map((cat) => (
+                          <option key={cat.value} value={cat.value}>
+                            {cat.name}
+                          </option>
+                        ))}
                       </select>
                     </div>
                   </div>
-                  
                   <div>
                     <label className="block text-sm font-medium text-[#5d4037] mb-1">
                       Description
                     </label>
-                    <textarea 
+                    <textarea
+                      name="product_description"
                       className="w-full p-2 border border-[#e4c9a7] rounded-md focus:outline-none focus:ring-2 focus:ring-[#3e2723]/20"
                       rows={3}
-                      defaultValue={currentItem?.description}
+                      defaultValue={currentItem?.product_description}
+                      required
                     ></textarea>
                   </div>
                 </div>
-                
-                {/* Options */}
                 <div className="space-y-2">
                   <div className="flex items-center">
-                    <input 
-                      type="checkbox" 
-                      id="isPopular" 
+                    <input
+                      type="checkbox"
+                      name="is_popular"
+                      id="is_popular"
                       className="rounded border-[#e4c9a7]"
-                      defaultChecked={currentItem?.isPopular}
+                      defaultChecked={currentItem?.is_popular}
                     />
-                    <label htmlFor="isPopular" className="ml-2 text-[#5d4037]">
+                    <label htmlFor="is_popular" className="ml-2 text-[#5d4037]">
                       Mark as Popular
                     </label>
                   </div>
                   <div className="flex items-center">
-                    <input 
-                      type="checkbox" 
-                      id="isAvailable" 
+                    <input
+                      type="checkbox"
+                      name="is_available"
+                      id="is_available"
                       className="rounded border-[#e4c9a7]"
-                      defaultChecked={currentItem?.isAvailable ?? true}
+                      defaultChecked={currentItem?.is_available ?? true}
                     />
-                    <label htmlFor="isAvailable" className="ml-2 text-[#5d4037]">
+                    <label htmlFor="is_available" className="ml-2 text-[#5d4037]">
                       Available for ordering
                     </label>
                   </div>
                 </div>
-                
-                {/* Ingredients */}
                 <div>
                   <label className="block text-sm font-medium text-[#5d4037] mb-1">
                     Ingredients (comma-separated)
                   </label>
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
+                    name="ingredients"
                     className="w-full p-2 border border-[#e4c9a7] rounded-md focus:outline-none focus:ring-2 focus:ring-[#3e2723]/20"
                     defaultValue={currentItem?.ingredients?.join(', ')}
                   />
                 </div>
-                
-                {/* Tags */}
                 <div>
                   <label className="block text-sm font-medium text-[#5d4037] mb-1">
-                    Tags (comma-separated)
+                    Product Image URL
                   </label>
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
+                    name="image_url"
                     className="w-full p-2 border border-[#e4c9a7] rounded-md focus:outline-none focus:ring-2 focus:ring-[#3e2723]/20"
-                    defaultValue={currentItem?.tags?.join(', ')}
+                    defaultValue={currentItem?.image_url}
                   />
                 </div>
-                
-                {/* Image Upload */}
                 <div>
                   <label className="block text-sm font-medium text-[#5d4037] mb-1">
                     Product Image
                   </label>
-                  <div className="flex items-center justify-center border-2 border-dashed border-[#e4c9a7] rounded-md p-6 bg-[#f8e8d0]">
-                    <div className="space-y-1 text-center">
-                      <div className="flex justify-center">
-                        <PlusCircle size={24} className="text-[#5d4037]" />
-                      </div>
-                      <div className="text-sm text-[#5d4037]">
-                        <span className="font-medium text-[#3e2723] hover:underline">Upload an image</span> or drag and drop
-                      </div>
-                      <p className="text-xs text-[#b5a397]">
-                        PNG, JPG up to 5MB
-                      </p>
-                    </div>
-                    <input type="file" className="hidden" />
-                  </div>
+                  <input
+                    type="file"
+                    name="image"
+                    accept="image/*"
+                    className="w-full p-2 border border-[#e4c9a7] rounded-md focus:outline-none focus:ring-2 focus:ring-[#3e2723]/20"
+                  />
+                </div>
+                <div className="flex justify-end space-x-3 mt-8">
+                  <button
+                    type="button"
+                    onClick={() => setShowForm(false)}
+                    className="px-4 py-2 border border-[#e4c9a7] rounded-md text-[#5d4037] hover:bg-[#f8e8d0]"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-4 py-2 bg-[#3e2723] text-white rounded-md hover:bg-[#5d4037]"
+                  >
+                    {currentItem ? 'Save Changes' : 'Add Item'}
+                  </button>
                 </div>
               </form>
-              
-              <div className="flex justify-end space-x-3 mt-8">
-                <button
-                  onClick={() => setShowForm(false)}
-                  className="px-4 py-2 border border-[#e4c9a7] rounded-md text-[#5d4037] hover:bg-[#f8e8d0]"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleSaveItem}
-                  className="px-4 py-2 bg-[#3e2723] text-white rounded-md hover:bg-[#5d4037]"
-                >
-                  {currentItem ? 'Save Changes' : 'Add Item'}
-                </button>
-              </div>
             </div>
           </div>
         </div>

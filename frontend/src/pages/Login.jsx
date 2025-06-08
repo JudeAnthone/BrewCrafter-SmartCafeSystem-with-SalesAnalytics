@@ -21,23 +21,10 @@ function Login() {
             setError('');
             setLoading(true);
             
-            // For demo purposes without a backend
-            // In production, this would be an API call
-            
-            // Allow login with any email/password
-            // You can add test user validation if you prefer
-            const userData = {
-                name: email.split('@')[0], // Extract a name from email
-                email,
-                id: Date.now(),
-                createdAt: new Date().toISOString()
-            };
-            
-            await login(userData);
+            await login({ email, password });
             
         } catch (err) {
-            setError('Failed to login. Please try again.');
-            console.error(err);
+            setError(err.response?.data?.message || 'Failed to login. Please try again.');
         } finally {
             setLoading(false);
         }
@@ -158,7 +145,11 @@ function Login() {
                         </svg>
                         Google
                     </button>
-                    <button className="flex items-center justify-center py-3 px-4 border border-[#e4c9a7] rounded-xl hover:bg-[#f8f4f0] transition-colors duration-200">
+                    <a
+                        href="http://localhost:5000/api/auth/facebook"
+                        className="flex items-center justify-center py-3 px-4 border border-[#e4c9a7] rounded-xl hover:bg-[#f8f4f0] transition-colors duration-200"
+                        style={{ textDecoration: 'none' }}
+                    >
                         <svg
                             className="w-5 h-5 mr-2"
                             viewBox="0 0 24 24"
@@ -171,7 +162,7 @@ function Login() {
                             />
                         </svg>
                         Facebook
-                    </button>
+                    </a>
                 </div>
             </div>
         </div>

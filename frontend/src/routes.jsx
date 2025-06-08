@@ -10,11 +10,11 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ForgotPassword from "./pages/ForgotPassword";
 import Profile from "./pages/Profile";
-import AboutUs from "./pages/AboutUs"; // Add this import
+import AboutUs from "./pages/AboutUs";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { AuthProvider } from "./contexts/AuthContext";
+import SocialAuth from "./pages/SocialAuth";
 
-// we can also add the Protected routes for Authentication.
 const AppRoutes = () => {
   return (
     <Router>
@@ -23,18 +23,19 @@ const AppRoutes = () => {
           {/* Public Routes */}
           <Route element={<MainLayout />}>
             <Route path="/" element={<Home />} />
-            <Route path="/menu" element={<Menu />} />
-            <Route path="/craft" element={<Craft />} />
-            <Route path="/cart" element={<Cart />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/about" element={<AboutUs />} /> {/* Add this route */}
+            <Route path="/about" element={<AboutUs />} />
+            <Route path="/social-auth" element={<SocialAuth />} />
 
-            {/* Protected Routes */}
+            {/* Protected Routes - for logged in users*/}
             <Route element={<ProtectedRoute />}>
+              <Route path="/menu" element={<Menu />} />
+              <Route path="/craft" element={<Craft />} />
+              <Route path="/cart" element={<Cart />} />
               <Route path="/profile" element={<Profile />} />
-              {/* Add more protected routes here */}
+              {/* more protected routes here if needed */}
             </Route>
           </Route>
 

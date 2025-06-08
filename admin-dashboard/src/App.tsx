@@ -6,11 +6,11 @@ import Inventory from './pages/Inventory';
 import Customers from './pages/Customers';
 import Orders from './pages/Orders';
 import Settings from './pages/Settings';
-import Login from './pages/Login';
-import Register from './pages/Register';
+import Login from './pages/AdminLogin';
+import Register from './pages/AdminRegister';
 import ForgotPassword from './pages/ForgotPassword';
-import ProtectedRoute from './components/ProtectedRoute';
-import { AuthProvider } from './contexts/AuthContext';
+import ProtectedRoute from './components/AdminProtectedRoute';
+import { AuthProvider } from './contexts/AdminAuthContext';
 
 function App() {
   return (

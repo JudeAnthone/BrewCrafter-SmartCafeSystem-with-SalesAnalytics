@@ -1,12 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Craft = () => {
+    // Check for user_id set by login, do NOT generate a new one here
+    useEffect(() => {
+        const user_id = localStorage.getItem("user_id");
+        if (!user_id) {
+            alert("Please log in to craft a drink.");
+            // Optionally: window.location.href = "/login";
+        }
+    }, []);
+
     const navigate = useNavigate();
     const [notification, setNotification] = useState(null);
     const [currentStep, setCurrentStep] = useState(1);
-    
-    // custome drink details 
+
+    // custom drink details 
     const [craftedDrink, setCraftedDrink] = useState({
         base: "",
         size: "",
@@ -19,14 +29,9 @@ const Craft = () => {
         price: 0,
     });
 
-    
-
     // Price calculation with useEffect whenever craftedDrink changes
     useEffect(() => {
-        
         let totalPrice = 0;
-
-        // Base prices
         const basePrices = {
             Espresso: 80,
             "Cold Brew": 90,
@@ -34,15 +39,11 @@ const Craft = () => {
             Tea: 70,
             Chocolate: 85,
         };
-
-        // Size multipliers
         const sizeMultipliers = {
             Small: 1,
             Medium: 1.25,
             Large: 1.5,
         };
-
-        // Add-on prices
         const milkPrices = {
             "Whole Milk": 10,
             "Almond Milk": 15,
@@ -51,8 +52,6 @@ const Craft = () => {
             "Soy Milk": 10,
             None: 0,
         };
-        
-        // Sweetener prices
         const sweetenerPrices = {
             Sugar: 0,
             Honey: 5,
@@ -60,42 +59,27 @@ const Craft = () => {
             Stevia: 5,
             None: 0,
         };
+        const toppingPrice = 10;
+        const extraPrice = 15;
 
-        // toppings and extras
-        const toppingPrice = 10; // Per topping
-        const extraPrice = 15; // Per extra
-
-        // Price calculation logic
-        if (craftedDrink.base && basePrices[craftedDrink.base]) { // base price, if selected:
-            totalPrice += basePrices[craftedDrink.base]; // do this 
+        if (craftedDrink.base && basePrices[craftedDrink.base]) {
+            totalPrice += basePrices[craftedDrink.base];
         }
-
-        // size multiplier
         if (craftedDrink.size && sizeMultipliers[craftedDrink.size]) {
             totalPrice *= sizeMultipliers[craftedDrink.size];
         }
-
-        // milk price
         if (craftedDrink.milk && milkPrices[craftedDrink.milk]) {
             totalPrice += milkPrices[craftedDrink.milk];
         }
-
-        // sweetener price
         if (craftedDrink.sweetener && sweetenerPrices[craftedDrink.sweetener]) {
             totalPrice += sweetenerPrices[craftedDrink.sweetener];
         }
-
-        // toppings and extras
         totalPrice += craftedDrink.toppings.length * toppingPrice;
         totalPrice += craftedDrink.extras.length * extraPrice;
-
-        // Round to nearest whole number
         totalPrice = Math.round(totalPrice);
 
-        
-        // updates the craftedDrink with its new prices 
         setCraftedDrink((prev) => ({ ...prev, price: totalPrice }));
-    }, [ // dependency array (use this if we have useEffect)
+    }, [
         craftedDrink.base,
         craftedDrink.size,
         craftedDrink.milk,
@@ -103,89 +87,83 @@ const Craft = () => {
         craftedDrink.toppings,
         craftedDrink.extras,
     ]);
-    
-    
-    // FUNCTIONAL UPDATE FORM
-    // Next step process
+
     const nextStep = () => {
-        setCurrentStep((prevStep) => Math.min(prevStep + 1, 7)); // Maximum of 7 step in drink customization process 
+        setCurrentStep((prevStep) => Math.min(prevStep + 1, 7));
     };
 
-    
-    // Previous step process
     const prevStep = () => {
-        setCurrentStep((prevStep) => Math.max(prevStep - 1, 1)); // Ensures that the step doesn't go below 1
+        setCurrentStep((prevStep) => Math.max(prevStep - 1, 1));
     };
 
-    
-    // Handles changes in the input and dropdown fields
     const handleChange = (e) => {
         const { name, value } = e.target;
         setCraftedDrink((prev) => ({ ...prev, [name]: value }));
     };
 
-    
-    // multi-select function for selecting or deselecting the options that can be repeated (toppings, add-ons and extras)
     const handleCheckboxChange = (category, item) => {
         setCraftedDrink((prev) => {
-            const updatedArray = prev[category].includes(item) //Checks if that item (user clicked item) is already in the array (i.e., checkbox was already selected)
-                ? prev[category].filter((i) => i !== item) // If yes → remove it
-                : [...prev[category], item]; // If no → add it
-
-            return { ...prev, [category]: updatedArray }; // Returning to the updated state
+            const updatedArray = prev[category].includes(item)
+                ? prev[category].filter((i) => i !== item)
+                : [...prev[category], item];
+            return { ...prev, [category]: updatedArray };
         });
     };
 
-    
-    const addToCart = () => {
-        // Generate a unique ID for the crafted drink
-        const craftedDrinkItem = {
-            id: `craft-${Date.now()}`,
-            name: craftedDrink.name || "Custom Crafted Drink",
-            description: `${craftedDrink.base} with ${craftedDrink.milk}, ${craftedDrink.temperature}, ${craftedDrink.size}`,
-            price: craftedDrink.price,
-            image: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&h=300&q=80",
-            quantity: 1,
-            customizations: { ...craftedDrink },
-        };
+    const addToCart = async () => {
+        try {
+            const user_id = localStorage.getItem("user_id");
+            if (!user_id) {
+                alert("Please log in to add to cart.");
+                return;
+            }
+            const payload = {
+                user_id,
+                base: craftedDrink.base,
+                size: craftedDrink.size,
+                milk: craftedDrink.milk,
+                sweetener: craftedDrink.sweetener,
+                toppings: craftedDrink.toppings,
+                extras: craftedDrink.extras,
+                temperature: craftedDrink.temperature,
+                name: craftedDrink.name || "Custom Crafted Drink",
+                price: craftedDrink.price
+            };
+            const res = await axios.post("http://localhost:5000/api/custom-drinks", payload);
+            const savedDrink = res.data;
 
-        // Get existing cart from localStorage
-        const existingCart = JSON.parse(localStorage.getItem("cart") || "[]"); // if no cart exist, initialize an empty array "[]"
-        const updatedCart = [...existingCart, craftedDrinkItem]; // combines the existing cart items with the new drink object 
+            await axios.post("http://localhost:5000/api/cart", {
+                user_id,
+                custom_drink_id: savedDrink.id,
+                quantity: 1
+            });
 
-        // Update localStorage
-        localStorage.setItem("cart", JSON.stringify(updatedCart)); // updatedCart back in the localStorage
+            setNotification("Your Custom Drink is added to the Cart!");
+            setTimeout(() => setNotification(null), 3000);
 
-        // Show notification
-        setNotification("Your Custom Drink is added to the Cart!");
-        setTimeout(() => setNotification(null), 3000);
-
-        // Reset form - reset the craftedDrink state to its initial values (empty arrays and fields) 
-        // after the customization process
-        setCraftedDrink({
-            base: "",
-            size: "",
-            milk: "",
-            sweetener: "",
-            toppings: [],
-            extras: [],
-            temperature: "",
-            name: "",
-            price: 0,
-        });
-
-        // reset all the step to step 1 after all the customization process
-        setCurrentStep(1);
+            setCraftedDrink({
+                base: "",
+                size: "",
+                milk: "",
+                sweetener: "",
+                toppings: [],
+                extras: [],
+                temperature: "",
+                name: "",
+                price: 0,
+            });
+            setCurrentStep(1);
+        } catch (err) {
+            setNotification("Failed to save your custom drink. Please try again.");
+            setTimeout(() => setNotification(null), 3000);
+        }
     };
-    
-    
-// Buy now button navigation
-    const buyNow = () => {
-        addToCart();
+
+    const buyNow = async () => {
+        await addToCart();
         navigate("/cart");
     };
 
-    
     // Options for the customization
     // STEP 1
     const drinkBases = ["Espresso", "Cold Brew", "Matcha", "Tea", "Chocolate"];

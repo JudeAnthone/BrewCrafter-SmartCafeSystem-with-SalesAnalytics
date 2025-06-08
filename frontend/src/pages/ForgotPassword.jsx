@@ -40,6 +40,7 @@ function ForgotPassword() {
         <h2 className="text-3xl font-bold text-center mb-4 text-[#3e2723]">
           Reset <span className="text-[#cc6d2d]">Password</span>
         </h2>
+        
         <p className="text-center text-[#5d4037] mb-8">
           Enter your email and we'll send you instructions to reset your password.
         </p>
@@ -57,7 +58,8 @@ function ForgotPassword() {
         )}
         
         <form className="space-y-6" onSubmit={handleSubmit}>
-          <div>
+          
+          <div>    {/* Enter Email */}
             <label className="block text-[#5d4037] font-medium mb-2">Email</label>
             <input
               type="email"
@@ -68,6 +70,7 @@ function ForgotPassword() {
             />
           </div>
           
+          {/* Submit button */}
           <button
             type="submit"
             className="w-full bg-[#cc6d2d] hover:bg-[#3e2723] text-white font-semibold py-3.5 rounded-xl transition duration-300 shadow-md hover:shadow-lg flex justify-center"
@@ -87,6 +90,7 @@ function ForgotPassword() {
           </button>
         </form>
         
+        {/* Back to login button */}
         <div className="mt-8 text-center">
           <Link 
             to="/login"

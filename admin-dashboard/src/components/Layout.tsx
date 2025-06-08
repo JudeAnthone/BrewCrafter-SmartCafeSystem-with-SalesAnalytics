@@ -4,7 +4,7 @@ import {
   Coffee, Home, Menu, Package, Users, ShoppingCart, Settings,
   LogOut, ChevronDown, ChevronRight, Bell, User as UserIcon
 } from 'lucide-react';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../contexts/AdminAuthContext';
 
 const Layout: React.FC = () => {
   const [isSidebarCollapsed, setSidebarCollapsed] = useState(false);
