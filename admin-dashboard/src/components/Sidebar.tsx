@@ -6,7 +6,6 @@ const links = [
   { to: "/orders", label: "Orders", icon: <ShoppingCart size={18} /> },
   { to: "/menu", label: "Menu Manager", icon: <Menu size={18} /> },
   { to: "/inventory", label: "Inventory", icon: <Package size={18} /> },
-  { to: "/customers", label: "Customers", icon: <Users size={18} /> },
   { to: "/settings", label: "Settings", icon: <Settings size={18} /> },
 ];
 

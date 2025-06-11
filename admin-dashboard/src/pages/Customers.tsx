@@ -1,131 +1,24 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { 
   Search, Filter, Download, X, User, Star, Mail, Phone, 
   MapPin, Calendar, Edit, Trash2, UserPlus, ChevronDown, ChevronUp, Eye 
 } from 'lucide-react';
 
-// Define TypeScript interfaces
 interface Customer {
   id: string;
   name: string;
   email: string;
   phone?: string;
-  joinDate: string;
-  orders: number;
-  totalSpent: number;
-  loyaltyPoints: number;
-  favorites: string[];
-  address?: string;
-  lastVisit: string;
+  join_date: string;
+  last_visit: string;
   birthday?: string;
+  address?: string;
   status: 'Active' | 'Inactive';
-  notes?: string;
-  profileImage?: string;
+  profile_image?: string;
 }
 
-// Mock data for customers
-const mockCustomers: Customer[] = [
-  {
-    id: 'C001',
-    name: 'Juan Dela Cruz',
-    email: 'juan@email.com',
-    phone: '+63 912 345 6789',
-    joinDate: '2025-01-15',
-    orders: 24,
-    totalSpent: 4580,
-    loyaltyPoints: 450,
-    favorites: ['Caramel Latte', 'Chocolate Croissant'],
-    address: 'Makati City, Metro Manila',
-    lastVisit: '2025-05-22',
-    birthday: '1994-06-12',
-    status: 'Active'
-  },
-  {
-    id: 'C002',
-    name: 'Maria Santos',
-    email: 'maria@email.com',
-    phone: '+63 917 876 5432',
-    joinDate: '2025-02-03',
-    orders: 18,
-    totalSpent: 3250,
-    loyaltyPoints: 325,
-    favorites: ['Matcha Latte', 'Vanilla Croissant'],
-    address: 'Quezon City, Metro Manila',
-    lastVisit: '2025-05-21',
-    status: 'Active'
-  },
-  {
-    id: 'C003',
-    name: 'Paolo Reyes',
-    email: 'paolo@email.com',
-    phone: '+63 918 765 4321',
-    joinDate: '2025-01-22',
-    orders: 15,
-    totalSpent: 2830,
-    loyaltyPoints: 280,
-    favorites: ['Americano', 'Blueberry Cheesecake'],
-    lastVisit: '2025-05-19',
-    status: 'Active'
-  },
-  {
-    id: 'C004',
-    name: 'Ana Tan',
-    email: 'ana@email.com',
-    phone: '+63 919 234 5678',
-    joinDate: '2025-03-15',
-    orders: 8,
-    totalSpent: 1450,
-    loyaltyPoints: 145,
-    favorites: ['Cold Brew', 'Chocolate Chip Cookie'],
-    address: 'Pasig City, Metro Manila',
-    lastVisit: '2025-05-12',
-    birthday: '1996-09-28',
-    status: 'Active'
-  },
-  {
-    id: 'C005',
-    name: 'David Lee',
-    email: 'david@email.com',
-    joinDate: '2025-02-28',
-    orders: 3,
-    totalSpent: 590,
-    loyaltyPoints: 60,
-    favorites: ['Cappuccino'],
-    lastVisit: '2025-04-05',
-    status: 'Inactive'
-  },
-  {
-    id: 'C006',
-    name: 'Sofia Garcia',
-    email: 'sofia@email.com',
-    phone: '+63 927 654 3210',
-    joinDate: '2025-04-10',
-    orders: 12,
-    totalSpent: 1980,
-    loyaltyPoints: 190,
-    favorites: ['Caramel Macchiato', 'Cinnamon Roll'],
-    address: 'Mandaluyong City, Metro Manila',
-    lastVisit: '2025-05-20',
-    birthday: '1992-11-15',
-    status: 'Active'
-  },
-  {
-    id: 'C007',
-    name: 'Miguel Castro',
-    email: 'miguel@email.com',
-    phone: '+63 935 123 4567',
-    joinDate: '2025-03-05',
-    orders: 6,
-    totalSpent: 930,
-    loyaltyPoints: 95,
-    favorites: ['Espresso', 'Butter Croissant'],
-    lastVisit: '2025-05-01',
-    status: 'Inactive'
-  }
-];
-
 const Customers = () => {
-  // State for filters and displays
+  const [customers, setCustomers] = useState<Customer[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
   const [showFilters, setShowFilters] = useState(false);
@@ -136,11 +29,51 @@ const Customers = () => {
     direction: 'asc'
   });
 
+  // Fetch customers from backend
+  useEffect(() => {
+    fetch('http://localhost:5000/api/admin/customers')
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data)) {
+          setCustomers(data);
+        } else {
+          setCustomers([]);
+           
+        }
+      });
+  }, []);
+
+  // Add, edit, delete handlers
+  const handleAddCustomer = async (customer: Partial<Customer>) => {
+    const res = await fetch('http://localhost:5000/api/admin/customers', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(customer)
+    });
+    const newCustomer = await res.json();
+    setCustomers([newCustomer, ...customers]);
+  };
+
+  const handleEditCustomer = async (id: string, updates: Partial<Customer>) => {
+    const res = await fetch(`http://localhost:5000/api/admin/customers/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(updates)
+    });
+    const updated = await res.json();
+    setCustomers(customers.map(c => c.id === id ? updated : c));
+  };
+
+  const handleDeleteCustomer = async (id: string) => {
+    await fetch(`http://localhost:5000/api/admin/customers/${id}`, { method: 'DELETE' });
+    setCustomers(customers.filter(c => c.id !== id));
+  };
+
   // Count customers by status for summary
-  const activeCustomers = mockCustomers.filter(customer => customer.status === 'Active').length;
-  const inactiveCustomers = mockCustomers.filter(customer => customer.status === 'Inactive').length;
-  const totalCustomers = mockCustomers.length;
-  const totalLoyaltyPoints = mockCustomers.reduce((total, customer) => total + customer.loyaltyPoints, 0);
+  const activeCustomers = customers.filter(customer => customer.status === 'Active').length;
+  const inactiveCustomers = customers.filter(customer => customer.status === 'Inactive').length;
+  const totalCustomers = customers.length;
+  const totalLoyaltyPoints = customers.reduce((total, customer) => total + customer.loyaltyPoints, 0);
 
   // Handle sort
   const requestSort = (key: keyof Customer) => {
@@ -152,7 +85,7 @@ const Customers = () => {
   };
 
   // Apply sort
-  const sortedCustomers = [...mockCustomers].sort((a, b) => {
+  const sortedCustomers = [...customers].sort((a, b) => {
     if (sortConfig.key === null) return 0;
     
     if (a[sortConfig.key] < b[sortConfig.key]) {
@@ -208,24 +141,6 @@ const Customers = () => {
   const handleViewCustomer = (customer: Customer) => {
     setSelectedCustomer(customer);
     setShowCustomerModal(true);
-  };
-
-  // Handle adding a new customer (placeholder)
-  const handleAddCustomer = () => {
-    console.log("Add new customer");
-    // This would open a form to add a new customer in a real app
-  };
-
-  // Handle editing a customer (placeholder)
-  const handleEditCustomer = (customer: Customer) => {
-    console.log("Edit customer:", customer.id);
-    // This would open a form to edit the customer in a real app
-  };
-
-  // Handle deleting a customer (placeholder)
-  const handleDeleteCustomer = (id: string) => {
-    console.log("Delete customer:", id);
-    // This would delete the customer in a real app
   };
 
   // Sort indicator component

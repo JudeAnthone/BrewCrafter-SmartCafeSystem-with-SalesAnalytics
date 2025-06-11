@@ -3,7 +3,6 @@ import Layout from './components/Layout'; // Change to Layout instead of AdminLa
 import Dashboard from './pages/Dashboard';
 import MenuManager from './pages/MenuManager';
 import Inventory from './pages/Inventory';
-import Customers from './pages/Customers';
 import Orders from './pages/Orders';
 import Settings from './pages/Settings';
 import Login from './pages/AdminLogin';
@@ -28,7 +27,6 @@ function App() {
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/menu" element={<MenuManager />} />
               <Route path="/inventory" element={<Inventory />} />
-              <Route path="/customers" element={<Customers />} />
               <Route path="/orders" element={<Orders />} />
               <Route path="/settings" element={<Settings />} />
             </Route>

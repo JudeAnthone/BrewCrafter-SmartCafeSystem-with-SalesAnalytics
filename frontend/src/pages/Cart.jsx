@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const Cart = () => {
     const [cartItems, setCartItems] = useState([]);
     const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
 
     const user_id = localStorage.getItem("user_id");
 
@@ -178,7 +179,9 @@ const Cart = () => {
                     <p className="text-lg font-medium text-[#3e2723]">Total</p>
                     <p className="text-lg font-bold text-[#3e2723]">₱{calculateTotal()}</p>
                 </div>
-                <button className="w-full bg-[#3e2723] text-white py-3 rounded-lg hover:bg-[#5d4037] transition-colors font-medium">
+                <button className="w-full bg-[#3e2723] text-white py-3 rounded-lg hover:bg-[#5d4037] transition-colors font-medium"
+                    onClick={() => navigate("/checkout")}
+                >
                     Proceed to Checkout
                 </button>
                 <button

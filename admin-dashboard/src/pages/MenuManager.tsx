@@ -94,8 +94,13 @@ const MenuManager = () => {
   };
 
   const handleDeleteItem = async (id: string) => {
-    await axios.delete(`http://localhost:5000/api/products/${id}`);
-    fetchMenuItems();
+    if (!window.confirm("Are you sure you want to delete this menu item?")) return;
+    try {
+      await axios.delete(`http://localhost:5000/api/products/${id}`);
+      setMenuItems(menuItems.filter(item => item.id !== id)); // Update UI immediately
+    } catch (err) {
+      alert('Failed to delete item.');
+    }
   };
 
   const formatPrice = (price: number) => `₱${price.toLocaleString()}`;

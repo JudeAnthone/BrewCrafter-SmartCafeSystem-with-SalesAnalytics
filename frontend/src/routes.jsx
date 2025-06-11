@@ -14,6 +14,8 @@ import AboutUs from "./pages/AboutUs";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { AuthProvider } from "./contexts/AuthContext";
 import SocialAuth from "./pages/SocialAuth";
+import Checkout from "./pages/Checkout";
+import OrderHistory from "./pages/OrderHistory";
 
 const AppRoutes = () => {
   return (
@@ -35,6 +37,8 @@ const AppRoutes = () => {
               <Route path="/craft" element={<Craft />} />
               <Route path="/cart" element={<Cart />} />
               <Route path="/profile" element={<Profile />} />
+              <Route path="/checkout" element={<Checkout />} />
+              <Route path="/order-history" element={<OrderHistory />} />
               {/* more protected routes here if needed */}
             </Route>
           </Route>

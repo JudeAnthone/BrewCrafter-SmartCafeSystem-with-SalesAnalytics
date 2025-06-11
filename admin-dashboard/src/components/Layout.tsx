@@ -84,21 +84,7 @@ const Layout: React.FC = () => {
                 {!isSidebarCollapsed && <span className="ml-3">Inventory</span>}
               </NavLink>
             </li>
-            <li>
-              <NavLink 
-                to="/customers" 
-                className={({ isActive }) => `
-                  flex items-center px-4 py-3 rounded-lg transition-colors
-                  ${isActive 
-                    ? 'bg-[#f8e8d0] text-[#3e2723] font-medium' 
-                    : 'text-[#5d4037] hover:bg-[#f8e8d0]/50'
-                  }
-                `}
-              >
-                <Users size={20} />
-                {!isSidebarCollapsed && <span className="ml-3">Customers</span>}
-              </NavLink>
-            </li>
+            
             <li>
               <NavLink 
                 to="/orders" 

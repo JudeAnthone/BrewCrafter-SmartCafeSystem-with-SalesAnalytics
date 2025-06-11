@@ -1,127 +1,76 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Search, Filter, Download, X, Eye, CheckCircle, Clock, AlertTriangle } from 'lucide-react';
+import axios from 'axios';
 
-// Mock data for orders
-const mockOrders = [
-  { 
-    id: '12345', 
-    customer: 'Juan Dela Cruz', 
-    email: 'juan@email.com',
-    items: ['Espresso', 'Croissant'], 
-    total: 250,
-    date: '2025-05-22T08:30:00',
-    status: 'Completed',
-    paymentMethod: 'Cash'
-  },
-  { 
-    id: '12346', 
-    customer: 'Maria Santos', 
-    email: 'maria@email.com',
-    items: ['Custom Matcha'], 
-    total: 180,
-    date: '2025-05-22T09:15:00',
-    status: 'Preparing',
-    paymentMethod: 'GCash'
-  },
-  { 
-    id: '12347', 
-    customer: 'Paolo Reyes', 
-    email: 'paolo@email.com',
-    items: ['Caramel Latte', 'Cheesecake'], 
-    total: 320,
-    date: '2025-05-22T10:45:00',
-    status: 'Pending',
-    paymentMethod: 'Credit Card'
-  },
-  { 
-    id: '12348', 
-    customer: 'Ana Tan', 
-    email: 'ana@email.com',
-    items: ['Americano', 'Blueberry Muffin', 'Extra Shot'], 
-    total: 275,
-    date: '2025-05-21T14:20:00',
-    status: 'Completed',
-    paymentMethod: 'Cash'
-  },
-  { 
-    id: '12349', 
-    customer: 'David Lee', 
-    email: 'david@email.com',
-    items: ['Mocha Frappuccino', 'Butter Croissant'], 
-    total: 295,
-    date: '2025-05-21T16:10:00',
-    status: 'Cancelled',
-    paymentMethod: 'GCash'
-  },
-  { 
-    id: '12350', 
-    customer: 'Sofia Garcia', 
-    email: 'sofia@email.com',
-    items: ['Iced Coffee', 'Chocolate Chip Cookie'], 
-    total: 195,
-    date: '2025-05-21T11:30:00',
-    status: 'Completed',
-    paymentMethod: 'PayMaya'
-  },
-  { 
-    id: '12351', 
-    customer: 'Miguel Castro', 
-    email: 'miguel@email.com',
-    items: ['Custom Cold Brew', 'Cinnamon Roll'], 
-    total: 260,
-    date: '2025-05-20T09:45:00',
-    status: 'Completed',
-    paymentMethod: 'Credit Card'
-  }
-];
-
-// Filter options
 const statusOptions = ['All', 'Completed', 'Preparing', 'Pending', 'Cancelled'];
 const dateOptions = ['All Time', 'Today', 'Yesterday', 'This Week', 'This Month'];
 
 const Orders = () => {
-  // State for filters
+  const [orders, setOrders] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
   const [dateFilter, setDateFilter] = useState('All Time');
   const [showFilters, setShowFilters] = useState(false);
 
+  useEffect(() => {
+    const fetchOrders = async () => {
+      setLoading(true);
+      try {
+        const res = await axios.get('http://localhost:5000/api/admin/orders');
+        setOrders(res.data);
+      } catch (err) {
+        setOrders([]);
+      }
+      setLoading(false);
+    };
+    fetchOrders();
+  }, []);
+
   // Count orders by status
   const orderCounts = {
-    total: mockOrders.length,
-    completed: mockOrders.filter(order => order.status === 'Completed').length,
-    preparing: mockOrders.filter(order => order.status === 'Preparing').length,
-    pending: mockOrders.filter(order => order.status === 'Pending').length,
-    cancelled: mockOrders.filter(order => order.status === 'Cancelled').length,
+    total: orders.length,
+    completed: orders.filter(order => order.status === 'completed' || order.status === 'Completed').length,
+    preparing: orders.filter(order => order.status === 'preparing' || order.status === 'Preparing').length,
+    pending: orders.filter(order => order.status === 'pending' || order.status === 'Pending').length,
+    cancelled: orders.filter(order => order.status === 'cancelled' || order.status === 'Cancelled').length,
   };
 
   // Filter orders
-  const filteredOrders = mockOrders.filter(order => {
+  const filteredOrders = orders.filter(order => {
     // Search filter
-    const matchesSearch = 
-      searchTerm === '' || 
+    const matchesSearch =
+      searchTerm === '' ||
       order.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      order.customer.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      order.items.some(item => item.toLowerCase().includes(searchTerm.toLowerCase()));
-    
+      (order.user_name && order.user_name.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (order.items && order.items.some((item: any) => item.item_name && item.item_name.toLowerCase().includes(searchTerm.toLowerCase())));
+
     // Status filter
-    const matchesStatus = statusFilter === 'All' || order.status === statusFilter;
-    
-    // Date filter (simplified for mock data)
+    const matchesStatus = statusFilter === 'All' || order.status.toLowerCase() === statusFilter.toLowerCase();
+
+    // Date filter (simplified)
     let matchesDate = true;
+    const orderDate = new Date(order.created_at);
+    const today = new Date();
     if (dateFilter === 'Today') {
-      matchesDate = order.date.includes('2025-05-22');
+      matchesDate = orderDate.toDateString() === today.toDateString();
     } else if (dateFilter === 'Yesterday') {
-      matchesDate = order.date.includes('2025-05-21');
+      const yesterday = new Date();
+      yesterday.setDate(today.getDate() - 1);
+      matchesDate = orderDate.toDateString() === yesterday.toDateString();
     } else if (dateFilter === 'This Week') {
-      matchesDate = order.date.includes('2025-05');
+      const weekAgo = new Date();
+      weekAgo.setDate(today.getDate() - 7);
+      matchesDate = orderDate >= weekAgo && orderDate <= today;
+    } else if (dateFilter === 'This Month') {
+      matchesDate = orderDate.getMonth() === today.getMonth() && orderDate.getFullYear() === today.getFullYear();
     }
-    
+
     return matchesSearch && matchesStatus && matchesDate;
   });
 
   // Format date string
-  const formatDate = (dateString) => {
+  const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return new Intl.DateTimeFormat('en-PH', {
       month: 'short',
@@ -133,26 +82,26 @@ const Orders = () => {
   };
 
   // Status badge component
-  const StatusBadge = ({ status }) => {
+  const StatusBadge = ({ status }: { status: string }) => {
     let bgColor, textColor, icon;
-    
-    switch (status) {
-      case 'Completed':
+
+    switch (status.toLowerCase()) {
+      case 'completed':
         bgColor = 'bg-green-100';
         textColor = 'text-green-800';
         icon = <CheckCircle size={14} className="mr-1" />;
         break;
-      case 'Preparing':
+      case 'preparing':
         bgColor = 'bg-amber-100';
         textColor = 'text-amber-800';
         icon = <Clock size={14} className="mr-1" />;
         break;
-      case 'Pending':
+      case 'pending':
         bgColor = 'bg-blue-100';
         textColor = 'text-blue-800';
         icon = <Clock size={14} className="mr-1" />;
         break;
-      case 'Cancelled':
+      case 'cancelled':
         bgColor = 'bg-red-100';
         textColor = 'text-red-800';
         icon = <AlertTriangle size={14} className="mr-1" />;
@@ -162,11 +111,11 @@ const Orders = () => {
         textColor = 'text-gray-800';
         break;
     }
-    
+
     return (
       <span className={`flex items-center ${bgColor} ${textColor} px-2 py-1 rounded-full text-xs font-medium`}>
         {icon}
-        {status}
+        {status.charAt(0).toUpperCase() + status.slice(1)}
       </span>
     );
   };
@@ -306,23 +255,29 @@ const Orders = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-light-200">
-              {filteredOrders.length > 0 ? (
+              {loading ? (
+                <tr>
+                  <td colSpan={8} className="py-6 text-center text-gray-100">
+                    Loading orders...
+                  </td>
+                </tr>
+              ) : filteredOrders.length > 0 ? (
                 filteredOrders.map((order) => (
                   <tr key={order.id} className="hover:bg-light-100/30">
-                    <td className="py-3 px-4 font-medium">#{order.id}</td>
+                    <td className="py-3 px-4 font-medium">#{order.id.slice(0, 8)}</td>
                     <td className="py-3 px-4">
-                      <div>{order.customer}</div>
-                      <div className="text-xs text-gray-100">{order.email}</div>
+                      <div>{order.user_name}</div>
+                      <div className="text-xs text-gray-100">{order.user_email}</div>
                     </td>
                     <td className="py-3 px-4">
                       <div className="max-w-[200px] truncate">
-                        {order.items.join(', ')}
+                        {order.items.map((item: any) => item.item_name).join(', ')}
                       </div>
                       <div className="text-xs text-gray-100">{order.items.length} item(s)</div>
                     </td>
-                    <td className="py-3 px-4 font-medium">₱{order.total.toLocaleString()}</td>
-                    <td className="py-3 px-4 text-sm">{formatDate(order.date)}</td>
-                    <td className="py-3 px-4">{order.paymentMethod}</td>
+                    <td className="py-3 px-4 font-medium">₱{Number(order.total_amount).toLocaleString()}</td>
+                    <td className="py-3 px-4 text-sm">{formatDate(order.created_at)}</td>
+                    <td className="py-3 px-4">{order.payment_method || 'Cash'}</td>
                     <td className="py-3 px-4">
                       <StatusBadge status={order.status} />
                     </td>
@@ -344,11 +299,11 @@ const Orders = () => {
           </table>
         </div>
 
-        {/* Pagination */}
+        {/* Pagination (optional, not implemented) */}
         <div className="px-4 py-3 flex items-center justify-between border-t border-light-200">
           <div className="text-sm text-gray-100">
             Showing <span className="font-medium text-primary">{filteredOrders.length}</span> of{" "}
-            <span className="font-medium text-primary">{mockOrders.length}</span> orders
+            <span className="font-medium text-primary">{orders.length}</span> orders
           </div>
           
           <div className="flex gap-1">

@@ -1,149 +1,21 @@
-import { useState } from 'react'; // Remove unused useEffect
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 import {
-  Search,
-  PlusCircle,
-  Filter,
-  Download,
-  AlertTriangle,
-  ChevronDown,
-  ChevronUp,
-  X,
-  Edit,
-  Trash2
-  // Remove unused Check import
+  Search, PlusCircle, Filter, Download, AlertTriangle, ChevronDown, ChevronUp, X, Edit, Trash2
 } from 'lucide-react';
 
-// Define TypeScript interfaces
 interface InventoryItem {
   id: string;
   name: string;
-  category: 'Coffee Beans' | 'Milk' | 'Syrups' | 'Tea' | 'Fruits' | 'Pastries' | 'Supplies';
+  category_name: string;
   quantity: number;
   unit: string;
-  minLevel: number;
-  supplierName: string;
-  lastRestocked: string;
-  price: number;
-  status: 'In Stock' | 'Low Stock' | 'Out of Stock';
-  location?: string;
-  expiryDate?: string;
+  min_level: number;
+  price_per_unit: number;
+  status: string;
+  last_restocked: string;
 }
 
-// Mock data for inventory items
-const mockInventoryItems: InventoryItem[] = [
-  {
-    id: 'INV-001',
-    name: 'Arabica Coffee Beans',
-    category: 'Coffee Beans',
-    quantity: 25,
-    unit: 'kg',
-    minLevel: 10,
-    supplierName: 'Metro Coffee Suppliers',
-    lastRestocked: '2025-05-15',
-    price: 450,
-    status: 'In Stock'
-  },
-  {
-    id: 'INV-002',
-    name: 'Fresh Milk',
-    category: 'Milk',
-    quantity: 8,
-    unit: 'L',
-    minLevel: 10,
-    supplierName: 'Local Dairy Farm',
-    lastRestocked: '2025-05-20',
-    price: 95,
-    status: 'Low Stock',
-    expiryDate: '2025-05-27'
-  },
-  {
-    id: 'INV-003',
-    name: 'Vanilla Syrup',
-    category: 'Syrups',
-    quantity: 12,
-    unit: 'bottles',
-    minLevel: 5,
-    supplierName: 'Flavor Masters Inc.',
-    lastRestocked: '2025-05-10',
-    price: 180,
-    status: 'In Stock'
-  },
-  {
-    id: 'INV-004',
-    name: 'Caramel Syrup',
-    category: 'Syrups',
-    quantity: 3,
-    unit: 'bottles',
-    minLevel: 5,
-    supplierName: 'Flavor Masters Inc.',
-    lastRestocked: '2025-05-10',
-    price: 180,
-    status: 'Low Stock'
-  },
-  {
-    id: 'INV-005',
-    name: 'Green Tea Leaves',
-    category: 'Tea',
-    quantity: 5,
-    unit: 'kg',
-    minLevel: 2,
-    supplierName: 'Tea Essence Co.',
-    lastRestocked: '2025-05-08',
-    price: 320,
-    status: 'In Stock'
-  },
-  {
-    id: 'INV-006',
-    name: 'Strawberries',
-    category: 'Fruits',
-    quantity: 0,
-    unit: 'kg',
-    minLevel: 2,
-    supplierName: 'Fresh Produce Market',
-    lastRestocked: '2025-05-18',
-    price: 220,
-    status: 'Out of Stock',
-    expiryDate: '2025-05-25'
-  },
-  {
-    id: 'INV-007',
-    name: 'Chocolate Croissants',
-    category: 'Pastries',
-    quantity: 15,
-    unit: 'pcs',
-    minLevel: 8,
-    supplierName: 'Sweet Delights Bakery',
-    lastRestocked: '2025-05-24',
-    price: 35,
-    status: 'In Stock',
-    expiryDate: '2025-05-26'
-  },
-  {
-    id: 'INV-008',
-    name: 'Paper Cups (12oz)',
-    category: 'Supplies',
-    quantity: 250,
-    unit: 'pcs',
-    minLevel: 100,
-    supplierName: 'EcoPack Solutions',
-    lastRestocked: '2025-05-05',
-    price: 3.5,
-    status: 'In Stock'
-  }
-];
-
-// Categories and their colors
-const categoryColors: Record<string, { bg: string; text: string }> = {
-  'Coffee Beans': { bg: 'bg-amber-100', text: 'text-amber-800' },
-  'Milk': { bg: 'bg-blue-50', text: 'text-blue-800' },
-  'Syrups': { bg: 'bg-purple-50', text: 'text-purple-800' },
-  'Tea': { bg: 'bg-green-50', text: 'text-green-800' },
-  'Fruits': { bg: 'bg-pink-50', text: 'text-pink-800' },
-  'Pastries': { bg: 'bg-orange-50', text: 'text-orange-800' },
-  'Supplies': { bg: 'bg-gray-100', text: 'text-gray-800' }
-};
-
-// Status colors
 const statusColors: Record<string, { bg: string; text: string }> = {
   'In Stock': { bg: 'bg-green-100', text: 'text-green-800' },
   'Low Stock': { bg: 'bg-amber-100', text: 'text-amber-800' },
@@ -151,9 +23,9 @@ const statusColors: Record<string, { bg: string; text: string }> = {
 };
 
 const Inventory = () => {
-  // State for filters
+  const [inventoryItems, setInventoryItems] = useState<InventoryItem[]>([]);
+  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
-  const [categoryFilter, setCategoryFilter] = useState('All');
   const [statusFilter, setStatusFilter] = useState('All');
   const [showFilters, setShowFilters] = useState(false);
   const [showForm, setShowForm] = useState(false);
@@ -163,71 +35,105 @@ const Inventory = () => {
     direction: 'asc'
   });
 
-  // Add state to manage inventory items
-  const [inventoryItems, setInventoryItems] = useState<InventoryItem[]>(mockInventoryItems);
-  
-  // Count low stock and out of stock items for summary using the state
-  const lowStockItems = inventoryItems.filter(item => item.status === 'Low Stock').length;
-  const outOfStockItems = inventoryItems.filter(item => item.status === 'Out of Stock').length;
-  const totalItems = inventoryItems.length;
-  const totalValue = inventoryItems.reduce((total, item) => total + (item.price * item.quantity), 0);
+  // Fetch inventory from backend
+  useEffect(() => {
+    const fetchInventory = async () => {
+      setLoading(true);
+      try {
+        const res = await axios.get('http://localhost:5000/api/admin/inventory');
+        setInventoryItems(res.data);
+      } catch (err) {
+        setInventoryItems([]);
+      }
+      setLoading(false);
+    };
+    fetchInventory();
+  }, []);
 
-  // Generate unique categories from state data
-  const categories = ['All', ...new Set(inventoryItems.map(item => item.category))];
+  // Add/Edit/Delete handlers (use backend)
+  const handleNewItem = () => {
+    setCurrentItem(null);
+    setShowForm(true);
+  };
 
-  // Generate unique statuses from data
-  const statuses = ['All', 'In Stock', 'Low Stock', 'Out of Stock'];
-  // Handle sort
+  const handleEditItem = (item: InventoryItem) => {
+    setCurrentItem(item);
+    setShowForm(true);
+  };
+
+  const handleSaveItem = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    const itemData = {
+      name: formData.get('name') as string,
+      category_id: formData.get('category_id') as string,
+      quantity: Number(formData.get('quantity')),
+      unit: formData.get('unit') as string,
+      min_level: Number(formData.get('min_level')),
+      price_per_unit: Number(formData.get('price_per_unit')),
+      status: formData.get('status') as string,
+      last_restocked: formData.get('last_restocked') as string,
+    };
+
+    try {
+      if (currentItem) {
+        // Update
+        await axios.put(`http://localhost:5000/api/admin/inventory/${currentItem.id}`, itemData);
+      } else {
+        // Add
+        await axios.post('http://localhost:5000/api/admin/inventory', itemData);
+      }
+      // Refresh list
+      const res = await axios.get('http://localhost:5000/api/admin/inventory');
+      setInventoryItems(res.data);
+      setShowForm(false);
+    } catch (err) {
+      alert('Failed to save inventory item.');
+    }
+  };
+
+  const handleDeleteItem = async (id: string) => {
+    if (!window.confirm('Delete this inventory item?')) return;
+    try {
+      await axios.delete(`http://localhost:5000/api/admin/inventory/${id}`);
+      setInventoryItems(items => items.filter(item => item.id !== id));
+    } catch (err) {
+      alert('Failed to delete inventory item.');
+    }
+  };
+
+  // Sorting and filtering logic (same as before)
   const requestSort = (key: keyof InventoryItem) => {
     let direction: 'asc' | 'desc' = 'asc';
     if (sortConfig.key === key && sortConfig.direction === 'asc') {
       direction = 'desc';
     }
     setSortConfig({ key, direction });
-  };  // Apply sort to the state items
+  };
   const sortedItems = [...inventoryItems].sort((a, b) => {
     if (sortConfig.key === null) return 0;
-    
-    // Type safe way to access property values
     const aValue = a[sortConfig.key];
     const bValue = b[sortConfig.key];
-    
-    // Handle string comparisons (case insensitive)
     if (typeof aValue === 'string' && typeof bValue === 'string') {
-      return sortConfig.direction === 'asc' 
-        ? aValue.localeCompare(bValue) 
+      return sortConfig.direction === 'asc'
+        ? aValue.localeCompare(bValue)
         : bValue.localeCompare(aValue);
     }
-    
-    // Handle number comparisons
     if (typeof aValue === 'number' && typeof bValue === 'number') {
-      if (aValue < bValue) {
-        return sortConfig.direction === 'asc' ? -1 : 1;
-      }
-      if (aValue > bValue) {
-        return sortConfig.direction === 'asc' ? 1 : -1;
-      }
+      if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1;
+      if (aValue > bValue) return sortConfig.direction === 'asc' ? 1 : -1;
     }
-    
     return 0;
   });
 
-  // Filter inventory items
   const filteredItems = sortedItems.filter(item => {
-    // Search filter
-    const matchesSearch = 
-      searchTerm === '' || 
+    const matchesSearch =
+      searchTerm === '' ||
       item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.supplierName.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    // Category filter
-    const matchesCategory = categoryFilter === 'All' || item.category === categoryFilter;
-    
-    // Status filter
+      item.id.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === 'All' || item.status === statusFilter;
-    
-    return matchesSearch && matchesCategory && matchesStatus;
+    return matchesSearch && matchesStatus;
   });
 
   // Format date
@@ -240,124 +146,24 @@ const Inventory = () => {
     }).format(date);
   };
 
-  // Check if date is approaching expiry (within 3 days)
-  const isApproachingExpiry = (dateString?: string) => {
-    if (!dateString) return false;
-    
-    const expiryDate = new Date(dateString);
-    const today = new Date();
-    const diffTime = expiryDate.getTime() - today.getTime();
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    
-    return diffDays >= 0 && diffDays <= 3;
-  };
+  // Format price
+  const formatPrice = (price: number) => `₱${price.toLocaleString()}`;
 
-  // Create a new inventory item (placeholder)
-  const handleNewItem = () => {
-    setCurrentItem(null);
-    setShowForm(true);
-  };
-
-  // Edit an existing inventory item
-  const handleEditItem = (item: InventoryItem) => {
-    setCurrentItem(item);
-    setShowForm(true);
-  };
-  // Save an inventory item implementation
-  const handleSaveItem = () => {
-    if (!currentItem) {
-      // Add new item
-      const nameInput = document.querySelector<HTMLInputElement>('input[required]:first-of-type');
-      const categorySelect = document.querySelector<HTMLSelectElement>('select');
-      const quantityInput = document.querySelectorAll<HTMLInputElement>('input[type="number"]')[0];
-      const unitInput = document.querySelectorAll<HTMLInputElement>('input[type="text"]')[1];
-      const minLevelInput = document.querySelectorAll<HTMLInputElement>('input[type="number"]')[1];
-      const supplierInput = document.querySelectorAll<HTMLInputElement>('input[type="text"]')[2];
-      const lastRestockedInput = document.querySelectorAll<HTMLInputElement>('input[type="date"]')[0];
-      const priceInput = document.querySelectorAll<HTMLInputElement>('input[type="number"]')[2];
-      const locationInput = document.querySelectorAll<HTMLInputElement>('input[type="text"]')[3];
-      const expiryDateInput = document.querySelectorAll<HTMLInputElement>('input[type="date"]')[1];
-      
-      const categoryValue = categorySelect?.value as 'Coffee Beans' | 'Milk' | 'Syrups' | 'Tea' | 'Fruits' | 'Pastries' | 'Supplies';
-      
-      const newItem: InventoryItem = {
-        id: `INV-${String(inventoryItems.length + 1).padStart(3, '0')}`,
-        name: nameInput?.value || 'New Item',
-        category: categoryValue || 'Supplies',
-        quantity: parseInt(quantityInput?.value || '0', 10),
-        unit: unitInput?.value || 'pcs',
-        minLevel: parseInt(minLevelInput?.value || '0', 10),
-        supplierName: supplierInput?.value || 'Unknown Supplier',
-        lastRestocked: lastRestockedInput?.value || new Date().toISOString().split('T')[0],
-        price: parseFloat(priceInput?.value || '0'),
-        status: 'In Stock',
-        location: locationInput?.value || undefined,
-        expiryDate: expiryDateInput?.value || undefined
-      };
-      
-      setInventoryItems([...inventoryItems, newItem]);
-    } else {
-      // Update existing item
-      const nameInput = document.querySelector<HTMLInputElement>('input[required]:first-of-type');
-      const categorySelect = document.querySelector<HTMLSelectElement>('select');
-      const quantityInput = document.querySelectorAll<HTMLInputElement>('input[type="number"]')[0];
-      const unitInput = document.querySelectorAll<HTMLInputElement>('input[type="text"]')[1];
-      const minLevelInput = document.querySelectorAll<HTMLInputElement>('input[type="number"]')[1];
-      const supplierInput = document.querySelectorAll<HTMLInputElement>('input[type="text"]')[2];
-      const lastRestockedInput = document.querySelectorAll<HTMLInputElement>('input[type="date"]')[0];
-      const priceInput = document.querySelectorAll<HTMLInputElement>('input[type="number"]')[2];
-      const locationInput = document.querySelectorAll<HTMLInputElement>('input[type="text"]')[3];
-      const expiryDateInput = document.querySelectorAll<HTMLInputElement>('input[type="date"]')[1];
-      
-      const categoryValue = categorySelect?.value as 'Coffee Beans' | 'Milk' | 'Syrups' | 'Tea' | 'Fruits' | 'Pastries' | 'Supplies';
-      
-      const updatedItems = inventoryItems.map(item => 
-        item.id === currentItem.id 
-          ? { ...currentItem, 
-              name: nameInput?.value || currentItem.name,
-              category: categoryValue || currentItem.category,
-              quantity: parseInt(quantityInput?.value || '0', 10),
-              unit: unitInput?.value || currentItem.unit,
-              minLevel: parseInt(minLevelInput?.value || '0', 10),
-              supplierName: supplierInput?.value || currentItem.supplierName,
-              lastRestocked: lastRestockedInput?.value || currentItem.lastRestocked,
-              price: parseFloat(priceInput?.value || '0'),
-              location: locationInput?.value || currentItem.location,
-              expiryDate: expiryDateInput?.value || currentItem.expiryDate
-            } 
-          : item
-      );
-      setInventoryItems(updatedItems);
-    }
-    
-    setShowForm(false);
-  };
-
-  // Delete an inventory item implementation
-  const handleDeleteItem = (id: string) => {
-    const updatedItems = inventoryItems.filter(item => item.id !== id);
-    setInventoryItems(updatedItems);
-  };
-
-  // Format price to currency
-  const formatPrice = (price: number) => {
-    return `₱${price.toLocaleString()}`;
-  };
-
-  // Sort indicator component
+  // Sort indicator
   const SortIndicator = ({ column }: { column: keyof InventoryItem }) => {
     if (sortConfig.key !== column) {
-      return (
-        <ChevronDown size={14} className="ml-1 text-gray-400" />
-      );
+      return <ChevronDown size={14} className="ml-1 text-gray-400" />;
     }
-    
-    return sortConfig.direction === 'asc' ? (
-      <ChevronUp size={14} className="ml-1 text-[#3e2723]" />
-    ) : (
-      <ChevronDown size={14} className="ml-1 text-[#3e2723]" />
-    );
+    return sortConfig.direction === 'asc'
+      ? <ChevronUp size={14} className="ml-1 text-[#3e2723]" />
+      : <ChevronDown size={14} className="ml-1 text-[#3e2723]" />;
   };
+
+  // Summary
+  const lowStockItems = inventoryItems.filter(item => item.status === 'Low Stock').length;
+  const outOfStockItems = inventoryItems.filter(item => item.status === 'Out of Stock').length;
+  const totalItems = inventoryItems.length;
+  const totalValue = inventoryItems.reduce((total, item) => total + (item.price_per_unit * item.quantity), 0);
 
   return (
     <div>
@@ -386,23 +192,20 @@ const Inventory = () => {
           <h3 className="text-sm font-medium text-[#5d4037] mb-1">Total Items</h3>
           <p className="text-2xl font-bold text-[#3e2723]">{totalItems}</p>
         </div>
-        
         <div className="bg-white p-4 rounded-lg shadow-sm border border-[#e4c9a7]">
           <h3 className="text-sm font-medium text-[#5d4037] mb-1">Low Stock</h3>
           <p className="text-2xl font-bold text-amber-600">{lowStockItems}</p>
         </div>
-        
         <div className="bg-white p-4 rounded-lg shadow-sm border border-[#e4c9a7]">
           <h3 className="text-sm font-medium text-[#5d4037] mb-1">Out of Stock</h3>
           <p className="text-2xl font-bold text-red-600">{outOfStockItems}</p>
         </div>
-        
         <div className="bg-white p-4 rounded-lg shadow-sm border border-[#e4c9a7]">
           <h3 className="text-sm font-medium text-[#5d4037] mb-1">Total Value</h3>
           <p className="text-2xl font-bold text-[#3e2723]">{formatPrice(totalValue)}</p>
         </div>
       </div>
-      
+
       {/* Search and Filters */}
       <div className="bg-white p-4 rounded-lg shadow-sm border border-[#e4c9a7] mb-6">
         <div className="flex flex-col md:flex-row gap-4">
@@ -410,13 +213,12 @@ const Inventory = () => {
             <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#b5a397]" />
             <input
               type="text"
-              placeholder="Search inventory by name, ID, or supplier..."
+              placeholder="Search inventory by name or ID..."
               className="w-full pl-10 pr-4 py-2 border border-[#e4c9a7] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3e2723]/20"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-          
           <div className="flex gap-2">
             <button
               onClick={() => setShowFilters(!showFilters)}
@@ -425,12 +227,10 @@ const Inventory = () => {
               <Filter size={18} className="mr-2" />
               Filters
             </button>
-            
-            {(searchTerm || categoryFilter !== 'All' || statusFilter !== 'All') && (
+            {(searchTerm || statusFilter !== 'All') && (
               <button
                 onClick={() => {
                   setSearchTerm('');
-                  setCategoryFilter('All');
                   setStatusFilter('All');
                 }}
                 className="px-3 py-2 border border-red-200 text-red-600 rounded-lg flex items-center hover:bg-red-50 transition-colors"
@@ -441,32 +241,12 @@ const Inventory = () => {
             )}
           </div>
         </div>
-        
-        {/* Expandable Filters */}
         {showFilters && (
           <div className="mt-4 pt-4 border-t border-[#e4c9a7] grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-[#5d4037] mb-1">Category</label>
-              <div className="flex flex-wrap gap-2">
-                {categories.map(category => (
-                  <button
-                    key={category}
-                    onClick={() => setCategoryFilter(category)}
-                    className={`px-3 py-1 text-sm rounded-full ${
-                      categoryFilter === category
-                        ? 'bg-[#3e2723] text-white'
-                        : 'bg-[#f8e8d0] text-[#3e2723] hover:bg-[#e4c9a7]'
-                    }`}
-                  >
-                    {category}
-                  </button>
-                ))}
-              </div>
-            </div>
-            <div>
               <label className="block text-sm font-medium text-[#5d4037] mb-1">Status</label>
               <div className="flex flex-wrap gap-2">
-                {statuses.map(status => (
+                {['All', 'In Stock', 'Low Stock', 'Out of Stock'].map(status => (
                   <button
                     key={status}
                     onClick={() => setStatusFilter(status)}
@@ -491,99 +271,39 @@ const Inventory = () => {
           <table className="w-full">
             <thead className="bg-[#f8e8d0] text-[#3e2723]">
               <tr>
-                <th 
-                  className="py-3 px-4 text-left cursor-pointer hover:bg-[#e4c9a7]"
-                  onClick={() => requestSort('id')}
-                >
-                  <div className="flex items-center">
-                    ID <SortIndicator column="id" />
-                  </div>
+                <th className="py-3 px-4 text-left cursor-pointer hover:bg-[#e4c9a7]" onClick={() => requestSort('id')}>
+                  <div className="flex items-center">ID <SortIndicator column="id" /></div>
                 </th>
-                <th 
-                  className="py-3 px-4 text-left cursor-pointer hover:bg-[#e4c9a7]"
-                  onClick={() => requestSort('name')}
-                >
-                  <div className="flex items-center">
-                    Item Name <SortIndicator column="name" />
-                  </div>
+                <th className="py-3 px-4 text-left cursor-pointer hover:bg-[#e4c9a7]" onClick={() => requestSort('name')}>
+                  <div className="flex items-center">Item Name <SortIndicator column="name" /></div>
                 </th>
-                <th 
-                  className="py-3 px-4 text-left cursor-pointer hover:bg-[#e4c9a7]"
-                  onClick={() => requestSort('category')}
-                >
-                  <div className="flex items-center">
-                    Category <SortIndicator column="category" />
-                  </div>
+                <th className="py-3 px-4 text-left">Category</th>
+                <th className="py-3 px-4 text-left cursor-pointer hover:bg-[#e4c9a7]" onClick={() => requestSort('quantity')}>
+                  <div className="flex items-center">Quantity <SortIndicator column="quantity" /></div>
                 </th>
-                <th 
-                  className="py-3 px-4 text-left cursor-pointer hover:bg-[#e4c9a7]"
-                  onClick={() => requestSort('quantity')}
-                >
-                  <div className="flex items-center">
-                    Quantity <SortIndicator column="quantity" />
-                  </div>
+                <th className="py-3 px-4 text-left cursor-pointer hover:bg-[#e4c9a7]" onClick={() => requestSort('price_per_unit')}>
+                  <div className="flex items-center">Unit Price <SortIndicator column="price_per_unit" /></div>
                 </th>
-                <th 
-                  className="py-3 px-4 text-left cursor-pointer hover:bg-[#e4c9a7]"
-                  onClick={() => requestSort('price')}
-                >
-                  <div className="flex items-center">
-                    Unit Price <SortIndicator column="price" />
-                  </div>
-                </th>
-                <th 
-                  className="py-3 px-4 text-left cursor-pointer hover:bg-[#e4c9a7]"
-                  onClick={() => requestSort('status')}
-                >
-                  <div className="flex items-center">
-                    Status <SortIndicator column="status" />
-                  </div>
-                </th>
-                <th 
-                  className="py-3 px-4 text-left cursor-pointer hover:bg-[#e4c9a7]"
-                  onClick={() => requestSort('lastRestocked')}
-                >
-                  <div className="flex items-center">
-                    Last Restocked <SortIndicator column="lastRestocked" />
-                  </div>
-                </th>
+                <th className="py-3 px-4 text-left">Status</th>
+                <th className="py-3 px-4 text-left">Last Restocked</th>
                 <th className="py-3 px-4 text-center">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[#e4c9a7]">
-              {filteredItems.length > 0 ? (
+              {loading ? (
+                <tr>
+                  <td colSpan={8} className="py-6 text-center text-[#5d4037]">
+                    Loading inventory...
+                  </td>
+                </tr>
+              ) : filteredItems.length > 0 ? (
                 filteredItems.map((item) => (
-                  <tr key={item.id} className={`${item.status === 'Out of Stock' ? 'bg-red-50' : item.quantity <= item.minLevel ? 'bg-amber-50' : ''} hover:bg-[#f8e8d0]/30`}>
+                  <tr key={item.id} className={`${item.status === 'Out of Stock' ? 'bg-red-50' : item.quantity <= item.min_level ? 'bg-amber-50' : ''} hover:bg-[#f8e8d0]/30`}>
                     <td className="py-3 px-4 font-medium">{item.id}</td>
-                    <td className="py-3 px-4">
-                      <div className="font-medium text-[#3e2723]">{item.name}</div>
-                      <div className="text-xs text-[#5d4037]">
-                        Supplier: {item.supplierName}
-                      </div>
-                    </td>
-                    <td className="py-3 px-4">
-                      <span className={`px-2 py-1 rounded-full text-xs ${
-                        categoryColors[item.category]?.bg || 'bg-gray-100'
-                      } ${
-                        categoryColors[item.category]?.text || 'text-gray-800'
-                      }`}>
-                        {item.category}
-                      </span>
-                    </td>
-                    <td className="py-3 px-4">
-                      <div className="flex items-center space-x-2">
-                        <div className="font-medium">
-                          {item.quantity} {item.unit}
-                        </div>
-                        {item.quantity <= item.minLevel && (
-                          <AlertTriangle size={16} className="text-amber-500" />
-                        )}
-                      </div>
-                      <div className="text-xs text-[#5d4037]">
-                        Min: {item.minLevel} {item.unit}
-                      </div>
-                    </td>
-                    <td className="py-3 px-4 font-medium">{formatPrice(item.price)}</td>
+                    <td className="py-3 px-4">{item.name}</td>
+                    <td className="py-3 px-4">{item.category_name}</td>
+                    <td className="py-3 px-4">{item.quantity} {item.unit}</td>
+                    <td className="py-3 px-4 font-medium">{formatPrice(item.price_per_unit)}</td>
                     <td className="py-3 px-4">
                       <span className={`px-2 py-1 rounded-full text-xs ${
                         statusColors[item.status]?.bg || 'bg-gray-100'
@@ -593,19 +313,7 @@ const Inventory = () => {
                         {item.status}
                       </span>
                     </td>
-                    <td className="py-3 px-4">
-                      <div>{formatDate(item.lastRestocked)}</div>
-                      {item.expiryDate && (
-                        <div className={`text-xs ${
-                          isApproachingExpiry(item.expiryDate) 
-                            ? 'text-red-600 font-medium'
-                            : 'text-[#5d4037]'
-                        }`}>
-                          Expires: {formatDate(item.expiryDate)}
-                          {isApproachingExpiry(item.expiryDate) && ' (Soon)'}
-                        </div>
-                      )}
-                    </td>
+                    <td className="py-3 px-4">{formatDate(item.last_restocked)}</td>
                     <td className="py-3 px-4">
                       <div className="flex items-center justify-center space-x-2">
                         <button
@@ -653,161 +361,118 @@ const Inventory = () => {
                 <X size={20} />
               </button>
             </div>
-            
-            <div className="p-6">
-              <form className="space-y-6">
-                {/* Basic Info */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-[#5d4037] mb-1">
-                      Item Name*
-                    </label>
-                    <input 
-                      type="text" 
-                      className="w-full p-2 border border-[#e4c9a7] rounded-md focus:outline-none focus:ring-2 focus:ring-[#3e2723]/20"
-                      defaultValue={currentItem?.name}
-                      required
-                    />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-[#5d4037] mb-1">
-                      Category*
-                    </label>
-                    <select 
-                      className="w-full p-2 border border-[#e4c9a7] rounded-md focus:outline-none focus:ring-2 focus:ring-[#3e2723]/20"
-                      defaultValue={currentItem?.category}
-                      required
-                    >
-                      {Object.keys(categoryColors).map(category => (
-                        <option key={category} value={category}>{category}</option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-[#5d4037] mb-1">
-                      Quantity*
-                    </label>
-                    <input 
-                      type="number" 
-                      className="w-full p-2 border border-[#e4c9a7] rounded-md focus:outline-none focus:ring-2 focus:ring-[#3e2723]/20"
-                      defaultValue={currentItem?.quantity}
-                      min="0"
-                      required
-                    />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-[#5d4037] mb-1">
-                      Unit*
-                    </label>
-                    <input 
-                      type="text" 
-                      className="w-full p-2 border border-[#e4c9a7] rounded-md focus:outline-none focus:ring-2 focus:ring-[#3e2723]/20"
-                      defaultValue={currentItem?.unit}
-                      placeholder="e.g. kg, L, pcs"
-                      required
-                    />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-[#5d4037] mb-1">
-                      Minimum Level*
-                    </label>
-                    <input 
-                      type="number" 
-                      className="w-full p-2 border border-[#e4c9a7] rounded-md focus:outline-none focus:ring-2 focus:ring-[#3e2723]/20"
-                      defaultValue={currentItem?.minLevel}
-                      min="0"
-                      required
-                    />
-                  </div>
-                </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-[#5d4037] mb-1">
-                      Supplier Name*
-                    </label>
-                    <input 
-                      type="text" 
-                      className="w-full p-2 border border-[#e4c9a7] rounded-md focus:outline-none focus:ring-2 focus:ring-[#3e2723]/20"
-                      defaultValue={currentItem?.supplierName}
-                      required
-                    />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-[#5d4037] mb-1">
-                      Unit Price (₱)*
-                    </label>
-                    <input 
-                      type="number" 
-                      step="0.01"
-                      className="w-full p-2 border border-[#e4c9a7] rounded-md focus:outline-none focus:ring-2 focus:ring-[#3e2723]/20"
-                      defaultValue={currentItem?.price}
-                      min="0"
-                      required
-                    />
-                  </div>
-                </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-[#5d4037] mb-1">
-                      Last Restocked Date*
-                    </label>
-                    <input 
-                      type="date" 
-                      className="w-full p-2 border border-[#e4c9a7] rounded-md focus:outline-none focus:ring-2 focus:ring-[#3e2723]/20"
-                      defaultValue={currentItem?.lastRestocked}
-                      required
-                    />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-[#5d4037] mb-1">
-                      Expiry Date (if applicable)
-                    </label>
-                    <input 
-                      type="date" 
-                      className="w-full p-2 border border-[#e4c9a7] rounded-md focus:outline-none focus:ring-2 focus:ring-[#3e2723]/20"
-                      defaultValue={currentItem?.expiryDate}
-                    />
-                  </div>
-                </div>
-                
+            <form className="p-6 space-y-6" onSubmit={handleSaveItem}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-[#5d4037] mb-1">
-                    Storage Location
+                    Item Name*
                   </label>
-                  <input 
-                    type="text" 
+                  <input
+                    name="name"
+                    type="text"
                     className="w-full p-2 border border-[#e4c9a7] rounded-md focus:outline-none focus:ring-2 focus:ring-[#3e2723]/20"
-                    defaultValue={currentItem?.location}
-                    placeholder="e.g. Back Storage, Refrigerator 2"
+                    defaultValue={currentItem?.name}
+                    required
                   />
                 </div>
-              </form>
-              
+                <div>
+                  <label className="block text-sm font-medium text-[#5d4037] mb-1">
+                    Category ID*
+                  </label>
+                  <input
+                    name="category_id"
+                    type="text"
+                    className="w-full p-2 border border-[#e4c9a7] rounded-md focus:outline-none focus:ring-2 focus:ring-[#3e2723]/20"
+                    defaultValue={currentItem?.category_name}
+                    required
+                  />
+                  {/* You may want to use a dropdown with real categories */}
+                </div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-[#5d4037] mb-1">
+                    Quantity*
+                  </label>
+                  <input
+                    name="quantity"
+                    type="number"
+                    className="w-full p-2 border border-[#e4c9a7] rounded-md focus:outline-none focus:ring-2 focus:ring-[#3e2723]/20"
+                    defaultValue={currentItem?.quantity}
+                    min="0"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-[#5d4037] mb-1">
+                    Unit*
+                  </label>
+                  <input
+                    name="unit"
+                    type="text"
+                    className="w-full p-2 border border-[#e4c9a7] rounded-md focus:outline-none focus:ring-2 focus:ring-[#3e2723]/20"
+                    defaultValue={currentItem?.unit}
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-[#5d4037] mb-1">
+                    Minimum Level*
+                  </label>
+                  <input
+                    name="min_level"
+                    type="number"
+                    className="w-full p-2 border border-[#e4c9a7] rounded-md focus:outline-none focus:ring-2 focus:ring-[#3e2723]/20"
+                    defaultValue={currentItem?.min_level}
+                    min="0"
+                    required
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-[#5d4037] mb-1">
+                    Unit Price (₱)*
+                  </label>
+                  <input
+                    name="price_per_unit"
+                    type="number"
+                    step="0.01"
+                    className="w-full p-2 border border-[#e4c9a7] rounded-md focus:outline-none focus:ring-2 focus:ring-[#3e2723]/20"
+                    defaultValue={currentItem?.price_per_unit}
+                    min="0"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-[#5d4037] mb-1">
+                    Last Restocked Date*
+                  </label>
+                  <input
+                    name="last_restocked"
+                    type="date"
+                    className="w-full p-2 border border-[#e4c9a7] rounded-md focus:outline-none focus:ring-2 focus:ring-[#3e2723]/20"
+                    defaultValue={currentItem?.last_restocked?.slice(0, 10)}
+                    required
+                  />
+                </div>
+              </div>
               <div className="flex justify-end space-x-3 mt-8">
                 <button
+                  type="button"
                   onClick={() => setShowForm(false)}
                   className="px-4 py-2 border border-[#e4c9a7] rounded-md text-[#5d4037] hover:bg-[#f8e8d0]"
                 >
                   Cancel
                 </button>
                 <button
-                  onClick={handleSaveItem}
+                  type="submit"
                   className="px-4 py-2 bg-[#3e2723] text-white rounded-md hover:bg-[#5d4037]"
                 >
                   {currentItem ? 'Save Changes' : 'Add Item'}
                 </button>
               </div>
-            </div>
+            </form>
           </div>
         </div>
       )}
