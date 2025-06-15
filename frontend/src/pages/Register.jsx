@@ -7,7 +7,8 @@ function Register() {
     name: '',
     email: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    birthday: ''  
   });
   const [otp, setOtp] = useState('');
   const [error, setError] = useState('');
@@ -96,6 +97,17 @@ function Register() {
               <input type="password" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange}
                 className="w-full p-3 border border-[#e4c9a7] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#cc6d2d] transition-all duration-200 bg-[#f8f4f0]/50"
                 placeholder="Confirm your password" />
+            </div>
+            <div>
+              <label className="block text-[#5d4037] font-medium mb-2">Birthday</label>
+              <input
+                type="date"
+                name="birthday"
+                value={formData.birthday}
+                onChange={handleChange}
+                className="w-full p-3 border border-[#e4c9a7] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#cc6d2d] transition-all duration-200 bg-[#f8f4f0]/50"
+                required
+              />
             </div>
             <button type="submit" disabled={loading}
               className="w-full bg-[#cc6d2d] hover:bg-[#3e2723] text-white font-semibold py-3.5 rounded-xl transition duration-300 shadow-md hover:shadow-lg flex justify-center">

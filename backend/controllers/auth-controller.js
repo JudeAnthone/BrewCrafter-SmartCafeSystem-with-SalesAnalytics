@@ -1,60 +1,45 @@
-
 // Imports and Setup
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 const pool = require('../config/db-connection');
 
-// Email sender 
-// sets up gmail transporter using credentials in .env file
+// Email sender setup
 const transporter = nodemailer.createTransport({
     service:'gmail',
     auth: {
         user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASSWORD // app pass in used gmail
+        pass: process.env.EMAIL_PASSWORD
     }
 });
 
+// OTP generator
+const generateOTP = () => Math.floor(100000 + Math.random() * 900000).toString();
 
-// FUNCTION - OTP generator
-const generateOTP = () => {
-  return Math.floor(100000 + Math.random() * 900000).toString();  
-};
-
-
-// FUNCTION - Send email verification to users email address
+// Send OTP email
 const sendVerificationEmail = async (userEmail, otp) => {
   try {
     await transporter.sendMail({
         from: `"BrewCrafter" <${process.env.EMAIL_USER}>`,
         to: userEmail,
-        subject: "Verify Your BrewCrafter Account!",
-        html: `<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-    <h2 style="color: #5d4037;">Welcome to BrewCrafter!</h2>
-    <p>Thank you for registering. To complete your registration, please use the verification code below:</p>
-    <div style="background-color: #f5f5f5; padding: 15px; text-align: center; margin: 20px 0;">
-      <h1 style="color: #5d4037; letter-spacing: 5px;">${otp}</h1>
-    </div>
-    <p>This code will expire in 10 minutes.</p>
-    <p>If you didn't request this verification, please ignore this email.</p>
-    <hr>
-    <p style="font-size: 12px; color: #666;">
-      This is an automated message, please do not reply.
-    </p>
-  </div>`
-    }); 
+        subject: "Your BrewCrafter OTP Code",
+        html: `<div>
+          <h2>Your OTP Code</h2>
+          <h1>${otp}</h1>
+          <p>This code will expire in 10 minutes.</p>
+        </div>`
+    });
     return true;
   } catch (error) {
     console.log('Email Sending failed:', error);
     return false;
-  }  
+  }
 };
-
 
 // Register new user
 exports.register = async (req, res) => {
     try {
-        const { user_name, user_email, user_password, user_phone, user_address } = req.body;
+        const { user_name, user_email, user_password, user_phone, user_address, birthday } = req.body; // <-- Add birthday
 
         // Check if user exists
         const userExists = await pool.query(
@@ -83,7 +68,10 @@ exports.register = async (req, res) => {
             });
         }
 
-        // Insert new user
+        // Before inserting, always store birthday as YYYY-MM-DD string
+        const birthdayStr = birthday ? birthday.slice(0, 10) : null;
+
+        // Insert new user (add birthday)
         const result = await pool.query(
             `INSERT INTO brewcrafter.users (
                 role_id,
@@ -92,9 +80,10 @@ exports.register = async (req, res) => {
                 user_password,
                 user_phone,
                 user_address,
+                birthday,
                 verification_token,
                 is_verified
-            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`,
+            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *`,
             [
                 2, // role_id 2 for customer
                 user_name,
@@ -102,6 +91,7 @@ exports.register = async (req, res) => {
                 hashedPassword,
                 user_phone,
                 user_address,
+                birthdayStr, // <-- use the string, not the raw birthday
                 verificationToken,
                 false // set as false because not yet verified
             ]
@@ -180,39 +170,44 @@ exports.verifyOTP = async (req, res) => {
 exports.login = async (req, res) => {
     try {
         const { email, password } = req.body;
-        
-        // Check if user exist
         const result = await pool.query(
-            'SELECT * FROM brewcrafter.users WHERE user_email = $1', 
+            'SELECT * FROM brewcrafter.users WHERE user_email = $1',
             [email]
         );
-        
-        // If invalid credentials
         if(result.rows.length === 0) {
-            return res.status(201).json ({
-                message: 'Please verify your account first'
-            });
+            return res.status(401).json({ message: 'Invalid credentials' });
         }
-        
         const user = result.rows[0];
-        
-        // Check if the user is verified
-         if (!user.is_verified) {
-            return res.status(401).json({
-                message: 'Please verify your email first'
-            });
+
+        // Step-up logic: only for users with birthday set
+        if (user.birthday) {
+            if (user.is_locked && user.lock_until && new Date() < new Date(user.lock_until)) {
+                return res.status(403).json({ message: `Account locked until ${user.lock_until}` });
+            }
+            const validPassword = await bcrypt.compare(password, user.user_password);
+            if (!validPassword) {
+                let failed = user.failed_login_attempts + 1;
+                await pool.query(
+                    "UPDATE brewcrafter.users SET failed_login_attempts = $1 WHERE id = $2",
+                    [failed, user.id]
+                );
+                if (failed >= 5) {
+                    return res.status(401).json({ stepUp: true, message: "Please enter your birthday to continue.", email });
+                }
+                return res.status(401).json({ message: "Invalid Credential" });
+            }
+            // On successful login, reset failed attempts
+            await pool.query(
+                "UPDATE brewcrafter.users SET failed_login_attempts = 0 WHERE id = $1",
+                [user.id]
+            );
+        } else {
+            // For old users (no birthday), use old logic
+            const validPassword = await bcrypt.compare(password, user.user_password);
+            if (!validPassword) {
+                return res.status(401).json({ message: "Invalid Credential" });
+            }
         }
-        
-        // Check password
-        const validPassword = await bcrypt.compare(password, user.user_password);
-        
-        // If invalid
-        if(!validPassword){
-            return res.status(401).json({
-                message: 'Invalid Credential'
-            });
-        }  
-        
         // Generate JWT token
         const token = jwt.sign(
             {
@@ -223,13 +218,10 @@ exports.login = async (req, res) => {
             process.env.JWT_SECRET,
             { expiresIn: '24h' }
         );
-        
-        // Update last login
         await pool.query(
             'UPDATE brewcrafter.users SET last_login = CURRENT_TIMESTAMP WHERE id = $1',
             [user.id]
         );
-
         res.json({
             message: 'Login successful',
             token,
@@ -240,12 +232,61 @@ exports.login = async (req, res) => {
                 role: user.role_id
             }
         });
-        
     } catch (error) {
-         console.error('Login error:', error);
+        console.error('Login error:', error);
         res.status(500).json({
             message: 'Login failed',
             error: error.message
         });
     }
-}; 
+};
+
+// Step-up: Birthday verification and send OTP
+exports.verifyBirthdayStepUp = async (req, res) => {
+    try {
+        const { email, birthday } = req.body;
+        const userRes = await pool.query('SELECT * FROM brewcrafter.users WHERE user_email = $1', [email]);
+        const user = userRes.rows[0];
+
+        // Robust birthday comparison (always as string)
+        const dbBirthday = String(user.birthday).slice(0, 10);
+
+        if (!user || !user.birthday || String(birthday).slice(0, 10) !== dbBirthday) {
+            // Lock account for 1 hour
+            const lockUntil = new Date(Date.now() + 1 * 60 * 1000); // 1 minute from now
+            await pool.query(
+                'UPDATE brewcrafter.users SET is_locked = TRUE, lock_until = $1 WHERE id = $2',
+                [lockUntil, user?.id]
+            );
+            return res.status(403).json({
+                message: `Account locked for 1 hour due to incorrect birthday. Try again after ${lockUntil.toLocaleString()}.`
+            });
+        }
+        // Generate OTP and send to email
+        const otp = generateOTP();
+        await pool.query('UPDATE brewcrafter.users SET verification_token = $1 WHERE id = $2', [otp, user.id]);
+        await sendVerificationEmail(email, otp);
+        res.json({ message: "OTP sent to your email.", email });
+    } catch (error) {
+        res.status(500).json({ message: "Birthday step-up failed", error: error.message });
+    }
+};
+
+// Step-up: OTP verification and unlock account
+exports.verifyStepUpOTP = async (req, res) => {
+    try {
+        const { email, otp } = req.body;
+        const userRes = await pool.query('SELECT * FROM brewcrafter.users WHERE user_email = $1', [email]);
+        const user = userRes.rows[0];
+        if (!user || user.verification_token !== otp) {
+            return res.status(401).json({ message: "Invalid OTP." });
+        }
+        // Reset failed attempts and unlock
+        await pool.query('UPDATE brewcrafter.users SET failed_login_attempts = 0, is_locked = false, lock_until = null, verification_token = null WHERE id = $1', [user.id]);
+        // Optionally auto-login: generate JWT and return user info
+        const token = jwt.sign({ id: user.id, email: user.user_email, role: user.role_id }, process.env.JWT_SECRET, { expiresIn: '24h' });
+        res.json({ message: "Step-up verification successful.", token, user: { id: user.id, email: user.user_email, role: user.role_id } });
+    } catch (error) {
+        res.status(500).json({ message: "OTP verification failed", error: error.message });
+    }
+};

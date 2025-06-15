@@ -1,12 +1,16 @@
 // API ROUTES - connector ot API
 const express = require ('express');
 const router  = express.Router();
-const { register, verifyOTP, login } = require('../controllers/auth-controller');
+const authController = require('../controllers/auth-controller');
 const passport = require('../config/facebook-auth');
 
-router.post('/register', register);
-router.post('/verify', verifyOTP);
-router.post('/login', login);
+router.post('/register', authController.register);
+router.post('/verify', authController.verifyOTP);
+router.post('/login', authController.login);
+
+// Step-up endpoints
+router.post('/stepup-birthday', authController.verifyBirthdayStepUp);
+router.post('/stepup-otp', authController.verifyStepUpOTP);
 
 // FB login router
 router.get('/facebook', passport.authenticate('facebook', { scope: ['email'] }));

@@ -182,6 +182,8 @@ WHERE status != 'completed';
 */
 
 
+/*
+
 SELECT id, total_amount, status, created_at
 FROM brewcrafter.orders
 ORDER BY created_at DESC;
@@ -227,3 +229,30 @@ SHOW timezone;
 SELECT * FROM products;
 
 SELECT * FROM brewcrafter.users;
+
+ALTER TABLE brewcrafter.users ADD COLUMN birthday DATE;
+ALTER TABLE brewcrafter.users
+  ADD COLUMN failed_login_attempts INT DEFAULT 0,
+  ADD COLUMN last_failed_login TIMESTAMP,
+  ADD COLUMN is_locked BOOLEAN DEFAULT FALSE,
+  ADD COLUMN lock_until TIMESTAMP;
+  
+*/
+
+DELETE FROM brewcrafter.users WHERE user_email = 'duartejudeanthone@gmail.com';
+
+
+DELETE FROM brewcrafter.custom_drinks
+WHERE user_id = (SELECT id FROM brewcrafter.users WHERE user_email = 'duartejudeanthone@gmail.com');
+
+DELETE FROM brewcrafter.users
+WHERE user_email = 'duartejudeanthone@gmail.com';
+
+SELECT user_email, birthday FROM brewcrafter.users WHERE user_email = 'judeanthone28@gmail.com';
+
+SELECT * FROM brewcrafter.users
+
+ 
+SELECT user_email, birthday FROM brewcrafter.users WHERE user_email = 'judeanthone28@gmail.com';
+
+ALTER TABLE brewcrafter.users ALTER COLUMN birthday TYPE VARCHAR(10);

@@ -30,12 +30,14 @@ export const AuthProvider = ({ children }) => {
       user_email: formData.email,
       user_password: formData.password,
       user_phone: formData.phone || '',
-      user_address: formData.address || ''
+      user_address: formData.address || '',
+      birthday: formData.birthday
     });
     setPendingEmail(formData.email); // Save for OTP step
     return res.data;
   };
 
+  
   // OTP verification function
   const verifyOtp = async (otp) => {
     const res = await axios.post('http://localhost:5000/api/auth/verify', {
@@ -97,6 +99,24 @@ export const AuthProvider = ({ children }) => {
     };
     localStorage.setItem('brewCrafterUser', JSON.stringify(updatedUser));
     setCurrentUser(updatedUser);
+  }; 
+
+  // Step-up functions for additional verification
+  const stepUpBirthday = async (email, birthday) => {
+    const res = await axios.post('http://localhost:5000/api/auth/stepup-birthday', { email, birthday });
+    return res.data;
+  };
+
+  const stepUpOTP = async (email, otp) => {
+    const res = await axios.post('http://localhost:5000/api/auth/stepup-otp', { email, otp });
+    // Save user/token after verification
+    localStorage.setItem('brewCrafterUser', JSON.stringify(res.data.user));
+    localStorage.setItem('brewCrafterToken', res.data.token);
+    if (res.data.user && res.data.user.id) {
+      localStorage.setItem('user_id', res.data.user.id);
+    }
+    setCurrentUser(res.data.user);
+    return res.data;
   };
 
   // Create the value object to be provided by the context
@@ -110,7 +130,9 @@ export const AuthProvider = ({ children }) => {
     updateProfile,
     loading,
     pendingEmail,
-    setPendingEmail
+    setPendingEmail,
+    stepUpBirthday,
+    stepUpOTP
   };
 
   return (
