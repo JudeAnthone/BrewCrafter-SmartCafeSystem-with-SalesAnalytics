@@ -15,6 +15,8 @@ interface AuthContextType {
   login: (token: string, user: AdminUser) => void;
   logout: () => void;
   loading: boolean;
+  stepUpBirthday: (email: string, birthday: string) => Promise<any>;
+  stepUpOTP: (email: string, otp: string) => Promise<any>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -55,8 +57,35 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     navigate('/login');
   };
 
+  const stepUpBirthday = async (email: string, birthday: string) => {
+    const res = await fetch('http://localhost:5000/api/auth/stepup-birthday', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, birthday }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || 'Birthday verification failed');
+    return data;
+  };
+
+  const stepUpOTP = async (email: string, otp: string) => {
+    const res = await fetch('http://localhost:5000/api/auth/stepup-otp', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, otp }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || 'OTP verification failed');
+    // Save user/token after verification
+    localStorage.setItem('adminUser', JSON.stringify(data.user));
+    localStorage.setItem('adminToken', data.token);
+    setUser(data.user);
+    setIsAuthenticated(true);
+    return data;
+  };
+
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user, token, login, logout, loading }}>
+    <AuthContext.Provider value={{ isAuthenticated, user, token, login, logout, loading, stepUpBirthday, stepUpOTP }}>
       {children}
     </AuthContext.Provider>
   );

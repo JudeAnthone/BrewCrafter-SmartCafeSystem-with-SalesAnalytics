@@ -252,7 +252,11 @@ SELECT user_email, birthday FROM brewcrafter.users WHERE user_email = 'judeantho
 
 SELECT * FROM brewcrafter.users
 
- 
-SELECT user_email, birthday FROM brewcrafter.users WHERE user_email = 'judeanthone28@gmail.com';
 
 ALTER TABLE brewcrafter.users ALTER COLUMN birthday TYPE VARCHAR(10);
+
+DELETE FROM brewcrafter.users WHERE user_email = 'brewcraftercs2a@gmail.com';
+
+SELECT user_email, verification_token FROM brewcrafter.users WHERE user_email = 'brewcraftercs2a@gmail.com';
+
+ALTER TABLE brewcrafter.users ADD COLUMN stepup_token VARCHAR(10);

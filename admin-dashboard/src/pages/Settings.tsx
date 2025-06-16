@@ -1,59 +1,104 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   User, Lock, Globe, Bell, Coffee, Store, CreditCard, Upload, 
-  Save, Clock, Mail, Phone, MapPin, ToggleLeft, ToggleRight, Trash2
+  Save, Clock, Mail, Phone, MapPin, ToggleLeft, ToggleRight
 } from 'lucide-react';
 
 const Settings = () => {
   // State for active tab
   const [activeTab, setActiveTab] = useState('account');
   
-  // State for notification settings
-  const [notifications, setNotifications] = useState({
-    orderConfirmations: true,
-    stockAlerts: true,
-    customerReviews: true,
-    dailyReports: false,
-    marketingEmails: false
+  // State for profile information
+  const [profile, setProfile] = useState({
+    user_name: '',
+    user_email: '',
+    birthday: '',
+    user_phone: ''
   });
 
-  // Toggle notification settings
-  const toggleNotification = (key: keyof typeof notifications) => {
-    setNotifications(prev => ({
-      ...prev,
-      [key]: !prev[key]
-    }));
+  // State for password fields
+  const [passwords, setPasswords] = useState({
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: ''
+  });
+
+  // State for loading, message, and error
+  const [loading, setLoading] = useState(false);
+  const [msg, setMsg] = useState('');
+  const [error, setError] = useState('');
+
+  // Fetch admin profile on mount
+  useEffect(() => {
+    const fetchProfile = async () => {
+      setLoading(true);
+      setError('');
+      try {
+        const token = localStorage.getItem('adminToken');
+        const res = await fetch('http://localhost:5000/api/admin/profile', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || 'Failed to fetch profile');
+        setProfile(data);
+      } catch (err: any) {
+        setError(err.message || 'Failed to fetch profile');
+      }
+      setLoading(false);
+    };
+    fetchProfile();
+  }, []);
+
+  // Handle profile update
+  const handleProfileSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setMsg('');
+    setError('');
+    setLoading(true);
+    try {
+      const token = localStorage.getItem('adminToken');
+      const res = await fetch('http://localhost:5000/api/admin/profile', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify(profile)
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || 'Failed to update profile');
+      setMsg('Profile updated successfully!');
+    } catch (err: any) {
+      setError(err.message || 'Failed to update profile');
+    }
+    setLoading(false);
   };
 
-  // State for store settings
-  const [storeSettings, setStoreSettings] = useState({
-    name: 'BrewCrafter Coffee',
-    description: 'Premium coffee and pastries in a cozy atmosphere',
-    email: 'contact@brewcrafter.com',
-    phone: '+63 912 345 6789',
-    address: '123 Coffee Street, Makati City, Metro Manila',
-    operatingHours: '7:00 AM - 10:00 PM',
-    timezone: 'Asia/Manila'
-  });
-
-  // State for payment settings
-  const [paymentSettings, setPaymentSettings] = useState({
-    acceptCash: true,
-    acceptCreditCard: true,
-    acceptDebit: true,
-    acceptGcash: true,
-    acceptPaymaya: true,
-    acceptGrabpay: false,
-    taxRate: 12,
-    serviceCharge: 0,
-    currency: 'PHP'
-  });
-
-  // Handle form submission (placeholder)
-  const handleSubmit = (e: React.FormEvent) => {
+  // Handle password change
+  const handlePasswordSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // This would save changes to the backend in a real app
-    alert('Settings saved successfully!');
+    setMsg('');
+    setError('');
+    if (passwords.newPassword !== passwords.confirmPassword) {
+      setError('New passwords do not match');
+      return;
+    }
+    setLoading(true);
+    try {
+      const token = localStorage.getItem('adminToken');
+      const res = await fetch('http://localhost:5000/api/admin/change-password', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({
+          currentPassword: passwords.currentPassword,
+          newPassword: passwords.newPassword
+        })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || 'Failed to change password');
+      setMsg('Password changed successfully!');
+      setPasswords({ currentPassword: '', newPassword: '', confirmPassword: '' });
+    } catch (err: any) {
+      setError(err.message || 'Failed to change password');
+    }
+    setLoading(false);
   };
 
   return (
@@ -102,18 +147,6 @@ const Settings = () => {
               </button>
               
               <button 
-                onClick={() => setActiveTab('payment')}
-                className={`flex items-center px-4 py-3 text-left ${
-                  activeTab === 'payment' 
-                    ? 'bg-[#f8e8d0] text-[#3e2723] font-medium' 
-                    : 'text-[#5d4037] hover:bg-[#f8e8d0]/50'
-                }`}
-              >
-                <CreditCard size={18} className="mr-3" />
-                Payment Methods
-              </button>
-              
-              <button 
                 onClick={() => setActiveTab('menu')}
                 className={`flex items-center px-4 py-3 text-left ${
                   activeTab === 'menu' 
@@ -152,207 +185,128 @@ const Settings = () => {
           </div>
         </div>
         
+        
         {/* Settings Content */}
         <div className="md:col-span-3">
           <div className="bg-white rounded-lg shadow-sm border border-[#e4c9a7] p-6">
+            {msg && <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg mb-4">{msg}</div>}
+            {error && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-4">{error}</div>}
             {/* Account Settings */}
             {activeTab === 'account' && (
-              <div>
-                <h2 className="text-xl font-bold text-[#3e2723] mb-5">Account Settings</h2>
+              <form onSubmit={handleProfileSubmit} className="space-y-6">
+                <div>
+                  <label className="block text-[#5d4037] font-medium mb-2">
+                    Full Name
+                  </label>
+                  <input 
+                    type="text" 
+                    className="w-full p-3 border border-[#e4c9a7] rounded-xl"
+                    value={profile.user_name}
+                    onChange={e => setProfile({ ...profile, user_name: e.target.value })}
+                    required
+                  />
+                </div>
                 
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-center mb-6">
-                      <div className="relative">
-                        <div className="w-24 h-24 bg-[#e4c9a7] rounded-full overflow-hidden flex items-center justify-center">
-                          <User size={36} className="text-[#3e2723]" />
-                        </div>
-                        <button className="absolute bottom-0 right-0 bg-[#3e2723] text-white p-1.5 rounded-full">
-                          <Upload size={14} />
-                        </button>
-                      </div>
-                    </div>
-                    
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium text-[#5d4037] mb-1">
-                          First Name
-                        </label>
-                        <input 
-                          type="text" 
-                          className="w-full p-2 border border-[#e4c9a7] rounded-md focus:outline-none focus:ring-2 focus:ring-[#3e2723]/20"
-                          defaultValue="Admin"
-                        />
-                      </div>
-                      
-                      <div>
-                        <label className="block text-sm font-medium text-[#5d4037] mb-1">
-                          Last Name
-                        </label>
-                        <input 
-                          type="text" 
-                          className="w-full p-2 border border-[#e4c9a7] rounded-md focus:outline-none focus:ring-2 focus:ring-[#3e2723]/20"
-                          defaultValue="User"
-                        />
-                      </div>
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-[#5d4037] mb-1">
-                        Email Address
-                      </label>
-                      <input 
-                        type="email" 
-                        className="w-full p-2 border border-[#e4c9a7] rounded-md focus:outline-none focus:ring-2 focus:ring-[#3e2723]/20"
-                        defaultValue="admin@brewcrafter.com"
-                      />
-                    </div>
-                    
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium text-[#5d4037] mb-1">
-                          Role
-                        </label>
-                        <input 
-                          type="text" 
-                          className="w-full p-2 border border-[#e4c9a7] rounded-md focus:outline-none focus:ring-2 focus:ring-[#3e2723]/20 bg-gray-50"
-                          defaultValue="Administrator"
-                          disabled
-                        />
-                      </div>
-                      
-                      <div>
-                        <label className="block text-sm font-medium text-[#5d4037] mb-1">
-                          Phone Number
-                        </label>
-                        <input 
-                          type="tel" 
-                          className="w-full p-2 border border-[#e4c9a7] rounded-md focus:outline-none focus:ring-2 focus:ring-[#3e2723]/20"
-                          defaultValue="+63 912 345 6789"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="flex justify-end pt-4">
-                    <button 
-                      type="submit"
-                      className="px-4 py-2 bg-[#3e2723] text-white rounded-md hover:bg-[#5d4037] flex items-center"
-                    >
-                      <Save size={16} className="mr-2" />
-                      Save Changes
-                    </button>
-                  </div>
-                </form>
-              </div>
+                <div>
+                  <label className="block text-[#5d4037] font-medium mb-2">
+                    Email
+                  </label>
+                  <input 
+                    type="email" 
+                    className="w-full p-3 border border-[#e4c9a7] rounded-xl"
+                    value={profile.user_email}
+                    onChange={e => setProfile({ ...profile, user_email: e.target.value })}
+                    required
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-[#5d4037] font-medium mb-2">
+                    Birthday
+                  </label>
+                  <input 
+                    type="date" 
+                    className="w-full p-3 border border-[#e4c9a7] rounded-xl"
+                    value={profile.birthday ? profile.birthday.slice(0, 10) : ''}
+                    onChange={e => setProfile({ ...profile, birthday: e.target.value })}
+                    required
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-[#5d4037] font-medium mb-2">
+                    Phone
+                  </label>
+                  <input 
+                    type="tel" 
+                    className="w-full p-3 border border-[#e4c9a7] rounded-xl"
+                    value={profile.user_phone || ''}
+                    onChange={e => setProfile({ ...profile, user_phone: e.target.value })}
+                  />
+                </div>
+                
+                <button 
+                  type="submit"
+                  className="px-4 py-2 bg-[#3e2723] text-white rounded-md hover:bg-[#5d4037] flex items-center"
+                  disabled={loading}
+                >
+                  <Save size={16} className="mr-2" />
+                  {loading ? 'Saving...' : 'Save Changes'}
+                </button>
+              </form>
             )}
             
             {/* Security Settings */}
             {activeTab === 'security' && (
-              <div>
-                <h2 className="text-xl font-bold text-[#3e2723] mb-5">Security Settings</h2>
+              <form onSubmit={handlePasswordSubmit} className="space-y-6">
+                <div>
+                  <label className="block text-[#5d4037] font-medium mb-2">
+                    Current Password
+                  </label>
+                  <input 
+                    type="password" 
+                    className="w-full p-3 border border-[#e4c9a7] rounded-xl"
+                    value={passwords.currentPassword}
+                    onChange={e => setPasswords({ ...passwords, currentPassword: e.target.value })}
+                    required
+                  />
+                </div>
                 
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  <div className="space-y-4">
-                    <div>
-                      <label className="block text-sm font-medium text-[#5d4037] mb-1">
-                        Current Password
-                      </label>
-                      <input 
-                        type="password" 
-                        className="w-full p-2 border border-[#e4c9a7] rounded-md focus:outline-none focus:ring-2 focus:ring-[#3e2723]/20"
-                        placeholder="Enter your current password"
-                      />
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-[#5d4037] mb-1">
-                        New Password
-                      </label>
-                      <input 
-                        type="password" 
-                        className="w-full p-2 border border-[#e4c9a7] rounded-md focus:outline-none focus:ring-2 focus:ring-[#3e2723]/20"
-                        placeholder="Enter new password"
-                      />
-                      <p className="text-xs text-[#5d4037] mt-1">
-                        Password must be at least 8 characters and include uppercase, lowercase, number, and special character
-                      </p>
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-[#5d4037] mb-1">
-                        Confirm New Password
-                      </label>
-                      <input 
-                        type="password" 
-                        className="w-full p-2 border border-[#e4c9a7] rounded-md focus:outline-none focus:ring-2 focus:ring-[#3e2723]/20"
-                        placeholder="Confirm new password"
-                      />
-                    </div>
-                  </div>
-                  
-                  <div className="pt-4">
-                    <h3 className="text-lg font-medium text-[#3e2723] mb-3">Two-Factor Authentication</h3>
-                    <div className="flex items-center justify-between p-4 bg-[#f8e8d0] rounded-lg">
-                      <div>
-                        <p className="font-medium text-[#3e2723]">Enable 2FA</p>
-                        <p className="text-sm text-[#5d4037] mt-1">
-                          Add an extra layer of security to your account
-                        </p>
-                      </div>
-                      <button
-                        type="button"
-                        className="px-4 py-2 border border-[#3e2723] text-[#3e2723] rounded-md hover:bg-[#3e2723] hover:text-white transition-colors"
-                      >
-                        Setup
-                      </button>
-                    </div>
-                  </div>
-                  
-                  <div className="pt-4">
-                    <h3 className="text-lg font-medium text-[#3e2723] mb-3">Login Sessions</h3>
-                    <div className="space-y-3">
-                      <div className="flex justify-between items-center p-3 bg-[#f8e8d0] rounded-lg">
-                        <div>
-                          <p className="font-medium text-[#3e2723]">Current Session</p>
-                          <p className="text-sm text-[#5d4037]">
-                            Windows • Chrome • Manila, Philippines
-                          </p>
-                        </div>
-                        <span className="text-green-600 text-sm font-medium">Active Now</span>
-                      </div>
-                      
-                      <div className="flex justify-between items-center p-3 bg-[#f8e8d0]/50 rounded-lg">
-                        <div>
-                          <p className="font-medium text-[#3e2723]">Previous Session</p>
-                          <p className="text-sm text-[#5d4037]">
-                            Windows • Chrome • Manila, Philippines
-                          </p>
-                        </div>
-                        <span className="text-[#5d4037] text-sm">Yesterday, 3:45 PM</span>
-                      </div>
-                    </div>
-                    <div className="mt-3">
-                      <button
-                        type="button"
-                        className="text-red-600 text-sm hover:underline"
-                      >
-                        Sign out of all other sessions
-                      </button>
-                    </div>
-                  </div>
-                  
-                  <div className="flex justify-end pt-4">
-                    <button 
-                      type="submit"
-                      className="px-4 py-2 bg-[#3e2723] text-white rounded-md hover:bg-[#5d4037] flex items-center"
-                    >
-                      <Save size={16} className="mr-2" />
-                      Save Changes
-                    </button>
-                  </div>
-                </form>
-              </div>
+                <div>
+                  <label className="block text-[#5d4037] font-medium mb-2">
+                    New Password
+                  </label>
+                  <input 
+                    type="password" 
+                    className="w-full p-3 border border-[#e4c9a7] rounded-xl"
+                    value={passwords.newPassword}
+                    onChange={e => setPasswords({ ...passwords, newPassword: e.target.value })}
+                    required
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-[#5d4037] font-medium mb-2">
+                    Confirm New Password
+                  </label>
+                  <input 
+                    type="password" 
+                    className="w-full p-3 border border-[#e4c9a7] rounded-xl"
+                    value={passwords.confirmPassword}
+                    onChange={e => setPasswords({ ...passwords, confirmPassword: e.target.value })}
+                    required
+                  />
+                </div>
+                
+                <button 
+                  type="submit"
+                  className="px-4 py-2 bg-[#3e2723] text-white rounded-md hover:bg-[#5d4037] flex items-center"
+                  disabled={loading}
+                >
+                  <Save size={16} className="mr-2" />
+                  {loading ? 'Saving...' : 'Change Password'}
+                </button>
+              </form>
             )}
             
             {/* Store Information */}
@@ -506,157 +460,6 @@ const Settings = () => {
               </div>
             )}
             
-            {/* Payment Methods */}
-            {activeTab === 'payment' && (
-              <div>
-                <h2 className="text-xl font-bold text-[#3e2723] mb-5">Payment Settings</h2>
-                
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  <div>
-                    <h3 className="text-lg font-medium text-[#3e2723] mb-3">Accepted Payment Methods</h3>
-                    <div className="space-y-3">
-                      <div className="flex items-center">
-                        <input 
-                          type="checkbox" 
-                          id="acceptCash" 
-                          checked={paymentSettings.acceptCash}
-                          onChange={() => setPaymentSettings({...paymentSettings, acceptCash: !paymentSettings.acceptCash})}
-                          className="h-4 w-4 text-[#3e2723] focus:ring-[#3e2723] rounded"
-                        />
-                        <label htmlFor="acceptCash" className="ml-2 text-[#5d4037]">
-                          Cash
-                        </label>
-                      </div>
-                      
-                      <div className="flex items-center">
-                        <input 
-                          type="checkbox" 
-                          id="acceptCreditCard" 
-                          checked={paymentSettings.acceptCreditCard}
-                          onChange={() => setPaymentSettings({...paymentSettings, acceptCreditCard: !paymentSettings.acceptCreditCard})}
-                          className="h-4 w-4 text-[#3e2723] focus:ring-[#3e2723] rounded"
-                        />
-                        <label htmlFor="acceptCreditCard" className="ml-2 text-[#5d4037]">
-                          Credit Card
-                        </label>
-                      </div>
-                      
-                      <div className="flex items-center">
-                        <input 
-                          type="checkbox" 
-                          id="acceptDebit" 
-                          checked={paymentSettings.acceptDebit}
-                          onChange={() => setPaymentSettings({...paymentSettings, acceptDebit: !paymentSettings.acceptDebit})}
-                          className="h-4 w-4 text-[#3e2723] focus:ring-[#3e2723] rounded"
-                        />
-                        <label htmlFor="acceptDebit" className="ml-2 text-[#5d4037]">
-                          Debit Card
-                        </label>
-                      </div>
-                      
-                      <div className="flex items-center">
-                        <input 
-                          type="checkbox" 
-                          id="acceptGcash" 
-                          checked={paymentSettings.acceptGcash}
-                          onChange={() => setPaymentSettings({...paymentSettings, acceptGcash: !paymentSettings.acceptGcash})}
-                          className="h-4 w-4 text-[#3e2723] focus:ring-[#3e2723] rounded"
-                        />
-                        <label htmlFor="acceptGcash" className="ml-2 text-[#5d4037]">
-                          GCash
-                        </label>
-                      </div>
-                      
-                      <div className="flex items-center">
-                        <input 
-                          type="checkbox" 
-                          id="acceptPaymaya" 
-                          checked={paymentSettings.acceptPaymaya}
-                          onChange={() => setPaymentSettings({...paymentSettings, acceptPaymaya: !paymentSettings.acceptPaymaya})}
-                          className="h-4 w-4 text-[#3e2723] focus:ring-[#3e2723] rounded"
-                        />
-                        <label htmlFor="acceptPaymaya" className="ml-2 text-[#5d4037]">
-                          PayMaya
-                        </label>
-                      </div>
-                      
-                      <div className="flex items-center">
-                        <input 
-                          type="checkbox" 
-                          id="acceptGrabpay" 
-                          checked={paymentSettings.acceptGrabpay}
-                          onChange={() => setPaymentSettings({...paymentSettings, acceptGrabpay: !paymentSettings.acceptGrabpay})}
-                          className="h-4 w-4 text-[#3e2723] focus:ring-[#3e2723] rounded"
-                        />
-                        <label htmlFor="acceptGrabpay" className="ml-2 text-[#5d4037]">
-                          GrabPay
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="pt-4">
-                    <h3 className="text-lg font-medium text-[#3e2723] mb-3">Tax & Pricing</h3>
-                    <div className="space-y-4">
-                      <div>
-                        <label className="block text-sm font-medium text-[#5d4037] mb-1">
-                          Tax Rate (%)
-                        </label>
-                        <input 
-                          type="number" 
-                          min="0"
-                          step="0.01"
-                          className="w-full p-2 border border-[#e4c9a7] rounded-md focus:outline-none focus:ring-2 focus:ring-[#3e2723]/20"
-                          value={paymentSettings.taxRate}
-                          onChange={(e) => setPaymentSettings({...paymentSettings, taxRate: parseFloat(e.target.value)})}
-                        />
-                      </div>
-                      
-                      <div>
-                        <label className="block text-sm font-medium text-[#5d4037] mb-1">
-                          Service Charge (%)
-                        </label>
-                        <input 
-                          type="number" 
-                          min="0"
-                          step="0.01"
-                          className="w-full p-2 border border-[#e4c9a7] rounded-md focus:outline-none focus:ring-2 focus:ring-[#3e2723]/20"
-                          value={paymentSettings.serviceCharge}
-                          onChange={(e) => setPaymentSettings({...paymentSettings, serviceCharge: parseFloat(e.target.value)})}
-                        />
-                      </div>
-                      
-                      <div>
-                        <label className="block text-sm font-medium text-[#5d4037] mb-1">
-                          Currency
-                        </label>
-                        <select 
-                          className="w-full p-2 border border-[#e4c9a7] rounded-md focus:outline-none focus:ring-2 focus:ring-[#3e2723]/20"
-                          value={paymentSettings.currency}
-                          onChange={(e) => setPaymentSettings({...paymentSettings, currency: e.target.value})}
-                        >
-                          <option value="PHP">Philippine Peso (PHP ₱)</option>
-                          <option value="USD">US Dollar (USD $)</option>
-                          <option value="EUR">Euro (EUR €)</option>
-                          <option value="JPY">Japanese Yen (JPY ¥)</option>
-                          <option value="GBP">British Pound (GBP £)</option>
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="flex justify-end pt-4">
-                    <button 
-                      type="submit"
-                      className="px-4 py-2 bg-[#3e2723] text-white rounded-md hover:bg-[#5d4037] flex items-center"
-                    >
-                      <Save size={16} className="mr-2" />
-                      Save Changes
-                    </button>
-                  </div>
-                </form>
-              </div>
-            )}
             
             {/* Menu Settings */}
             {activeTab === 'menu' && (

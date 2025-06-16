@@ -5,6 +5,8 @@ import Orders from "@/pages/Orders";
 import MenuManager from "@/pages/MenuManager";
 import Inventory from "@/pages/Inventory";
 import Settings from "@/pages/Settings";
+import Register from "@/pages/AdminRegister";
+ 
 
 export default function AppRouter() {
   return (
@@ -18,6 +20,7 @@ export default function AppRouter() {
           <Route path="/inventory" element={<Inventory />} />
           <Route path="/settings" element={<Settings />} />
         </Route>
+        <Route path="/register" element={<Register />} />
       </Routes>
     </Router>
   );

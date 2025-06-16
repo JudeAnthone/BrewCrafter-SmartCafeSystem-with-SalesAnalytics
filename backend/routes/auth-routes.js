@@ -7,6 +7,7 @@ const passport = require('../config/facebook-auth');
 router.post('/register', authController.register);
 router.post('/verify', authController.verifyOTP);
 router.post('/login', authController.login);
+router.post('/admin-register', authController.adminRegister);
 
 // Step-up endpoints
 router.post('/stepup-birthday', authController.verifyBirthdayStepUp);

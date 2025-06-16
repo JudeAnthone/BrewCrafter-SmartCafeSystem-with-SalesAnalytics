@@ -25,13 +25,11 @@ app.use(cors());
 // // Facebook auth - cancelled plan app.use(passport.initialize()); // FB passport
 
 app.use('/api/auth', authRoutes);
-app.use('/api/admin', adminRoutes); // admin routes
 app.use('/api/products', productRoutes); // product routes
 app.use('/api/custom-drinks', customDrinkRoutes); // custom drink routes
 app.use('/api/cart', cartRoutes); // cart routes
 app.use('/api/orders', orderRoutes); // order routes
 app.use('/api/order-history', orderHistoryRoutes); // order history routes
-app.use('/api/admin', adminOrderRoutes);  
 app.use('/api/admin/inventory', inventoryRoutes);
 app.use('/api/admin/dashboard', dashboardRoutes);
 app.use('/api/admin/customers', customerRoutes);
