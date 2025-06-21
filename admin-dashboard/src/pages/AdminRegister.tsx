@@ -50,7 +50,7 @@ const Register = () => {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || 'Registration failed');
-      setSuccess(true);
+      setSuccess(false); // Reset success here!
       setStep(2); // Move to OTP step
     } catch (err: any) {
       setError(err.message || 'Failed to register. Please try again later.');
@@ -72,7 +72,7 @@ const Register = () => {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || 'Invalid OTP. Please try again.');
-      setSuccess(true);
+      setSuccess(true); // <-- Only set success here!
       setTimeout(() => navigate('/login'), 2000);
     } catch (err: any) {
       setError(err.message || 'Invalid OTP. Please try again.');

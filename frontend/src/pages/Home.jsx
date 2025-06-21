@@ -1,13 +1,23 @@
-import React from "react";
-import HeroImage from "../assets/LOGO_brewcrafter.png";
-import CraftImage from "../assets/food-sample.png";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import HeroImage from "../assets/LOGO_brewcrafter.png";
+import CraftImage from "../assets/Screenshot 2025-06-18 153806.png";
 import Divider from "../components/Divider";
 import Buttons from "../components/Buttons";
-import { useNavigate } from "react-router-dom";
-import { FaCoffee, FaLeaf, FaCog } from "react-icons/fa"; // Import icons
+import { FaCoffee, FaLeaf, FaCog } from "react-icons/fa";  
+
+// Import your asset images
+import BerryBlastImg from "../assets/Screenshot 2025-06-10 005509.png";
+import MatchaFrappeImg from "../assets/Screenshot 2025-06-10 003427.png";
+import CaramelLatteImg from "../assets/Screenshot 2025-06-09 234939.png";
+import PremiumImg from "../assets/Screenshot 2025-06-18 154843.png";
+import CustomImg from "../assets/Screenshot 2025-06-18 153806.png";
+import SustainableImg from "../assets/Screenshot 2025-06-18 155055.png";
 
 const Home = () => {
+  const navigate = useNavigate();
+
   // Animation variants for text elements
   const textVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -47,25 +57,23 @@ const Home = () => {
     },
   };
 
-  const navigate = useNavigate();
-
   // Testimonial data
   const testimonials = [
     {
       id: 1,
-      name: "Maria Santos",
+      name: "Jude Anthone Duarte",
       quote: "I absolutely love the ability to craft my own coffee! BrewCrafter has changed my morning routine completely.",
       role: "Regular Customer",
     },
     {
       id: 2,
-      name: "Juan Dela Cruz",
+      name: "Jude Anthone Duarte",
       quote: "The best coffee shop in town. Their custom drinks are unmatched in flavor and quality.",
       role: "Coffee Enthusiast",
     },
     {
       id: 3,
-      name: "Sophia Garcia",
+      name: "Jude Anthone Duarte",
       quote: "I visit BrewCrafter at least three times a week. Their craft options let me try something new every time!",
       role: "Loyal Customer",
     },
@@ -75,19 +83,22 @@ const Home = () => {
   // Popular drinks data
   const popularDrinks = [
     {
-      name: "Signature Espresso",
-      description: "Rich, bold espresso with caramel notes",
-      imageBg: "bg-amber-200",
+      name: "Berry Blast Smoothie",
+      description: "Mixed berries with Greek yogurt and honey.",
+      price: "₱160",
+      image: BerryBlastImg,
     },
     {
-      name: "Matcha Fusion",
-      description: "Creamy matcha with a hint of vanilla",
-      imageBg: "bg-green-200",
+      name: "Matcha Frappe",
+      description: "Creamy matcha green tea blended with ice and milk.",
+      price: "₱140",
+      image: MatchaFrappeImg,
     },
     {
-      name: "Berry Bliss",
-      description: "Mixed berries blended with cream",
-      imageBg: "bg-red-200",
+      name: "Caramel Latte",
+      description: "Sweet espresso with caramel syrup and steamed milk.",
+      price: "₱120",
+      image: CaramelLatteImg,
     },
   ];
   
@@ -222,7 +233,8 @@ const Home = () => {
       </section>
 
 
-      {/* NEW SECTION 3 - Features */}
+
+      {/* NEW SECTION 3 - Features (Why Choose BrewCrafter) */}
       <section className="py-20 px-6 bg-white">
         <div className="max-w-7xl mx-auto">
           <motion.div
@@ -249,52 +261,64 @@ const Home = () => {
             viewport={{ once: true, amount: 0.3 }}
             transition={{ staggerChildren: 0.2 }}
           >
-            {/* Feature 1 */}
+            {/* Image 1 - Premium Ingredients */}
             <motion.div
-              className="bg-[#f8f4e5] p-8 rounded-2xl shadow-md border border-[#e4c9a7] text-center"
+              className="relative rounded-2xl overflow-hidden shadow-md border border-[#e4c9a7] group min-h-[380px] flex flex-col justify-end"
               variants={featureVariants}
             >
-              <div className="bg-[#cc6d2d] w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 text-white">
-                <FaCoffee className="text-2xl" />
+              <img
+                src={PremiumImg}
+                alt="Premium Ingredients"
+                className="absolute inset-0 w-full h-full object-cover opacity-70 group-hover:scale-105 transition-transform duration-500"
+              />
+              <div className="relative z-10 bg-gradient-to-t from-[#fff8] via-[#fff6] to-[#fff0] p-8 pt-32 text-center">
+                <h3 className="text-2xl font-bold text-[#3e2723] mb-3 drop-shadow">Premium Ingredients</h3>
+                <p className="text-[#5d4037] font-medium drop-shadow">
+                  We source only the finest coffee beans and ingredients, ensuring a premium experience with every sip.
+                </p>
               </div>
-              <h3 className="text-xl font-bold text-[#3e2723] mb-4">Premium Ingredients</h3>
-              <p className="text-[#5d4037]">
-                We source only the finest coffee beans and ingredients, ensuring a premium experience with every sip.
-              </p>
             </motion.div>
 
-            {/* Feature 2 */}
+            {/* Image 2 - Custom Crafting */}
             <motion.div
-              className="bg-[#f8f4e5] p-8 rounded-2xl shadow-md border border-[#e4c9a7] text-center"
+              className="relative rounded-2xl overflow-hidden shadow-md border border-[#e4c9a7] group min-h-[380px] flex flex-col justify-end"
               variants={featureVariants}
             >
-              <div className="bg-[#cc6d2d] w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 text-white">
-                <FaCog className="text-2xl" />
+              <img
+                src={CustomImg}
+                alt="Custom Crafting"
+                className="absolute inset-0 w-full h-full object-cover opacity-70 group-hover:scale-105 transition-transform duration-500"
+              />
+              <div className="relative z-10 bg-gradient-to-t from-[#fff8] via-[#fff6] to-[#fff0] p-8 pt-32 text-center">
+                <h3 className="text-2xl font-bold text-[#3e2723] mb-3 drop-shadow">Custom Crafting</h3>
+                <p className="text-[#5d4037] font-medium drop-shadow">
+                  Create your perfect drink with our intuitive customization options. Your coffee, your way.
+                </p>
               </div>
-              <h3 className="text-xl font-bold text-[#3e2723] mb-4">Custom Crafting</h3>
-              <p className="text-[#5d4037]">
-                Create your perfect drink with our intuitive customization options. Your coffee, your way.
-              </p>
             </motion.div>
 
-            {/* Feature 3 */}
+            {/* Image 3 - Sustainable Practices */}
             <motion.div
-              className="bg-[#f8f4e5] p-8 rounded-2xl shadow-md border border-[#e4c9a7] text-center"
+              className="relative rounded-2xl overflow-hidden shadow-md border border-[#e4c9a7] group min-h-[380px] flex flex-col justify-end"
               variants={featureVariants}
             >
-              <div className="bg-[#cc6d2d] w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 text-white">
-                <FaLeaf className="text-2xl" />
+              <img
+                src={SustainableImg}
+                alt="Sustainable Practices"
+                className="absolute inset-0 w-full h-full object-cover opacity-70 group-hover:scale-105 transition-transform duration-500"
+              />
+              <div className="relative z-10 bg-gradient-to-t from-[#fff8] via-[#fff6] to-[#fff0] p-8 pt-32 text-center">
+                <h3 className="text-2xl font-bold text-[#3e2723] mb-3 drop-shadow">Sustainable Practices</h3>
+                <p className="text-[#5d4037] font-medium drop-shadow">
+                  We're committed to eco-friendly practices from bean to cup, ensuring a positive impact on our community.
+                </p>
               </div>
-              <h3 className="text-xl font-bold text-[#3e2723] mb-4">Sustainable Practices</h3>
-              <p className="text-[#5d4037]">
-                We're committed to eco-friendly practices from bean to cup, ensuring a positive impact on our community.
-              </p>
             </motion.div>
           </motion.div>
         </div>
       </section>
-	  
-	  
+    
+    
       {/* NEW SECTION 4 - Popular Drinks */}
       <section className="py-20 px-6 bg-[#f8f4f0]">
         <div className="max-w-7xl mx-auto">
@@ -326,17 +350,19 @@ const Home = () => {
                 variants={index % 2 === 0 ? slideInLeftVariants : slideInRightVariants}
                 whileHover={{ y: -10, transition: { duration: 0.3 } }}
               >
-                <div className={`h-48 ${drink.imageBg} flex items-center justify-center`}>
-                  {/* Placeholder for drink images */}
-                  <div className="w-24 h-24 rounded-full bg-[#cc6d2d] flex items-center justify-center text-white">
-                    <FaCoffee className="text-4xl" />
-                  </div>
+                <div className="h-64 flex items-center justify-center bg-gray-100">
+                  <img
+                    src={drink.image}
+                    alt={drink.name}
+                    className="object-contain h-48"
+                  />
                 </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-bold text-[#3e2723] mb-2">{drink.name}</h3>
-                  <p className="text-[#5d4037] mb-4">{drink.description}</p>
+                <div className="p-6 text-center">
+                  <h3 className="text-2xl font-bold text-[#3e2723] mb-2">{drink.name}</h3>
+                  <p className="text-[#5d4037] mb-2">{drink.description}</p>
+                  <div className="text-[#cc6d2d] font-bold text-lg mb-4">{drink.price}</div>
                   <button 
-                    className="text-[#cc6d2d] font-semibold hover:text-[#3e2723] transition-colors"
+                    className="text-[#cc6d2d] font-semibold hover:text-[#3e2723] transition-colors border border-[#cc6d2d] px-4 py-2 rounded-full"
                     onClick={() => navigate("/menu")}
                   >
                     Order Now →
@@ -353,16 +379,16 @@ const Home = () => {
             viewport={{ once: true, amount: 0.3 }}
             variants={textVariants}
           >
-            <Buttons
-              text="View Full Menu"
-              bgColor="bg-[#cc6d2d]"
-              hoverColor="hover:bg-[#3e2723]"
-              textColor="text-white"
+            <button
+              className="bg-[#cc6d2d] hover:bg-[#3e2723] text-white font-semibold px-8 py-3 rounded-full transition duration-300 shadow-md hover:shadow-lg"
               onClick={() => navigate("/menu")}
-            />
+            >
+              View Full Menu
+            </button>
           </motion.div>
         </div>
       </section>
+
 
 
       {/* NEW SECTION 5 - Testimonials */}
@@ -411,7 +437,7 @@ const Home = () => {
       </section>
 
 
-      {/* NEW SECTION 6 - CTA */}
+      {/* Footer */}
       <section className="py-24 px-6 bg-[#3e2723] text-white">
         <motion.div 
           className="max-w-4xl mx-auto text-center"
@@ -437,7 +463,7 @@ const Home = () => {
           >
             <Buttons
               text="Start Crafting"
-              bgColor="bg-[#cc6d2d]"
+              bgColor="bg-[#cc6d2d]"  
               hoverColor="hover:bg-[#e4c9a7]"
               textColor="text-white"
               onClick={() => navigate("/craft")}

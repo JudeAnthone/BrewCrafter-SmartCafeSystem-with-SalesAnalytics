@@ -24,9 +24,9 @@ const Footer = () => {
         {/* Contact */}
         <div>
           <h4 className="text-[#e4c9a7] font-semibold mb-3">Contact</h4>
-          <p className="text-sm mb-2">123 Coffee Street, Manila</p>
-          <p className="text-sm mb-2">contact@brewcrafter.com</p>
-          <p className="text-sm">+63 912 345 6789</p>
+          <p className="text-sm mb-2">86-B Silenctio, Philippines</p>
+          <p className="text-sm mb-2">duartejudeanthone@gmail.com</p>
+          <p className="text-sm">+63 9476998990</p>
         </div>
       </div>
       

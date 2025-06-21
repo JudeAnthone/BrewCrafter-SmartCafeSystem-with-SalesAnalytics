@@ -276,7 +276,7 @@ exports.verifyBirthdayStepUp = async (req, res) => {
         const dbBirthday = String(user.birthday).slice(0, 10);
 
         if (!user || !user.birthday || String(birthday).slice(0, 10) !== dbBirthday) {
-            const lockUntil = new Date(Date.now() + 1 * 60 * 1000); // 1 minute for testing
+            const lockUntil = new Date(Date.now() + 1 * 60 * 1000); // 1 minute for testing  
             await pool.query(
                 'UPDATE brewcrafter.users SET is_locked = TRUE, lock_until = $1 WHERE id = $2',
                 [lockUntil, user?.id]

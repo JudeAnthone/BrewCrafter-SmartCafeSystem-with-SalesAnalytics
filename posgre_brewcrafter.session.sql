@@ -239,7 +239,7 @@ ALTER TABLE brewcrafter.users
   
 */
 
-DELETE FROM brewcrafter.users WHERE user_email = 'duartejudeanthone@gmail.com';
+DELETE FROM brewcrafter.users WHERE user_email = 'cosgafa.j.bscs@gmail.com';
 
 
 DELETE FROM brewcrafter.custom_drinks
@@ -249,6 +249,7 @@ DELETE FROM brewcrafter.users
 WHERE user_email = 'duartejudeanthone@gmail.com';
 
 SELECT user_email, birthday FROM brewcrafter.users WHERE user_email = 'judeanthone28@gmail.com';
+
 
 SELECT * FROM brewcrafter.users
 
@@ -260,3 +261,5 @@ DELETE FROM brewcrafter.users WHERE user_email = 'brewcraftercs2a@gmail.com';
 SELECT user_email, verification_token FROM brewcrafter.users WHERE user_email = 'brewcraftercs2a@gmail.com';
 
 ALTER TABLE brewcrafter.users ADD COLUMN stepup_token VARCHAR(10);
+
+DELETE FROM brewcrafter.users WHERE user_email = 'hudeus28@gmail.com';

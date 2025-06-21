@@ -1,7 +1,27 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { FaCoffee, FaLeaf, FaHandshake, FaUsers } from 'react-icons/fa';
+import { 
+  FaUserPlus, 
+  FaSignInAlt, 
+  FaCoffee, 
+  FaShoppingCart, 
+  FaUserShield, 
+  FaChartBar, 
+  FaCog,
+  FaCreditCard  // Add this import
+} from 'react-icons/fa';
 import Divider from "../components/Divider";
+
+// Import your screenshots
+import RegisterImg from "../assets/Screenshot 2025-06-18 155902.png";
+import LoginImg from "../assets/Screenshot 2025-06-18 155935.png";
+import MenuImg from "../assets/Screenshot 2025-06-18 160049.png";
+import CraftImg from "../assets/Screenshot 2025-06-18 153806.png";
+import OrderImg from "../assets/Screenshot 2025-06-18 160151.png";
+import DashboardImg from "../assets/Screenshot 2025-06-18 160302.png";
+import MenuMgmtImg from "../assets/Screenshot 2025-06-18 160343.png";
+import OrderProcessImg from "../assets/Screenshot 2025-06-18 160421.png";
+import SettingsImg from "../assets/Screenshot 2025-06-18 160449.png";
 
 const AboutUs = () => {
   // Animation variants
@@ -23,56 +43,73 @@ const AboutUs = () => {
       }
     }
   };
-  
-  // Team members data
-  const teamMembers = [
+
+  // Updated Customer flow steps
+  const customerSteps = [
     {
-      name: "Maria Santos",
-      role: "Founder & Head Barista",
-      bio: "With over 12 years of experience in specialty coffee, Maria brings passion and expertise to every cup. Her journey began in the coffee fields of Batangas, giving her unique insights into the entire coffee process.",
-      image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80"
+      icon: <FaUserPlus className="text-3xl" />,
+      title: "1. Create an Account",
+      description: "Sign up with your email, set a password, and verify through OTP sent to your email.",
+      image: RegisterImg
     },
     {
-      name: "Carlos Mendoza",
-      role: "Coffee Sourcing Director",
-      bio: "Carlos travels the world to find the finest coffee beans. His relationships with local farmers ensure ethical sourcing practices and the highest quality ingredients for our customers.",
-      image: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80"
+      icon: <FaSignInAlt className="text-3xl" />,
+      title: "2. Login Securely",
+      description: "Access your account with email and password. After 5 failed attempts, verify with birthday and OTP.",
+      image: LoginImg
     },
-    {
-      name: "Sophia Lee",
-      role: "Creative Drink Designer",
-      bio: "A culinary school graduate with a specialty in beverages, Sophia is the creative mind behind our unique drink menu. She constantly experiments with flavors to create memorable coffee experiences.",
-      image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80"
-    }
-  ];
-  
-  // Core values data
-  const coreValues = [
     {
       icon: <FaCoffee className="text-3xl" />,
-      title: "Quality Without Compromise",
-      description: "We source only the finest beans and ingredients, ensuring every sip is exceptional."
+      title: "3. Browse & Customize",
+      description: "Explore our menu and customize your drinks with various options.",
+      images: [MenuImg, CraftImg],
+      dual: true
     },
     {
-      icon: <FaLeaf className="text-3xl" />,
-      title: "Sustainability",
-      description: "Our eco-friendly practices extend from bean sourcing to cup handling, minimizing our environmental footprint."
+      icon: <FaShoppingCart className="text-3xl" />,
+      title: "4. Place Order",
+      description: "Add items to cart, review your order, and proceed to checkout.",
+      image: OrderImg
+    }
+  ];
+
+  // Updated Admin flow steps
+  const adminSteps = [
+    {
+      icon: <FaUserShield className="text-3xl" />,
+      title: "1. Admin Authentication",
+      description: "Secure login with IP verification and multi-factor authentication.",
+      image: LoginImg
     },
     {
-      icon: <FaHandshake className="text-3xl" />,
-      title: "Community Connection",
-      description: "We build lasting relationships with farmers, customers, and communities through fair practices."
+      icon: <FaChartBar className="text-3xl" />,
+      title: "2. Dashboard Overview",
+      description: "Monitor orders, sales, and customer activity in real-time.",
+      image: DashboardImg
     },
     {
-      icon: <FaUsers className="text-3xl" />,
-      title: "Inclusivity",
-      description: "Creating a welcoming space where everyone feels comfortable enjoying great coffee."
+      icon: <FaCoffee className="text-3xl" />,
+      title: "3. Menu Management",
+      description: "Add, edit, or remove menu items and manage categories.",
+      image: MenuMgmtImg
+    },
+    {
+      icon: <FaShoppingCart className="text-3xl" />,
+      title: "4. Order Processing",
+      description: "View and manage incoming orders, track status, and update customers.",
+      image: OrderProcessImg
+    },
+    {
+      icon: <FaCog className="text-3xl" />,
+      title: "5. System Settings",
+      description: "Configure system preferences, user accounts, and security settings.",
+      image: SettingsImg
     }
   ];
 
   return (
     <div className="min-h-screen bg-[#f8f4e5]">
-      {/* Hero Section */}
+      {/* Hero Section - User Manual */}
       <section className="bg-[#3e2723] text-white py-24 px-6">
         <div className="max-w-7xl mx-auto">
           <motion.div 
@@ -82,57 +119,79 @@ const AboutUs = () => {
             viewport={{ once: true }}
             variants={fadeIn}
           >
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">Our <span className="text-[#e4c9a7]">Story</span></h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-6">BrewCrafter <span className="text-[#e4c9a7]">User Manual</span></h1>
             <p className="text-lg md:text-xl leading-relaxed text-[#e4c9a7]/90">
-              Brewing perfection one cup at a time since 2018
+              A comprehensive guide to using the BrewCrafter system
             </p>
           </motion.div>
         </div>
       </section>
 
-      {/* Our Journey Section */}
+      {/* Customer Guide Section */}
       <section className="py-20 px-6 bg-white">
         <div className="max-w-7xl mx-auto">
           <motion.div 
-            className="flex flex-col md:flex-row items-center gap-12"
+            className="text-center mb-16"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
+            variants={fadeIn}
           >
-            <motion.div 
-              className="md:w-1/2"
-              variants={fadeIn}
-            >
-              <h2 className="text-3xl md:text-4xl font-bold text-[#3e2723] mb-6">The Journey of <span className="text-[#cc6d2d]">BrewCrafter</span></h2>
-              <p className="text-[#5d4037] mb-4 leading-relaxed">
-                BrewCrafter began with a simple vision: to transform the ordinary coffee experience into an extraordinary craft. Founded in 2018 by Maria Santos, our journey started in a small corner shop with just three coffee varieties and a passionate team of two.
-              </p>
-              <p className="text-[#5d4037] mb-4 leading-relaxed">
-                What set us apart was our innovative approach to personalization. While other coffee shops offered standard menus, we pioneered the concept of "coffee crafting" – allowing customers to tailor every aspect of their beverage from bean selection to brewing method.
-              </p>
-              <p className="text-[#5d4037] leading-relaxed">
-                Today, BrewCrafter has grown into a beloved destination for coffee enthusiasts who appreciate artisanal quality and creative freedom. Our commitment to excellence, sustainability, and innovation continues to drive everything we do.
-              </p>
-            </motion.div>
-            <motion.div 
-              className="md:w-1/2 rounded-2xl overflow-hidden shadow-xl border-4 border-[#e4c9a7]"
-              variants={fadeIn}
-            >
-              {/* You can replace this with your actual coffee shop image */}
-              <div className="aspect-video bg-[#cc6d2d]/20 flex items-center justify-center">
-                <div className="text-center p-8">
-                  <FaCoffee className="text-8xl mx-auto text-[#cc6d2d] mb-4" />
-                  <p className="text-[#3e2723] font-medium">Shop Image Placeholder</p>
+            <h2 className="text-3xl md:text-4xl font-bold text-[#3e2723] mb-4">
+              Customer <span className="text-[#cc6d2d]">Guide</span>
+            </h2>
+            <p className="text-[#5d4037] max-w-2xl mx-auto">
+              Follow these steps to order your perfect craft coffee
+            </p>
+          </motion.div>
+
+          <motion.div 
+            className="space-y-12"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={staggerVariants}
+          >
+            {customerSteps.map((step, index) => (
+              <motion.div 
+                key={index}
+                className="flex flex-col md:flex-row items-center gap-8 bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300"
+                variants={fadeIn}
+              >
+                <div className="md:w-1/2 space-y-4">
+                  <div className="w-16 h-16 bg-gradient-to-r from-[#cc6d2d] to-[#e4c9a7] rounded-full flex items-center justify-center text-white mb-4 shadow-lg">
+                    {step.icon}
+                  </div>
+                  <h3 className="text-2xl font-bold text-[#3e2723]">{step.title}</h3>
+                  <p className="text-[#5d4037] text-lg leading-relaxed">{step.description}</p>
                 </div>
-              </div>
-            </motion.div>
+                <div className={`md:w-1/2 ${step.dual ? 'grid grid-cols-2 gap-4' : ''}`}>
+                  {step.dual ? (
+                    step.images.map((img, i) => (
+                      <img 
+                        key={i}
+                        src={img} 
+                        alt={`${step.title} - ${i + 1}`}
+                        className="rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 border-2 border-[#e4c9a7] w-full h-auto"
+                      />
+                    ))
+                  ) : (
+                    <img 
+                      src={step.image} 
+                      alt={step.title}
+                      className="rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 border-2 border-[#e4c9a7] w-full h-auto"
+                    />
+                  )}
+                </div>
+              </motion.div>
+            ))}
           </motion.div>
         </div>
       </section>
 
       <Divider />
 
-      {/* Core Values Section */}
+      {/* Admin Guide Section */}
       <section className="py-20 px-6 bg-[#f8f4e5]">
         <div className="max-w-7xl mx-auto">
           <motion.div 
@@ -142,38 +201,48 @@ const AboutUs = () => {
             viewport={{ once: true }}
             variants={fadeIn}
           >
-            <h2 className="text-3xl md:text-4xl font-bold text-[#3e2723] mb-4">Our Core <span className="text-[#cc6d2d]">Values</span></h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-[#3e2723] mb-4">
+              Administrator <span className="text-[#cc6d2d]">Guide</span>
+            </h2>
             <p className="text-[#5d4037] max-w-2xl mx-auto">
-              These principles guide every decision we make, from sourcing beans to serving our customers
+              Management and control features for system administrators
             </p>
           </motion.div>
 
           <motion.div 
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
+            className="space-y-12"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             variants={staggerVariants}
           >
-            {coreValues.map((value, index) => (
+            {adminSteps.map((step, index) => (
               <motion.div 
                 key={index}
-                className="bg-white p-8 rounded-2xl shadow-md border border-[#e4c9a7] text-center"
+                className="flex flex-col md:flex-row items-center gap-8 bg-[#f8f4e5] p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300"
                 variants={fadeIn}
-                whileHover={{ y: -10, transition: { duration: 0.3 } }}
               >
-                <div className="w-16 h-16 bg-[#cc6d2d] rounded-full flex items-center justify-center mx-auto mb-6 text-white">
-                  {value.icon}
+                <div className="md:w-1/2 space-y-4">
+                  <div className="w-16 h-16 bg-gradient-to-r from-[#3e2723] to-[#cc6d2d] rounded-full flex items-center justify-center text-white mb-4 shadow-lg">
+                    {step.icon}
+                  </div>
+                  <h3 className="text-2xl font-bold text-[#3e2723]">{step.title}</h3>
+                  <p className="text-[#5d4037] text-lg leading-relaxed">{step.description}</p>
                 </div>
-                <h3 className="text-xl font-bold text-[#3e2723] mb-3">{value.title}</h3>
-                <p className="text-[#5d4037]">{value.description}</p>
+                <div className="md:w-1/2">
+                  <img 
+                    src={step.image} 
+                    alt={step.title}
+                    className="rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 border-2 border-[#e4c9a7] w-full h-auto"
+                  />
+                </div>
               </motion.div>
             ))}
           </motion.div>
         </div>
       </section>
 
-      {/* Meet the Team Section */}
+      {/* Security Features Section */}
       <section className="py-20 px-6 bg-white">
         <div className="max-w-7xl mx-auto">
           <motion.div 
@@ -183,186 +252,59 @@ const AboutUs = () => {
             viewport={{ once: true }}
             variants={fadeIn}
           >
-            <h2 className="text-3xl md:text-4xl font-bold text-[#3e2723] mb-4">Meet Our <span className="text-[#cc6d2d]">Team</span></h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-[#3e2723] mb-4">
+              Security <span className="text-[#cc6d2d]">Features</span>
+            </h2>
             <p className="text-[#5d4037] max-w-2xl mx-auto">
-              The passionate people behind every cup of BrewCrafter coffee
+              Understanding our multi-layer security system
             </p>
           </motion.div>
 
-          <motion.div 
-            className="grid grid-cols-1 md:grid-cols-3 gap-8"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={staggerVariants}
-          >
-            {teamMembers.map((member, index) => (
-              <motion.div 
-                key={index}
-                className="bg-[#f8f4e5] rounded-2xl overflow-hidden shadow-md border border-[#e4c9a7]"
-                variants={fadeIn}
-              >
-                {/* Replace with actual team member images */}
-                <div className="h-64 bg-[#cc6d2d]/20 relative overflow-hidden">
-                  {member.image ? (
-                    <img 
-                      src={member.image} 
-                      alt={member.name} 
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <div className="flex items-center justify-center h-full">
-                      <div className="w-24 h-24 rounded-full bg-[#cc6d2d] flex items-center justify-center text-white text-4xl font-bold">
-                        {member.name[0]}
-                      </div>
-                    </div>
-                  )}
-                </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-bold text-[#3e2723]">{member.name}</h3>
-                  <p className="text-[#cc6d2d] font-medium mb-3">{member.role}</p>
-                  <p className="text-[#5d4037]">{member.bio}</p>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Milestones Section */}
-      <section className="py-20 px-6 bg-[#f8f4e5]">
-        <div className="max-w-4xl mx-auto">
-          <motion.div 
-            className="text-center mb-16"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={fadeIn}
-          >
-            <h2 className="text-3xl md:text-4xl font-bold text-[#3e2723] mb-4">Our <span className="text-[#cc6d2d]">Milestones</span></h2>
-            <p className="text-[#5d4037] max-w-2xl mx-auto">
-              The key moments in our journey to coffee excellence
-            </p>
-          </motion.div>
-
-          <motion.div 
-            className="relative border-l-4 border-[#cc6d2d] pl-10 ml-6"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={staggerVariants}
-          >
-            {/* Timeline Items */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {/* User Security */}
             <motion.div 
-              className="mb-12 relative"
+              className="bg-[#f8f4e5] p-8 rounded-2xl border border-[#e4c9a7]"
               variants={fadeIn}
             >
-              <div className="absolute -left-[3.25rem] w-10 h-10 bg-[#cc6d2d] rounded-full border-4 border-[#f8f4e5] flex items-center justify-center">
-                <FaCoffee className="text-white" />
-              </div>
-              <div className="bg-white p-6 rounded-lg shadow-md border border-[#e4c9a7]">
-                <h3 className="text-xl font-bold text-[#3e2723] mb-1">2018</h3>
-                <h4 className="text-[#cc6d2d] font-medium mb-3">Grand Opening</h4>
-                <p className="text-[#5d4037]">BrewCrafter opened its doors in downtown Manila, introducing the innovative craft coffee concept.</p>
-              </div>
+              <h3 className="text-2xl font-bold text-[#3e2723] mb-6">User Security</h3>
+              <ul className="space-y-4">
+                <li className="flex items-start gap-3">
+                  <FaUserPlus className="text-[#cc6d2d] mt-1" />
+                  <span className="text-[#5d4037]">Email verification with OTP during registration</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <FaSignInAlt className="text-[#cc6d2d] mt-1" />
+                  <span className="text-[#5d4037]">Birthday verification after 5 failed login attempts</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <FaCreditCard className="text-[#cc6d2d] mt-1" />
+                  <span className="text-[#5d4037]">Secure payment processing</span>
+                </li>
+              </ul>
             </motion.div>
 
+            {/* Admin Security */}
             <motion.div 
-              className="mb-12 relative"
+              className="bg-[#f8f4e5] p-8 rounded-2xl border border-[#e4c9a7]"
               variants={fadeIn}
             >
-              <div className="absolute -left-[3.25rem] w-10 h-10 bg-[#cc6d2d] rounded-full border-4 border-[#f8f4e5] flex items-center justify-center">
-                <FaCoffee className="text-white" />
-              </div>
-              <div className="bg-white p-6 rounded-lg shadow-md border border-[#e4c9a7]">
-                <h3 className="text-xl font-bold text-[#3e2723] mb-1">2020</h3>
-                <h4 className="text-[#cc6d2d] font-medium mb-3">Digital Transformation</h4>
-                <p className="text-[#5d4037]">Launched our online ordering platform and custom drink builder, expanding our reach during challenging times.</p>
-              </div>
+              <h3 className="text-2xl font-bold text-[#3e2723] mb-6">Admin Security</h3>
+              <ul className="space-y-4">
+                <li className="flex items-start gap-3">
+                  <FaUserShield className="text-[#cc6d2d] mt-1" />
+                  <span className="text-[#5d4037]">IP-based access restriction</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <FaSignInAlt className="text-[#cc6d2d] mt-1" />
+                  <span className="text-[#5d4037]">Multi-factor authentication</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <FaCog className="text-[#cc6d2d] mt-1" />
+                  <span className="text-[#5d4037]">Account lockout protection</span>
+                </li>
+              </ul>
             </motion.div>
-
-            <motion.div 
-              className="mb-12 relative"
-              variants={fadeIn}
-            >
-              <div className="absolute -left-[3.25rem] w-10 h-10 bg-[#cc6d2d] rounded-full border-4 border-[#f8f4e5] flex items-center justify-center">
-                <FaCoffee className="text-white" />
-              </div>
-              <div className="bg-white p-6 rounded-lg shadow-md border border-[#e4c9a7]">
-                <h3 className="text-xl font-bold text-[#3e2723] mb-1">2022</h3>
-                <h4 className="text-[#cc6d2d] font-medium mb-3">Sustainability Partnership</h4>
-                <p className="text-[#5d4037]">Formed key partnerships with local coffee farmers to ensure sustainable sourcing and fair trade practices.</p>
-              </div>
-            </motion.div>
-
-            <motion.div 
-              className="relative"
-              variants={fadeIn}
-            >
-              <div className="absolute -left-[3.25rem] w-10 h-10 bg-[#cc6d2d] rounded-full border-4 border-[#f8f4e5] flex items-center justify-center">
-                <FaCoffee className="text-white" />
-              </div>
-              <div className="bg-white p-6 rounded-lg shadow-md border border-[#e4c9a7]">
-                <h3 className="text-xl font-bold text-[#3e2723] mb-1">2023</h3>
-                <h4 className="text-[#cc6d2d] font-medium mb-3">Expansion & Recognition</h4>
-                <p className="text-[#5d4037]">Opened our second location and received "Best Craft Coffee Experience" award from Metro Manila Food Critics.</p>
-              </div>
-            </motion.div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Visit Us Section */}
-      <section className="py-20 px-6 bg-[#3e2723] text-white">
-        <div className="max-w-7xl mx-auto">
-          <motion.div 
-            className="flex flex-col md:flex-row items-center gap-12"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-          >
-            <motion.div 
-              className="md:w-1/2"
-              variants={fadeIn}
-            >
-              <h2 className="text-3xl md:text-4xl font-bold mb-6">Visit <span className="text-[#e4c9a7]">BrewCrafter</span></h2>
-              <p className="text-[#e4c9a7] mb-6 leading-relaxed">
-                We'd love to welcome you to our coffee shops and share the BrewCrafter experience with you.
-              </p>
-              
-              <div className="mb-8">
-                <h3 className="text-xl font-semibold mb-3 text-[#e4c9a7]">Main Location</h3>
-                <p className="mb-1">123 Coffee Street, Makati City</p>
-                <p className="mb-1">Monday - Friday: 7am - 9pm</p>
-                <p className="mb-3">Saturday - Sunday: 8am - 10pm</p>
-                <p>Contact: (02) 8123-4567</p>
-              </div>
-              
-              <div>
-                <h3 className="text-xl font-semibold mb-3 text-[#e4c9a7]">Downtown Branch</h3>
-                <p className="mb-1">456 Brew Avenue, BGC, Taguig</p>
-                <p className="mb-1">Monday - Friday: 7am - 8pm</p>
-                <p className="mb-3">Saturday - Sunday: 8am - 9pm</p>
-                <p>Contact: (02) 8987-6543</p>
-              </div>
-            </motion.div>
-            
-            <motion.div 
-              className="md:w-1/2 rounded-2xl overflow-hidden shadow-xl"
-              variants={fadeIn}
-            >
-              {/* Replace with an actual map or store image */}
-              <div className="aspect-square bg-[#5d4037] flex items-center justify-center p-8">
-                <div className="text-center">
-                  <FaUsers className="text-8xl mx-auto text-[#e4c9a7] mb-4" />
-                  <p className="text-[#e4c9a7] text-xl font-medium">Store Map Placeholder</p>
-                  <p className="text-[#e4c9a7]/80 mt-4">
-                    In your final implementation, you can embed a Google Maps location here
-                  </p>
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
+          </div>
         </div>
       </section>
     </div>
