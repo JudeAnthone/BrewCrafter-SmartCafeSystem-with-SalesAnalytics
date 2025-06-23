@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import Layout from './components/Layout'; // Change to Layout instead of AdminLayout
+import Layout from './components/Layout'; 
 import Dashboard from './pages/Dashboard';
 import MenuManager from './pages/MenuManager';
 import Inventory from './pages/Inventory';

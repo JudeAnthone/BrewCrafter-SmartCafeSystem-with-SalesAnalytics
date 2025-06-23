@@ -32,7 +32,7 @@ export default function Dashboard() {
   }, []);
 
   return (
-    // Main container - add width constraints and padding bottom for scrolling
+    // Main container
     <div className="w-full max-w-full pb-4"> 
       <h1 className="text-2xl font-bold text-[#3e2723] mb-6">Dashboard</h1>
       
@@ -72,12 +72,12 @@ export default function Dashboard() {
         </div>
       </div>
       
-      {/* Charts section - add responsive constraints */}
+      {/* Charts section*/}
       <div className="mb-8 overflow-hidden">
         <Chart data={salesData} />
       </div>
       
-      {/* Recent Orders - add responsive overflows */}
+      {/* Recent Orders*/}
       <div className="bg-white rounded-lg shadow-sm border border-[#e4c9a7] p-6 mb-8 overflow-x-auto">
         <h2 className="text-lg font-semibold text-[#3e2723] mb-4">Recent Orders</h2>
         <div className="min-w-full overflow-hidden">
@@ -103,7 +103,7 @@ export default function Dashboard() {
                       order.status === 'completed'
                         ? 'bg-green-100 text-green-800'
                         : order.status === 'preparing'
-                        ? 'bg-amber-100 text-amber-800'
+                        ? 'bg-amber-100 text-amber-800' 
                         : order.status === 'pending'
                         ? 'bg-blue-100 text-blue-800'
                         : order.status === 'cancelled'

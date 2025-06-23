@@ -20,14 +20,6 @@ const ForgotPassword = () => {
       setLoading(true);
       setError('');
       
-      // In a real application, you would call your API here
-      // const response = await fetch('/api/admin/forgot-password', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ email }),
-      // });
-      
-      // For demo purposes, we'll just simulate a successful submission
       setTimeout(() => {
         setLoading(false);
         setSubmitted(true);

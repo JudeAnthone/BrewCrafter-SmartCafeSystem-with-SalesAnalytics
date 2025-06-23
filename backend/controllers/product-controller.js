@@ -1,4 +1,3 @@
-// Product/Menu controller / business logic - for handling requests
 
 const pool = require("../config/db-connection");
 const path = require('path');

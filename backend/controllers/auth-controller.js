@@ -23,10 +23,10 @@ const sendVerificationEmail = async (userEmail, otp) => {
         from: `"BrewCrafter" <${process.env.EMAIL_USER}>`,
         to: userEmail,
         subject: "Your BrewCrafter OTP Code",
-        html: `<div>
-          <h2>Your OTP Code</h2>
-          <h1>${otp}</h1>
-          <p>This code will expire in 10 minutes.</p>
+        html: `<div style="font-family:sans-serif; text-align:center;">
+          <h2 style="color:#3e2723;">Your OTP Code</h2>
+          <h1 style="font-size:2.5em; color:#cc6d2d; letter-spacing:4px;">${otp}</h1>
+          <p style="color:#555;">This code will expire in 10 minutes.</p>
         </div>`
     });
     return true;
@@ -226,7 +226,7 @@ exports.login = async (req, res) => {
                 [user.id]
             );
         } else {
-            // For old users (no birthday), use old logic
+            // For old users (no birthday), OLD LOGIC
             const validPassword = await bcrypt.compare(password, user.user_password);
             if (!validPassword) {
                 return res.status(401).json({ message: "Invalid Credential" });

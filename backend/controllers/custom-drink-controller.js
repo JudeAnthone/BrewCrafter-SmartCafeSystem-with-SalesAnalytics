@@ -1,4 +1,3 @@
-// Custom drink controller API/ business logic - for handling requests
 
 const pool = require("../config/db-connection");
 

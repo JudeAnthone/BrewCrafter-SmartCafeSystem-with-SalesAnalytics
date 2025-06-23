@@ -8,11 +8,11 @@ import {
   FaUserShield, 
   FaChartBar, 
   FaCog,
-  FaCreditCard  // Add this import
+  FaCreditCard  
 } from 'react-icons/fa';
 import Divider from "../components/Divider";
 
-// Import your screenshots
+// about us images
 import RegisterImg from "../assets/Screenshot 2025-06-18 155902.png";
 import LoginImg from "../assets/Screenshot 2025-06-18 155935.png";
 import MenuImg from "../assets/Screenshot 2025-06-18 160049.png";

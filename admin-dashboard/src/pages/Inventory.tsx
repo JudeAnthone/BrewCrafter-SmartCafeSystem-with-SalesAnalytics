@@ -50,7 +50,7 @@ const Inventory = () => {
     fetchInventory();
   }, []);
 
-  // Add/Edit/Delete handlers (use backend)
+  // Add/Edit/Delete handlers  
   const handleNewItem = () => {
     setCurrentItem(null);
     setShowForm(true);
@@ -386,7 +386,7 @@ const Inventory = () => {
                     defaultValue={currentItem?.category_name}
                     required
                   />
-                  {/* You may want to use a dropdown with real categories */}
+                  
                 </div>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

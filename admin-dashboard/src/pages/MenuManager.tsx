@@ -6,7 +6,7 @@ interface MenuItem {
   id: string;
   product_name: string;
   product_price: number;
-  category_id: number; // FIX: should be number, not string
+  category_id: number; 
   product_description: string;
   image_url?: string;
   is_popular: boolean;
@@ -72,9 +72,6 @@ const MenuManager = () => {
       method = 'put';
     }
 
-    // If editing, add a hidden _method override for PUT (if needed by backend)
-    // formData.append('_method', method);
-
     // Ingredients: convert to JSON string for backend
     const ingredients = formData.get('ingredients') as string;
     formData.set('ingredients', JSON.stringify(ingredients.split(',').map(i => i.trim())));
@@ -97,7 +94,7 @@ const MenuManager = () => {
     if (!window.confirm("Are you sure you want to delete this menu item?")) return;
     try {
       await axios.delete(`http://localhost:5000/api/products/${id}`);
-      setMenuItems(menuItems.filter(item => item.id !== id)); // Update UI immediately
+      setMenuItems(menuItems.filter(item => item.id !== id));  
     } catch (err) {
       alert('Failed to delete item.');
     }

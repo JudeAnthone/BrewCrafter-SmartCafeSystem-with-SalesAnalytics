@@ -22,7 +22,6 @@ const app = express();
 app.use(express.json());
 app.use(cors());
  
-// // Facebook auth - cancelled plan app.use(passport.initialize()); // FB passport
 
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes); // product routes
@@ -39,7 +38,6 @@ app.use('/api/admin', adminOrderRoutes);
 // product image (multer)
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/uploads/products', express.static(path.join(__dirname, '../uploads/products')));
-
 
 
 // Route - backend server message

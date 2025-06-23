@@ -185,9 +185,7 @@ function Profile() {
                   Browse Menu
                 </Link>
               </div>
-              
-              {/* If has orders, show them here */}
-              {/* This will be implemented when you have order data */}
+
             </div>
           </div>
         </div>

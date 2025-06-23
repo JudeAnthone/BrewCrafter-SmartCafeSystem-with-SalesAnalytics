@@ -1,5 +1,5 @@
 const allowedIPs = [
-  '192.168.1.44'
+  '192.168.1.41'
 ];
 
 function restrictionMiddleware(req, res, next) {

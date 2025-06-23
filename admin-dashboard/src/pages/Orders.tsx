@@ -299,7 +299,6 @@ const Orders = () => {
           </table>
         </div>
 
-        {/* Pagination (optional, not implemented) */}
         <div className="px-4 py-3 flex items-center justify-between border-t border-light-200">
           <div className="text-sm text-gray-100">
             Showing <span className="font-medium text-primary">{filteredOrders.length}</span> of{" "}
