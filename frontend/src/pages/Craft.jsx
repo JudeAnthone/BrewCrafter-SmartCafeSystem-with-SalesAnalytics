@@ -8,7 +8,7 @@ const Craft = () => {
         const user_id = localStorage.getItem("user_id");
         if (!user_id) {
             alert("Please log in to craft a drink.");
-            // Optionally: window.location.href = "/login";
+            
         }
     }, []);
 
