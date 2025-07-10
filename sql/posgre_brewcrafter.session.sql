@@ -239,57 +239,5 @@ ALTER TABLE brewcrafter.users
   
 */
 
-DELETE FROM brewcrafter.users WHERE user_email = 'cosgafa.j.bscs@gmail.com';
-
-
-DELETE FROM brewcrafter.custom_drinks
-WHERE user_id = (SELECT id FROM brewcrafter.users WHERE user_email = 'duartejudeanthone@gmail.com');
-
-DELETE FROM brewcrafter.users
-WHERE user_email = 'hudeus28@gmail.com';
-
-SELECT user_email, birthday FROM brewcrafter.users WHERE user_email = 'judeanthone28@gmail.com';
-
-
-SELECT * FROM brewcrafter.users
-
-
-ALTER TABLE brewcrafter.users ALTER COLUMN birthday TYPE VARCHAR(10);
-
-DELETE FROM brewcrafter.users WHERE user_email = 'brewcraftercs2a@gmail.com';
-
-SELECT user_email, verification_token FROM brewcrafter.users WHERE user_email = 'brewcraftercs2a@gmail.com';
-
-ALTER TABLE brewcrafter.users ADD COLUMN stepup_token VARCHAR(10);
-
-DELETE FROM brewcrafter.users WHERE user_email = 'hudeus28@gmail.com';
-
-
--- Insert into orders
-INSERT INTO brewcrafter.orders (id, user_id, total_amount, status, payment_method, created_at, updated_at)
-VALUES (
-  '4c14add9-9f2b-40e1-8214-283b55288127',
-  '9e7300ed-526b-4566-aa89-0989b85a660d',
-  250.00,
-  'completed',
-  'cash',
-  '2025-06-21 10:00:00',
-  '2025-06-21 10:00:00'
-);
-
--- Insert into order_items (example)
-INSERT INTO brewcrafter.order_items (order_id, product_id, custom_drink_id, quantity, unit_price, subtotal, notes, created_at)
-VALUES (
-  '4c14add9-9f2b-40e1-8214-283b55288127',
-  '"acaa7d06-b6c5-4087-92b8-f005605144cb"',
-  NULL,
-  2,
-  125.00,
-  250.00,
-  'No sugar',
-  '2025-06-21 10:00:00'
-);
-
-SELECT * FROM brewcrafter.testing
 
 
