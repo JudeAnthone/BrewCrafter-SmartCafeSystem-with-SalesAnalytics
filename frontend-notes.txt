@@ -58,5 +58,3 @@ BREWCRAFTER-FINAL-PROJECT/
 │   │── package-lock.json         # Frontend dependency lock file
 │   └── README.md                 # Project documentation
 
-
-all the reusable imports" framer motion, daisyUI, shadcn, material UI
