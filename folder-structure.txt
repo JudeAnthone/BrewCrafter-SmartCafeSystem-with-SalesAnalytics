@@ -1,5 +1,5 @@
-✅ Final Review of Folder Structure
-📌 Backend (backend/)
+
+Backend (backend/)
 server.js → Main entry point for the backend (Express server).
 
 config/ → Manages database (db.js) and environment variables (dotenvConfig.js).
@@ -16,7 +16,7 @@ utils/ → Helper functions (like generateToken.js for JWT authentication).
 
 
 
-📌 Frontend (frontend/)
+Frontend for both admin and customer(frontend/)
 components/ → Reusable UI elements (buttons, modals, etc.).
 
 layouts/ → Page structures (navbar, sidebar, footer).
