@@ -15,11 +15,11 @@ passport.use(new FacebookStrategy({
       const email = profile.emails[0].value;
       let user = await pool.query('SELECT * FROM brewcrafter.users WHERE user_email = $1', [email]);
      
-      if(user.rows.length === 0){ // create/insert new user if does not exist
+      if(user.rows.length === 0){  
         user = await pool.query(
           `INSERT INTO brewcrafter.users (role_id, user_name, user_email, user_password, is_verified)
            VALUES ($1, $2, $3, $4, $5) RETURNING *`,
-          [2, profile.displayName, email, 'facebook', true] // 'facebook' as dummy password
+          [2, profile.displayName, email, 'facebook', true]  
         );
       }
       

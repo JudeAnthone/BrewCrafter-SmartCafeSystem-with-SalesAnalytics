@@ -14,6 +14,7 @@ function Profile() {
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   
+  
   // Handle form input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -22,6 +23,7 @@ function Profile() {
       [name]: value
     }));
   };
+  
   
   // Handle save profile changes
   const handleSave = () => {
@@ -35,12 +37,14 @@ function Profile() {
       setTimeout(() => setError(''), 3000);
     }
   };
+  
 
   return (
     <div className="max-w-4xl mx-auto py-8 px-4 sm:px-6">
-      <div className="bg-white rounded-2xl shadow-md p-6 sm:p-8 border border-[#e4c9a7]/20">
+      <div className="bg-white rounded-2xl shadow-md p-6 sm:p-8 border border-[#e4c9a7]/20"> 
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
           <h1 className="text-3xl font-bold text-[#3e2723]">My <span className="text-[#cc6d2d]">Profile</span></h1>
+          
           <div className="mt-4 sm:mt-0">
             {editing ? (
               <div className="flex space-x-3">
@@ -50,6 +54,7 @@ function Profile() {
                 >
                   Cancel
                 </button>
+                
                 <button 
                   onClick={handleSave}
                   className="px-4 py-2 bg-[#cc6d2d] text-white rounded-lg hover:bg-[#3e2723] transition-colors"
@@ -66,6 +71,7 @@ function Profile() {
               </button>
             )}
           </div>
+          
         </div>
         
         {message && (
@@ -86,6 +92,7 @@ function Profile() {
               <div className="w-24 h-24 bg-[#cc6d2d] rounded-full mx-auto flex items-center justify-center text-white text-3xl font-bold mb-4">
                 {currentUser?.name?.charAt(0) || 'U'}
               </div>
+              
               <h2 className="text-xl font-semibold text-[#3e2723]">{currentUser?.name}</h2>
               <p className="text-[#5d4037] mt-1">{currentUser?.email}</p>
               <p className="text-sm text-[#5d4037] mt-4">Member since {new Date(currentUser?.createdAt).toLocaleDateString()}</p>
@@ -96,14 +103,17 @@ function Profile() {
               >
                 Sign Out
               </button>
+              
             </div>
           </div>
           
           <div className="md:col-span-2">
             <div className="bg-[#f8f4e5] rounded-xl p-6">
+              
               <h3 className="text-xl font-semibold text-[#3e2723] mb-4">Personal Information</h3>
               
               <div className="space-y-4">
+                
                 <div>
                   <label className="block text-[#5d4037] font-medium mb-1">Name</label>
                   {editing ? (
@@ -119,6 +129,7 @@ function Profile() {
                   )}
                 </div>
                 
+                
                 <div>
                   <label className="block text-[#5d4037] font-medium mb-1">Email</label>
                   {editing ? (
@@ -133,6 +144,7 @@ function Profile() {
                     <p className="text-[#3e2723]">{currentUser?.email}</p>
                   )}
                 </div>
+                
                 
                 <div>
                   <label className="block text-[#5d4037] font-medium mb-1">Phone Number</label>
@@ -150,6 +162,7 @@ function Profile() {
                   )}
                 </div>
                 
+                
                 <div>
                   <label className="block text-[#5d4037] font-medium mb-1">Address</label>
                   {editing ? (
@@ -165,6 +178,7 @@ function Profile() {
                     <p className="text-[#3e2723]">{currentUser?.address || 'Not provided'}</p>
                   )}
                 </div>
+                
               </div>
             </div>
             
@@ -174,6 +188,7 @@ function Profile() {
                 <h3 className="text-xl font-semibold text-[#3e2723]">Recent Orders</h3>
                 <Link to="/orders" className="text-[#cc6d2d] hover:text-[#3e2723] font-medium">View All</Link>
               </div>
+              
               
               {/* If no orders yet */}
               <div className="text-center py-8 text-[#5d4037]">

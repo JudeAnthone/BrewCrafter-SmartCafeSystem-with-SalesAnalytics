@@ -44,7 +44,6 @@ const AboutUs = () => {
     }
   };
 
-  // Updated Customer flow steps
   const customerSteps = [
     {
       icon: <FaUserPlus className="text-3xl" />,
@@ -73,7 +72,6 @@ const AboutUs = () => {
     }
   ];
 
-  // Updated Admin flow steps
   const adminSteps = [
     {
       icon: <FaUserShield className="text-3xl" />,
@@ -126,6 +124,7 @@ const AboutUs = () => {
           </motion.div>
         </div>
       </section>
+
 
       {/* Customer Guide Section */}
       <section className="py-20 px-6 bg-white">

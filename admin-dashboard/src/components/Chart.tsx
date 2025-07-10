@@ -1,6 +1,4 @@
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-
-// Define props interface
 interface ChartProps {
   data: Array<{
     name: string;

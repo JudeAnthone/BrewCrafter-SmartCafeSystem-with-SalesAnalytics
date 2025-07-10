@@ -9,12 +9,14 @@ const CATEGORY_MAP = {
   3: "Smoothie"
 };
 
+
 const Menu = () => {
     const navigate = useNavigate();
     const [activeCategory, setActiveCategory] = useState("all");
     const [notification, setNotification] = useState(null);
     const [menuItems, setMenuItems] = useState([]);
     const [categories, setCategories] = useState(["all"]);
+    
 
     // Fetch products from backend
     useEffect(() => {
@@ -24,12 +26,13 @@ const Menu = () => {
                 // Get unique category IDs from products and map to names
                 const cats = Array.from(new Set(res.data.map(item => item.category_id))).filter(Boolean);
                 const catNames = cats.map(id => CATEGORY_MAP[id]).filter(Boolean);
-                setCategories(["all", ...catNames]);
+                setCategories(["all", ...catNames]); // all the categories
             })
             .catch(() => setMenuItems([]));
     }, []);
+    
 
-    // Add to cart (send to backend, not localStorage)
+    // Add to cart (send to backend)
     const addToCart = async (item) => {
         const user_id = localStorage.getItem("user_id");
         if (!user_id) {
@@ -54,7 +57,7 @@ const Menu = () => {
 
     // Filter menu items based on the selected category name
     const filteredItems =
-        activeCategory === "all"
+        activeCategory === "all" // default category
             ? menuItems
             : menuItems.filter((item) =>
                 CATEGORY_MAP[item.category_id] === activeCategory
@@ -62,6 +65,7 @@ const Menu = () => {
 
     const itemCount = filteredItems.length;
 
+    
     return (
         <div className="bg-[#f8f4e5] min-h-screen py-8">
             <div className="max-w-7xl mx-auto px-4">
@@ -71,6 +75,7 @@ const Menu = () => {
                         Discover our selection of handcrafted coffees, frappes, and smoothies made with premium ingredients
                     </p>
                 </div>
+
 
                 {/* Category selector */}
                 <div className="flex justify-center mb-6 flex-wrap gap-2">
@@ -89,10 +94,13 @@ const Menu = () => {
                     ))}
                 </div>
 
+
                 <p className="text-center text-[#5d4037] mb-8">
                     Showing {itemCount} {activeCategory !== "all" ? activeCategory : ""} Items
                 </p>
 
+
+                {/* Menu placeholder with descriptions, price, category, image */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                     {filteredItems.map((item) => (
                         <div
@@ -106,20 +114,25 @@ const Menu = () => {
                                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                                 />
                             </div>
+                            
                             <div className="p-5">
                                 <div className="flex justify-between items-start mb-2">
                                     <h2 className="text-xl font-semibold text-[#3e2723]">
                                         {item.product_name}
                                     </h2>
+                                    
                                     <span className="bg-[#f8e8d0] text-[#3e2723] px-2 py-1 rounded-full text-xs font-medium">
                                         {CATEGORY_MAP[item.category_id]}
                                     </span>
                                 </div>
+                                
                                 <p className="text-gray-600 text-sm mb-4">{item.product_description}</p>
+                                
                                 <div className="flex justify-between items-center">
                                     <span className="text-[#3e2723] font-bold text-lg">
                                         ₱{item.product_price}
                                     </span>
+                                    
                                     <div className="flex gap-2">
                                         <button
                                             className="bg-[#e4c9a7] text-[#3e2723] px-4 py-2 rounded-full text-sm hover:bg-[#b5a397] hover:text-white transition-colors flex items-center gap-1"
@@ -141,6 +154,7 @@ const Menu = () => {
                                             </svg>
                                             Add to Cart
                                         </button>
+                                        
                                         <button
                                             className="bg-[#3e2723] text-white px-4 py-2 rounded-full text-sm hover:bg-[#5d4037] transition-colors"
                                             onClick={goToCart}
@@ -153,6 +167,7 @@ const Menu = () => {
                         </div>
                     ))}
                 </div>
+                
 
                 {filteredItems.length === 0 && (
                     <div className="text-center py-12">
@@ -166,6 +181,7 @@ const Menu = () => {
                         {notification}
                     </div>
                 )}
+
 
                 <div className="text-center mt-12">
                     <button

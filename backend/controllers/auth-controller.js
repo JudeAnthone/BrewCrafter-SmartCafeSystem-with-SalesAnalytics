@@ -91,9 +91,9 @@ exports.register = async (req, res) => {
                 hashedPassword,
                 user_phone,
                 user_address,
-                birthdayStr, // <-- use the string, not the raw birthday
+                birthdayStr, 
                 verificationToken,
-                false // set as false because not yet verified
+                false // false because not yet verified
             ]
         );
         // message if succesfull
@@ -201,11 +201,13 @@ exports.login = async (req, res) => {
                 }
                 return res.status(401).json({ message: "Invalid Credential" });
             }
+            
             // On successful login, reset failed attempts
             await pool.query(
                 "UPDATE brewcrafter.users SET failed_login_attempts = 0 WHERE id = $1",
                 [user.id]
             );
+            
         } else if (user.birthday) {
             // For regular users with birthday, keep existing logic
             const validPassword = await bcrypt.compare(password, user.user_password);
@@ -220,11 +222,13 @@ exports.login = async (req, res) => {
                 }
                 return res.status(401).json({ message: "Invalid Credential" });
             }
+            
             // On successful login, reset failed attempts
             await pool.query(
                 "UPDATE brewcrafter.users SET failed_login_attempts = 0 WHERE id = $1",
                 [user.id]
             );
+            
         } else {
             // For old users (no birthday), OLD LOGIC
             const validPassword = await bcrypt.compare(password, user.user_password);
@@ -276,7 +280,7 @@ exports.verifyBirthdayStepUp = async (req, res) => {
         const dbBirthday = String(user.birthday).slice(0, 10);
 
         if (!user || !user.birthday || String(birthday).slice(0, 10) !== dbBirthday) {
-            const lockUntil = new Date(Date.now() + 1 * 60 * 1000); // 1 minute for testing  
+            const lockUntil = new Date(Date.now() + 1 * 60 * 1000); // 1 minute  
             await pool.query(
                 'UPDATE brewcrafter.users SET is_locked = TRUE, lock_until = $1 WHERE id = $2',
                 [lockUntil, user?.id]
@@ -317,6 +321,8 @@ exports.verifyStepUpOTP = async (req, res) => {
         res.status(500).json({ message: "OTP verification failed", error: error.message });
     }
 };
+
+
 
 // Admin registration
 exports.adminRegister = async (req, res) => {

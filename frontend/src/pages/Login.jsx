@@ -21,10 +21,10 @@ function Login() {
         setLoading(true);
         try {
             const res = await login({ email, password });
-            // success: handled in context
+            // if success: handled in context
         } catch (err) {
             if (err.response?.data?.stepUp) {
-                setStep(2); // Go to birthday step
+                setStep(2); // to birthday step
             } else {
                 setError(err.response?.data?.message || 'Failed to login. Please try again.');
             }
@@ -40,7 +40,7 @@ function Login() {
         setLoading(true);
         try {
             const res = await stepUpBirthday(email, birthday);
-            setStep(3); // Go to OTP step
+            setStep(3); // to OTP step
         } catch (err) {
             setError(err.response?.data?.message || 'Incorrect birthday.');
         } finally {
@@ -55,7 +55,7 @@ function Login() {
         setLoading(true);
         try {
             await stepUpOTP(email, otp);
-            window.location.href = '/profile'; // or use navigate('/profile')
+            window.location.href = '/profile';  
         } catch (err) {
             setError(err.response?.data?.message || 'Invalid OTP.');
         } finally {
@@ -69,6 +69,7 @@ function Login() {
                 <Coffee size={48} className="text-[#3e2723] mb-3" />
                 <h1 className="text-3xl font-bold text-[#3e2723]">BrewCrafter</h1>
             </div>
+            
             <div className="bg-white p-8 md:p-10 rounded-2xl shadow-xl w-full max-w-md border border-[#e4c9a7]/20">
                 <h2 className="text-3xl font-bold text-center mb-8 text-[#3e2723]">
                     Welcome <span className="text-[#cc6d2d]">Back!</span>
@@ -91,7 +92,8 @@ function Login() {
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
                             />
-                        </div>
+                        </div> 
+                        
                         <div>
                             <label className="block text-[#5d4037] font-medium mb-2">Password</label>
                             <div className="relative">
@@ -103,6 +105,7 @@ function Login() {
                                     onChange={(e) => setPassword(e.target.value)}
                                     required
                                 />
+                                
                                 <button
                                     type="button"
                                     className="absolute right-3 top-1/2 -translate-y-1/2 text-[#5d4037]"
@@ -113,6 +116,7 @@ function Login() {
                                 </button>
                             </div>
                         </div>
+                        
                         <button type="submit" className="w-full bg-[#cc6d2d] text-white py-3.5 rounded-xl" disabled={loading}>
                             {loading ? "Logging in..." : "Login"}
                         </button>
@@ -125,6 +129,7 @@ function Login() {
                             <label className="block text-[#5d4037] font-medium mb-2">
                                 Birthday <span className="text-xs text-[#cc6d2d]">(use the date picker)</span>
                             </label>
+                            
                             <input
                                 type="date"
                                 className="w-full p-3 border border-[#e4c9a7] rounded-xl"
@@ -134,6 +139,7 @@ function Login() {
                                 required
                             />
                         </div>
+                        
                         <button type="submit" className="w-full bg-[#cc6d2d] text-white py-3.5 rounded-xl" disabled={loading}>
                             {loading ? "Verifying..." : "Verify Birthday"}
                         </button>
@@ -153,6 +159,7 @@ function Login() {
                                 required
                             />
                         </div>
+                        
                         <button type="submit" className="w-full bg-[#cc6d2d] text-white py-3.5 rounded-xl" disabled={loading}>
                             {loading ? "Verifying..." : "Verify OTP"}
                         </button>

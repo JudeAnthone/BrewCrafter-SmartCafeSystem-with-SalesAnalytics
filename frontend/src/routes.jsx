@@ -39,7 +39,6 @@ const AppRoutes = () => {
               <Route path="/profile" element={<Profile />} />
               <Route path="/checkout" element={<Checkout />} />
               <Route path="/order-history" element={<OrderHistory />} />
-              {/* more protected routes here if needed */}
             </Route>
           </Route>
 

@@ -40,6 +40,7 @@ const AdminVerify = () => {
         <h2 className="text-2xl font-bold text-center mb-8 text-[#3e2723]">
           Admin Email Verification
         </h2>
+        
         {!success && (
           <div className="mb-4 text-[#5d4037] text-center">
             Please check your email for the OTP code to verify your account.
@@ -55,6 +56,7 @@ const AdminVerify = () => {
             {success}
           </div>
         )}
+        
         <form className="space-y-6" onSubmit={handleSubmit}>
           <div>
             <label className="block text-[#5d4037] font-medium mb-2">Email</label>
@@ -67,6 +69,7 @@ const AdminVerify = () => {
               required
             />
           </div>
+          
           <div>
             <label className="block text-[#5d4037] font-medium mb-2">OTP Code</label>
             <input
@@ -78,6 +81,7 @@ const AdminVerify = () => {
               required
             />
           </div>
+          
           <button
             type="submit"
             className="w-full bg-[#cc6d2d] text-white py-3.5 rounded-xl"

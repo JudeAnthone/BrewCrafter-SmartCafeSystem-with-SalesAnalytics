@@ -33,7 +33,7 @@ export const AuthProvider = ({ children }) => {
       user_address: formData.address || '',
       birthday: formData.birthday
     });
-    setPendingEmail(formData.email); // Save for OTP step
+    setPendingEmail(formData.email); 
     return res.data;
   };
 
@@ -46,6 +46,7 @@ export const AuthProvider = ({ children }) => {
     });
     // Save user/token after verification
     localStorage.setItem('brewCrafterToken', res.data.token);
+    
     // Save user_id for use in cart/craft
     if (res.data.user && res.data.user.id) {
       localStorage.setItem('user_id', res.data.user.id);
@@ -63,6 +64,7 @@ export const AuthProvider = ({ children }) => {
     });
     localStorage.setItem('brewCrafterUser', JSON.stringify(res.data.user));
     localStorage.setItem('brewCrafterToken', res.data.token);
+    
     // Save user_id for use in cart/craft
     if (res.data.user && res.data.user.id) {
       localStorage.setItem('user_id', res.data.user.id);
@@ -78,13 +80,12 @@ export const AuthProvider = ({ children }) => {
     console.log("Logout function called");
     localStorage.removeItem('brewCrafterUser');
     localStorage.removeItem('brewCrafterToken');
-    localStorage.removeItem('user_id'); // <-- Remove user_id on logout
+    localStorage.removeItem('user_id'); 
     setCurrentUser(null);
     navigate('/login');
   };
   
-
-  // Password reset - placeholder function
+  // Password reset 
   const resetPassword = (email) => {
     console.log(`Password reset email sent to: ${email}`);
     return Promise.resolve();
@@ -109,8 +110,10 @@ export const AuthProvider = ({ children }) => {
 
   const stepUpOTP = async (email, otp) => {
     const res = await axios.post('http://localhost:5000/api/auth/stepup-otp', { email, otp });
+    
     // Save user/token after verification
     localStorage.setItem('brewCrafterUser', JSON.stringify(res.data.user));
+    
     localStorage.setItem('brewCrafterToken', res.data.token);
     if (res.data.user && res.data.user.id) {
       localStorage.setItem('user_id', res.data.user.id);
@@ -119,7 +122,6 @@ export const AuthProvider = ({ children }) => {
     return res.data;
   };
 
-  // Create the value object to be provided by the context
   const value = {
     currentUser,
     register,
@@ -148,8 +150,6 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-
-// Custom hook to use the auth context
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
@@ -158,5 +158,4 @@ export const useAuth = () => {
   return context;
 };
 
-// Export the context as well
 export default AuthContext;

@@ -30,7 +30,7 @@ const Login = () => {
       if (res.ok && (data.user?.role === 1 || data.user?.role === 'admin')) {
         login(data.token, data.user);
       } else if (data.stepUp) {
-        setStep(2); // Go to birthday step
+        setStep(2); //to birthday step
       } else {
         setError(data.message || 'Access denied. Admins only.');
       }
@@ -41,6 +41,7 @@ const Login = () => {
     }
   };
 
+  
   // Step 2: Birthday step-up
   const handleBirthday = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,13 +49,14 @@ const Login = () => {
     setLoading(true);
     try {
       await stepUpBirthday(email, birthday);
-      setStep(3); // Go to OTP step
+      setStep(3); // to OTP step
     } catch (err: any) {
       setError(err.message || 'Incorrect birthday.');
     } finally {
       setLoading(false);
     }
   };
+  
 
   // Step 3: OTP step-up
   const handleOtp = async (e: React.FormEvent) => {
@@ -64,7 +66,7 @@ const Login = () => {
     try {
       await stepUpOTP(email, otp);
       setSuccess(true);
-      setTimeout(() => window.location.href = '/dashboard', 1500); // or use navigate
+      setTimeout(() => window.location.href = '/dashboard', 1500);  
     } catch (err: any) {
       setError(err.message || 'Invalid OTP.');
     } finally {
@@ -72,22 +74,27 @@ const Login = () => {
     }
   };
 
+  
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-[#f8e8d0] px-4 py-12">
+      
       <div className="flex flex-col items-center mb-8">
         <Coffee size={48} className="text-[#3e2723] mb-3" />
         <h1 className="text-3xl font-bold text-[#3e2723]">BrewCrafter</h1>
         <p className="text-[#5d4037] font-medium">Admin Dashboard</p>
       </div>
+      
       <div className="bg-white p-8 md:p-10 rounded-2xl shadow-xl w-full max-w-md border border-[#e4c9a7]/20">
         <h2 className="text-3xl font-bold text-center mb-8 text-[#3e2723]">
           Admin <span className="text-[#cc6d2d]">Login</span>
         </h2>
+        
         {error && (
           <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-4">
             {error}
           </div>
         )}
+
 
         {step === 1 && (
           <form className="space-y-6" onSubmit={handleLogin}>
@@ -102,6 +109,7 @@ const Login = () => {
                 required
               />
             </div>
+            
             <div>
               <label className="block text-[#5d4037] font-medium mb-2">Password</label>
               <div className="relative">
@@ -113,6 +121,7 @@ const Login = () => {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                 />
+                
                 <button
                   type="button"
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-[#5d4037]"
@@ -122,6 +131,7 @@ const Login = () => {
                 </button>
               </div>
             </div>
+            
             <button
               type="submit"
               className="w-full bg-[#cc6d2d] text-white py-3.5 rounded-xl"
@@ -131,22 +141,25 @@ const Login = () => {
             </button>
           </form>
         )}
+        
 
         {step === 2 && (
           <form className="space-y-6" onSubmit={handleBirthday}>
             <div>
-              <label className="block text-[#5d4037] font-medium mb-2">
-                Birthday <span className="text-xs text-[#cc6d2d]">(use the date picker)</span>
-              </label>
-              <input
-                type="date"
-                className="w-full p-3 border border-[#e4c9a7] rounded-xl"
-                placeholder="Enter your birthday"
-                value={birthday}
-                onChange={(e) => setBirthday(e.target.value)}
-                required
-              />
+                <label className="block text-[#5d4037] font-medium mb-2">
+                  Birthday <span className="text-xs text-[#cc6d2d]">(use the date picker)</span>
+                </label>
+                
+                <input
+                  type="date"
+                  className="w-full p-3 border border-[#e4c9a7] rounded-xl"
+                  placeholder="Enter your birthday"
+                  value={birthday}
+                  onChange={(e) => setBirthday(e.target.value)}
+                  required
+                />
             </div>
+            
             <button
               type="submit"
               className="w-full bg-[#cc6d2d] text-white py-3.5 rounded-xl"
@@ -154,8 +167,10 @@ const Login = () => {
             >
               {loading ? "Verifying..." : "Verify Birthday"}
             </button>
+            
           </form>
         )}
+
 
         {step === 3 && (
           <form className="space-y-6" onSubmit={handleOtp}>
@@ -171,6 +186,7 @@ const Login = () => {
                 disabled={loading || success}
               />
             </div>
+            
             <button
               type="submit"
               className="w-full bg-[#cc6d2d] text-white py-3.5 rounded-xl"

@@ -132,29 +132,35 @@ const Orders = () => {
         </button>
       </div>
 
+
       {/* Order Statistics */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
         <div className="bg-white p-4 rounded-lg shadow-sm border border-light-200">
           <p className="text-sm text-gray-100 mb-1">Total Orders</p>
           <p className="text-2xl font-bold text-primary">{orderCounts.total}</p>
         </div>
+        
         <div className="bg-white p-4 rounded-lg shadow-sm border border-light-200">
           <p className="text-sm text-gray-100 mb-1">Completed</p>
           <p className="text-2xl font-bold text-green-600">{orderCounts.completed}</p>
         </div>
+        
         <div className="bg-white p-4 rounded-lg shadow-sm border border-light-200">
           <p className="text-sm text-gray-100 mb-1">Preparing</p>
           <p className="text-2xl font-bold text-amber-600">{orderCounts.preparing}</p>
         </div>
+        
         <div className="bg-white p-4 rounded-lg shadow-sm border border-light-200">
           <p className="text-sm text-gray-100 mb-1">Pending</p>
           <p className="text-2xl font-bold text-blue-600">{orderCounts.pending}</p>
         </div>
+        
         <div className="bg-white p-4 rounded-lg shadow-sm border border-light-200">
           <p className="text-sm text-gray-100 mb-1">Cancelled</p>
           <p className="text-2xl font-bold text-red-600">{orderCounts.cancelled}</p>
         </div>
       </div>
+
 
       {/* Search and Filters */}
       <div className="bg-white p-4 rounded-lg shadow-sm border border-light-200 mb-6">
@@ -195,9 +201,11 @@ const Orders = () => {
           </div>
         </div>
         
+        
         {/* Expandable Filters */}
         {showFilters && (
           <div className="mt-4 pt-4 border-t border-light-200 grid grid-cols-1 md:grid-cols-2 gap-4">
+            
             <div>
               <label className="block text-sm font-medium text-gray-100 mb-1">Status</label>
               <div className="flex flex-wrap gap-2">
@@ -216,6 +224,7 @@ const Orders = () => {
                 ))}
               </div>
             </div>
+            
             <div>
               <label className="block text-sm font-medium text-gray-100 mb-1">Date Range</label>
               <div className="flex flex-wrap gap-2">
@@ -238,10 +247,12 @@ const Orders = () => {
         )}
       </div>
 
+
       {/* Orders Table */}
       <div className="bg-white rounded-lg shadow-sm border border-light-200 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
+            
             <thead className="bg-light-100 text-primary">
               <tr>
                 <th className="py-3 px-4 text-left">Order ID</th>
@@ -254,6 +265,7 @@ const Orders = () => {
                 <th className="py-3 px-4 text-center">Actions</th>
               </tr>
             </thead>
+            
             <tbody className="divide-y divide-light-200">
               {loading ? (
                 <tr>
@@ -269,18 +281,21 @@ const Orders = () => {
                       <div>{order.user_name}</div>
                       <div className="text-xs text-gray-100">{order.user_email}</div>
                     </td>
+                    
                     <td className="py-3 px-4">
                       <div className="max-w-[200px] truncate">
                         {order.items.map((item: any) => item.item_name).join(', ')}
                       </div>
                       <div className="text-xs text-gray-100">{order.items.length} item(s)</div>
                     </td>
+                    
                     <td className="py-3 px-4 font-medium">₱{Number(order.total_amount).toLocaleString()}</td>
                     <td className="py-3 px-4 text-sm">{formatDate(order.created_at)}</td>
                     <td className="py-3 px-4">{order.payment_method || 'Cash'}</td>
                     <td className="py-3 px-4">
                       <StatusBadge status={order.status} />
                     </td>
+                    
                     <td className="py-3 px-4 text-center">
                       <button className="p-2 hover:bg-light-100 rounded-full text-primary">
                         <Eye size={18} />
@@ -309,7 +324,9 @@ const Orders = () => {
             <button className="px-3 py-1 border border-light-200 rounded hover:bg-light-100 text-primary disabled:opacity-50 disabled:cursor-not-allowed">
               Previous
             </button>
+            
             <button className="px-3 py-1 bg-primary text-white rounded">1</button>
+            
             <button className="px-3 py-1 border border-light-200 rounded hover:bg-light-100 text-primary">
               Next
             </button>

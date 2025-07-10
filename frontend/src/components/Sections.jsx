@@ -28,7 +28,8 @@ const Sections = ({ title, description, buttonText, buttonAction, image, reverse
 					}}
 				>
 					{title}
-				</motion.h2>
+				</motion.h2> 
+				
 				<motion.p
 					className="text-[#5d4037] text-xl leading-relaxed"
 					variants={{
@@ -42,12 +43,14 @@ const Sections = ({ title, description, buttonText, buttonAction, image, reverse
 				>
 					{description}
 				</motion.p>
+				
 				<button
 					className="bg-[#cc6d2d] text-[#3e2723] px-6 py-3 rounded-lg hover:bg-[#f8e8d0] transition-colors font-medium"
 					onClick={buttonAction}
 				>
 					{buttonText}
 				</button>
+				
 			</motion.div>
 
 			{/* Image Content */}

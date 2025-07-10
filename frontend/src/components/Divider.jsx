@@ -1,3 +1,4 @@
+// Custom divider
 import React from 'react';
 
 const Divider = ({ top = true, bottom = true, colorMiddle = '#e4c9a7', colorDots = '#d7ccc8' }) => {

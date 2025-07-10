@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Coffee, ShoppingCart, Menu, Package, Users, Settings } from "lucide-react"; // Optional icons
+import { Coffee, ShoppingCart, Menu, Package, Users, Settings } from "lucide-react";
 
 const links = [
   { to: "/dashboard", label: "Dashboard", icon: <Coffee size={18} /> },

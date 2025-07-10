@@ -103,7 +103,7 @@ const Inventory = () => {
     }
   };
 
-  // Sorting and filtering logic (same as before)
+  // Sorting and filtering logic 
   const requestSort = (key: keyof InventoryItem) => {
     let direction: 'asc' | 'desc' = 'asc';
     if (sortConfig.key === key && sortConfig.direction === 'asc') {
@@ -111,6 +111,7 @@ const Inventory = () => {
     }
     setSortConfig({ key, direction });
   };
+  
   const sortedItems = [...inventoryItems].sort((a, b) => {
     if (sortConfig.key === null) return 0;
     const aValue = a[sortConfig.key];
@@ -192,14 +193,17 @@ const Inventory = () => {
           <h3 className="text-sm font-medium text-[#5d4037] mb-1">Total Items</h3>
           <p className="text-2xl font-bold text-[#3e2723]">{totalItems}</p>
         </div>
+        
         <div className="bg-white p-4 rounded-lg shadow-sm border border-[#e4c9a7]">
           <h3 className="text-sm font-medium text-[#5d4037] mb-1">Low Stock</h3>
           <p className="text-2xl font-bold text-amber-600">{lowStockItems}</p>
         </div>
+        
         <div className="bg-white p-4 rounded-lg shadow-sm border border-[#e4c9a7]">
           <h3 className="text-sm font-medium text-[#5d4037] mb-1">Out of Stock</h3>
           <p className="text-2xl font-bold text-red-600">{outOfStockItems}</p>
         </div>
+        
         <div className="bg-white p-4 rounded-lg shadow-sm border border-[#e4c9a7]">
           <h3 className="text-sm font-medium text-[#5d4037] mb-1">Total Value</h3>
           <p className="text-2xl font-bold text-[#3e2723]">{formatPrice(totalValue)}</p>
@@ -209,6 +213,7 @@ const Inventory = () => {
       {/* Search and Filters */}
       <div className="bg-white p-4 rounded-lg shadow-sm border border-[#e4c9a7] mb-6">
         <div className="flex flex-col md:flex-row gap-4">
+          
           <div className="relative flex-grow">
             <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#b5a397]" />
             <input
@@ -219,6 +224,7 @@ const Inventory = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
+          
           <div className="flex gap-2">
             <button
               onClick={() => setShowFilters(!showFilters)}
@@ -227,6 +233,7 @@ const Inventory = () => {
               <Filter size={18} className="mr-2" />
               Filters
             </button>
+            
             {(searchTerm || statusFilter !== 'All') && (
               <button
                 onClick={() => {
@@ -241,6 +248,7 @@ const Inventory = () => {
             )}
           </div>
         </div>
+        
         {showFilters && (
           <div className="mt-4 pt-4 border-t border-[#e4c9a7] grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
@@ -274,16 +282,21 @@ const Inventory = () => {
                 <th className="py-3 px-4 text-left cursor-pointer hover:bg-[#e4c9a7]" onClick={() => requestSort('id')}>
                   <div className="flex items-center">ID <SortIndicator column="id" /></div>
                 </th>
+                
                 <th className="py-3 px-4 text-left cursor-pointer hover:bg-[#e4c9a7]" onClick={() => requestSort('name')}>
                   <div className="flex items-center">Item Name <SortIndicator column="name" /></div>
                 </th>
+                
                 <th className="py-3 px-4 text-left">Category</th>
+                
                 <th className="py-3 px-4 text-left cursor-pointer hover:bg-[#e4c9a7]" onClick={() => requestSort('quantity')}>
                   <div className="flex items-center">Quantity <SortIndicator column="quantity" /></div>
                 </th>
+                
                 <th className="py-3 px-4 text-left cursor-pointer hover:bg-[#e4c9a7]" onClick={() => requestSort('price_per_unit')}>
                   <div className="flex items-center">Unit Price <SortIndicator column="price_per_unit" /></div>
                 </th>
+                
                 <th className="py-3 px-4 text-left">Status</th>
                 <th className="py-3 px-4 text-left">Last Restocked</th>
                 <th className="py-3 px-4 text-center">Actions</th>
@@ -296,6 +309,7 @@ const Inventory = () => {
                     Loading inventory...
                   </td>
                 </tr>
+                
               ) : filteredItems.length > 0 ? (
                 filteredItems.map((item) => (
                   <tr key={item.id} className={`${item.status === 'Out of Stock' ? 'bg-red-50' : item.quantity <= item.min_level ? 'bg-amber-50' : ''} hover:bg-[#f8e8d0]/30`}>
@@ -313,7 +327,9 @@ const Inventory = () => {
                         {item.status}
                       </span>
                     </td>
+                    
                     <td className="py-3 px-4">{formatDate(item.last_restocked)}</td>
+                    
                     <td className="py-3 px-4">
                       <div className="flex items-center justify-center space-x-2">
                         <button
@@ -323,6 +339,7 @@ const Inventory = () => {
                         >
                           <Edit size={16} />
                         </button>
+                        
                         <button
                           onClick={() => handleDeleteItem(item.id)}
                           className="p-1 hover:bg-red-100 rounded text-red-600"
@@ -351,9 +368,11 @@ const Inventory = () => {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center p-4 border-b border-[#e4c9a7]">
+              
               <h2 className="text-xl font-bold text-[#3e2723]">
                 {currentItem ? `Edit Item: ${currentItem.name}` : 'Add New Inventory Item'}
               </h2>
+              
               <button 
                 onClick={() => setShowForm(false)}
                 className="text-[#5d4037] hover:text-[#3e2723]"
@@ -361,12 +380,14 @@ const Inventory = () => {
                 <X size={20} />
               </button>
             </div>
+            
             <form className="p-6 space-y-6" onSubmit={handleSaveItem}>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-[#5d4037] mb-1">
                     Item Name*
                   </label>
+                  
                   <input
                     name="name"
                     type="text"
@@ -375,10 +396,12 @@ const Inventory = () => {
                     required
                   />
                 </div>
+                
                 <div>
                   <label className="block text-sm font-medium text-[#5d4037] mb-1">
                     Category ID*
                   </label>
+                  
                   <input
                     name="category_id"
                     type="text"
@@ -386,14 +409,15 @@ const Inventory = () => {
                     defaultValue={currentItem?.category_name}
                     required
                   />
-                  
                 </div>
               </div>
+              
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-[#5d4037] mb-1">
                     Quantity*
                   </label>
+                  
                   <input
                     name="quantity"
                     type="number"
@@ -403,10 +427,12 @@ const Inventory = () => {
                     required
                   />
                 </div>
+                
                 <div>
                   <label className="block text-sm font-medium text-[#5d4037] mb-1">
                     Unit*
                   </label>
+                  
                   <input
                     name="unit"
                     type="text"
@@ -415,10 +441,12 @@ const Inventory = () => {
                     required
                   />
                 </div>
+                
                 <div>
                   <label className="block text-sm font-medium text-[#5d4037] mb-1">
                     Minimum Level*
                   </label>
+                  
                   <input
                     name="min_level"
                     type="number"
@@ -429,11 +457,13 @@ const Inventory = () => {
                   />
                 </div>
               </div>
+              
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-[#5d4037] mb-1">
                     Unit Price (₱)*
                   </label>
+                  
                   <input
                     name="price_per_unit"
                     type="number"
@@ -444,10 +474,12 @@ const Inventory = () => {
                     required
                   />
                 </div>
+                
                 <div>
                   <label className="block text-sm font-medium text-[#5d4037] mb-1">
                     Last Restocked Date*
                   </label>
+                  
                   <input
                     name="last_restocked"
                     type="date"
@@ -457,6 +489,7 @@ const Inventory = () => {
                   />
                 </div>
               </div>
+              
               <div className="flex justify-end space-x-3 mt-8">
                 <button
                   type="button"
@@ -465,6 +498,7 @@ const Inventory = () => {
                 >
                   Cancel
                 </button>
+                
                 <button
                   type="submit"
                   className="px-4 py-2 bg-[#3e2723] text-white rounded-md hover:bg-[#5d4037]"

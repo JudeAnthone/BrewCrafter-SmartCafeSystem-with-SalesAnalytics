@@ -5,6 +5,7 @@ const Footer = () => {
   return (
     <footer className="bg-[#3e2723] text-white py-8">
       <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between">
+        
         {/* Logo and tagline */}
         <div className="mb-6 md:mb-0">
           <h3 className="text-xl font-bold mb-2">BrewCrafter</h3>
@@ -28,6 +29,7 @@ const Footer = () => {
           <p className="text-sm mb-2">duartejudeanthone@gmail.com</p>
           <p className="text-sm">+63 9476998990</p>
         </div>
+        
       </div>
       
       <div className="max-w-7xl mx-auto px-4 pt-6 mt-6 border-t border-[#5d4037] text-center text-sm text-[#e4c9a7]">

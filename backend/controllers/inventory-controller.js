@@ -16,6 +16,7 @@ exports.getAllInventory = async (req, res) => {
   }
 };
 
+
 // Add new inventory item
 exports.addInventory = async (req, res) => {
   try {
@@ -36,6 +37,7 @@ exports.addInventory = async (req, res) => {
     res.status(500).json({ error: "Failed to add inventory item" });
   }
 };
+
 
 // Update inventory item
 exports.updateInventory = async (req, res) => {
@@ -58,6 +60,7 @@ exports.updateInventory = async (req, res) => {
     res.status(500).json({ error: "Failed to update inventory item" });
   }
 };
+
 
 // Delete inventory item
 exports.deleteInventory = async (req, res) => {

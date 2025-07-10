@@ -8,7 +8,7 @@ const Header = () => {
 	const [drawerOpen, setDrawerOpen] = useState(false);
 	const location = useLocation();
 
-	// Hide header on login/register/forgot-password pages
+	// Hiding header on login/register/forgot-password pages
 	if (["/login", "/register", "/forgot-password"].includes(location.pathname)) {
 		return null;
 	}

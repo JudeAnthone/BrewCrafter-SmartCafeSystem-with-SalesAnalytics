@@ -7,6 +7,7 @@ const getToday = () => {
   return localISO;
 };
 
+
 // 1. Today's Sales
 exports.getTodaySales = async (req, res) => {
   try {
@@ -22,6 +23,7 @@ exports.getTodaySales = async (req, res) => {
     res.status(500).json({ error: "Failed to fetch today's sales" });
   }
 };
+
 
 // 2. Orders Summary (today)
 exports.getOrdersSummary = async (req, res) => {
@@ -44,6 +46,7 @@ exports.getOrdersSummary = async (req, res) => {
   }
 };
 
+
 // 3. Custom Drinks (today)
 exports.getCustomDrinksCount = async (req, res) => {
   try {
@@ -60,6 +63,7 @@ exports.getCustomDrinksCount = async (req, res) => {
     res.status(500).json({ error: "Failed to fetch custom drinks count" });
   }
 };
+
 
 // 4. Inventory Status
 exports.getInventoryStatus = async (req, res) => {
@@ -83,6 +87,7 @@ exports.getInventoryStatus = async (req, res) => {
   }
 };
 
+
 // 5. Sales Chart (last 7 days)
 exports.getSalesChart = async (req, res) => {
   try {
@@ -94,7 +99,7 @@ exports.getSalesChart = async (req, res) => {
        GROUP BY name, DATE(created_at)
        ORDER BY DATE(created_at)`
     );
-    // Fill missing days with 0 sales
+    // Fills missing days with 0 sales
     const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
     const todayIdx = new Date().getDay();
     const chart = [];
@@ -110,6 +115,7 @@ exports.getSalesChart = async (req, res) => {
     res.status(500).json({ error: "Failed to fetch sales chart" });
   }
 };
+
 
 // 6. Recent Orders (last 5)
 exports.getRecentOrders = async (req, res) => {
@@ -138,6 +144,7 @@ exports.getRecentOrders = async (req, res) => {
     res.status(500).json({ error: "Failed to fetch recent orders" });
   }
 };
+
 
 // 7. Popular Items (top 5 this week)
 exports.getPopularItems = async (req, res) => {

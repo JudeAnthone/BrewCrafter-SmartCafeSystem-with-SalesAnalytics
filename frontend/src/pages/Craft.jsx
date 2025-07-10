@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const Craft = () => {
-    // Check for user_id set by login, do NOT generate a new one here
     useEffect(() => {
         const user_id = localStorage.getItem("user_id");
         if (!user_id) {
@@ -39,11 +38,13 @@ const Craft = () => {
             Tea: 70,
             Chocolate: 85,
         };
+        
         const sizeMultipliers = {
             Small: 1,
             Medium: 1.25,
             Large: 1.5,
         };
+        
         const milkPrices = {
             "Whole Milk": 10,
             "Almond Milk": 15,
@@ -52,6 +53,7 @@ const Craft = () => {
             "Soy Milk": 10,
             None: 0,
         };
+        
         const sweetenerPrices = {
             Sugar: 0,
             Honey: 5,
@@ -59,6 +61,7 @@ const Craft = () => {
             Stevia: 5,
             None: 0,
         };
+        
         const toppingPrice = 10;
         const extraPrice = 15;
 
@@ -258,7 +261,7 @@ const Craft = () => {
                                 Select the foundation of your drink
                             </p>
 
-                            {/* Container for options of base */}
+                            {/* Container for base option */}
                             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                                 {drinkBases.map((base) => (
                                     <label
@@ -283,6 +286,7 @@ const Craft = () => {
                                             <span className="text-lg font-medium text-[#3e2723]">
                                                 {base}
                                             </span>
+                                            
                                             {base === "Espresso" && (
                                                 <span className="text-sm text-gray-500">
                                                     Rich, strong coffee shot
@@ -326,6 +330,7 @@ const Craft = () => {
                             <h2 className="text-2xl font-semibold text-[#3e2723] mb-4">
                                 Choose Your Size
                             </h2>
+                            
                             <p className="text-gray-600 mb-6">How much would you like?</p>
 
                             <div className="flex justify-center space-x-6">
@@ -353,6 +358,7 @@ const Craft = () => {
                                                 }`}
                                             ></div>
                                         </div>
+                                        
                                         <input
                                             type="radio"
                                             name="size"
@@ -361,6 +367,7 @@ const Craft = () => {
                                             onChange={handleChange}
                                             className="sr-only"
                                         />
+                                        
                                         <span>{size}</span>
                                     </label>
                                 ))}
@@ -375,6 +382,7 @@ const Craft = () => {
                             <h2 className="text-2xl font-semibold text-[#3e2723] mb-4">
                                 Choose Your Milk
                             </h2>
+                            
                             <p className="text-gray-600 mb-6">Select milk type or choose none</p>
 
                             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
@@ -395,6 +403,7 @@ const Craft = () => {
                                             onChange={handleChange}
                                             className="sr-only"
                                         />
+                                        
                                         <div className="flex items-center">
                                             <span className="ml-2 font-medium">{milk}</span>
                                             {milk !== "None" && milk !== "Whole Milk" && (
@@ -416,6 +425,7 @@ const Craft = () => {
                             <h2 className="text-2xl font-semibold text-[#3e2723] mb-4">
                                 Choose Your Sweetener
                             </h2>
+                            
                             <p className="text-gray-600 mb-6">
                                 How would you like to sweeten your drink?
                             </p>
@@ -438,8 +448,11 @@ const Craft = () => {
                                             onChange={handleChange}
                                             className="sr-only"
                                         />
+                                        
                                         <div className="flex items-center">
+                                            
                                             <span className="ml-2 font-medium">{sweetener}</span>
+                                            
                                             {sweetener !== "None" && sweetener !== "Sugar" && (
                                                 <span className="ml-auto text-sm text-gray-500">
                                                     +₱
@@ -462,6 +475,7 @@ const Craft = () => {
                             <h2 className="text-2xl font-semibold text-[#3e2723] mb-4">
                                 Choose Your Toppings
                             </h2>
+                            
                             <p className="text-gray-600 mb-6">Add some extras on top (₱10 each)</p>
 
                             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
@@ -482,12 +496,14 @@ const Craft = () => {
                                             }
                                             className="sr-only"
                                         />
+                                        
                                         <div className="flex items-center">
                                             <span className="ml-2 font-medium">{topping}</span>
                                             <span className="ml-auto text-sm text-gray-500">
                                                 +₱10
                                             </span>
                                         </div>
+                                        
                                     </label>
                                 ))}
                             </div>
@@ -501,6 +517,7 @@ const Craft = () => {
                             <h2 className="text-2xl font-semibold text-[#3e2723] mb-4">
                                 Choose Your Add-ins
                             </h2>
+                            
                             <p className="text-gray-600 mb-6">
                                 Enhance your drink's flavor (₱15 each)
                             </p>
@@ -521,6 +538,7 @@ const Craft = () => {
                                             onChange={() => handleCheckboxChange("extras", extra)}
                                             className="sr-only"
                                         />
+                                        
                                         <div className="flex items-center">
                                             <span className="ml-2 font-medium">{extra}</span>
                                             <span className="ml-auto text-sm text-gray-500">
@@ -545,6 +563,7 @@ const Craft = () => {
                                 <h3 className="text-lg font-medium text-[#3e2723] mb-2">
                                     Temperature
                                 </h3>
+                                
                                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                                     {temperatureOptions.map((temp) => (
                                         <label
@@ -563,6 +582,7 @@ const Craft = () => {
                                                 onChange={handleChange}
                                                 className="sr-only"
                                             />
+                                            
                                             <div className="flex items-center justify-center">
                                                 <span className="font-medium">{temp}</span>
                                             </div>
@@ -570,17 +590,19 @@ const Craft = () => {
                                     ))}
                                 </div>
                             </div>
-
+                                
+                            {/* Naming the custom drink */}
                             <div className="mb-6">
                                 <h3 className="text-lg font-medium text-[#3e2723] mb-2">
                                     Name Your Creation
                                 </h3>
+                                
                                 <input
                                     type="text"
                                     name="name"
                                     value={craftedDrink.name}
                                     onChange={handleChange}
-                                    placeholder="My Perfect Drink"
+                                    placeholder="My Perfect Drink" // default name
                                     className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3e2723]"
                                 />
                             </div>
@@ -624,6 +646,7 @@ const Craft = () => {
                             >
                                 Next
                             </button>
+                            
                         ) : (
                             <div className="flex gap-3">
                                 <button
@@ -651,6 +674,7 @@ const Craft = () => {
                                     </svg>
                                     Add to Cart
                                 </button>
+                                
                                 <button
                                     onClick={buyNow}
                                     disabled={!craftedDrink.temperature}
@@ -668,11 +692,11 @@ const Craft = () => {
                 </div>
                 
 
-
                 {/* Drink Preview */}
                 <div className="bg-white rounded-2xl shadow-lg p-6">
                     <h2 className="text-2xl font-semibold text-[#3e2723] mb-4">Your Creation</h2>
 
+                    {/* Static values per customized contents */}
                     <div className="flex flex-col md:flex-row gap-6">
                         <div className="w-full md:w-1/3 relative">
                             <div className="bg-[#f8f4e5] rounded-lg aspect-square flex items-center justify-center overflow-hidden">
@@ -688,6 +712,7 @@ const Craft = () => {
                                             }`}
                                             style={{ height: "90%" }}
                                         ></div>
+                                        
                                         <div
                                             className={`absolute inset-x-0 top-0 rounded-t-lg ${
                                                 craftedDrink.base === "Espresso"
@@ -702,15 +727,18 @@ const Craft = () => {
                                             }`}
                                             style={{ height: "30%" }}
                                         ></div>
+                                        
                                         {craftedDrink.milk && craftedDrink.milk !== "None" && (
                                             <div
                                                 className="absolute inset-x-0 bottom-0 bg-[#F5F5DC]"
                                                 style={{ height: "30%" }}
                                             ></div>
                                         )}
+                                        
                                         {craftedDrink.toppings.includes("Whipped Cream") && (
                                             <div className="absolute inset-x-0 -top-4 h-8 bg-white rounded-t-full"></div>
                                         )}
+                                        
                                         {(craftedDrink.toppings.includes("Chocolate Drizzle") ||
                                             craftedDrink.toppings.includes("Caramel Drizzle")) && (
                                             <div className="absolute inset-x-0 top-0 flex justify-center">
@@ -725,12 +753,15 @@ const Craft = () => {
                                                 ></div>
                                             </div>
                                         )}
+                                        
                                         <div
                                             className="absolute inset-0 border-2 border-[#3e2723] rounded-t-lg"
                                             style={{ height: "90%" }}
                                         ></div>
+                                        
                                         <div className="absolute inset-x-0 bottom-0 h-2 bg-[#3e2723] rounded-b-lg transform translate-y-full"></div>
                                     </div>
+                                    
                                 ) : (
                                     <p className="text-gray-500 text-center p-4">
                                         Select ingredients to see your drink
@@ -738,7 +769,9 @@ const Craft = () => {
                                 )}
                             </div>
                         </div>
+                        
 
+                        {/* Content title placeholders */}
                         <div className="w-full md:w-2/3">
                             <h3 className="text-xl font-semibold text-[#3e2723] mb-2">
                                 {craftedDrink.name || "Custom Drink"}

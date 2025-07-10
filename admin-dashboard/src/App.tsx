@@ -23,7 +23,7 @@ function App() {
           
           {/* Protected Dashboard Routes */}
           <Route element={<ProtectedRoute />}>
-            <Route element={<Layout />}> {/* Changed from AdminLayout to Layout */}
+            <Route element={<Layout />}> 
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/menu" element={<MenuManager />} />
               <Route path="/inventory" element={<Inventory />} />

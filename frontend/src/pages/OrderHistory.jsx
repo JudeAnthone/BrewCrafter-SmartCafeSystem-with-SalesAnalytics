@@ -22,6 +22,7 @@ const OrderHistory = () => {
         if (user_id) fetchOrders();
     }, [user_id]);
 
+    
     if (loading) {
         return (
             <div className="max-w-7xl mx-auto px-4 py-16 text-center">
@@ -30,7 +31,6 @@ const OrderHistory = () => {
             </div>
         );
     }
-
     if (!orders.length) {
         return (
             <div className="max-w-7xl mx-auto px-4 py-16 text-center">
@@ -39,10 +39,12 @@ const OrderHistory = () => {
             </div>
         );
     }
+    
 
     return (
         <div className="max-w-7xl mx-auto px-4 py-8">
             <h1 className="text-3xl font-bold text-[#3e2723] mb-8">Order History</h1>
+            
             {orders.map((order) => (
                 <div key={order.id} className="bg-white rounded-lg shadow-md p-6 mb-8">
                     <div className="flex justify-between items-center mb-2">
@@ -50,6 +52,7 @@ const OrderHistory = () => {
                         <span className="text-sm text-gray-600">{new Date(order.created_at).toLocaleString()}</span>
                         <span className="text-sm px-2 py-1 rounded bg-[#e4c9a7] text-[#3e2723]">{order.status}</span>
                     </div>
+                    
                     <div>
                         {order.items.map((item) => (
                             <div key={item.id} className="flex items-center py-2 border-b border-gray-100 last:border-0">
@@ -60,6 +63,7 @@ const OrderHistory = () => {
                                         className="h-full w-full object-cover"
                                     />
                                 </div>
+                                
                                 <div className="ml-4 flex-1">
                                     <div className="flex justify-between">
                                         <span className="font-medium">{item.name}</span>
@@ -67,14 +71,18 @@ const OrderHistory = () => {
                                         <span className="text-sm text-gray-600">₱{item.unit_price}</span>
                                         <span className="text-sm text-gray-600">Subtotal: ₱{item.subtotal}</span>
                                     </div>
+                                    
                                     {item.notes && <div className="text-xs text-gray-500">Notes: {item.notes}</div>}
                                 </div>
+                                
                             </div>
                         ))}
                     </div>
+                    
                     <div className="flex justify-end mt-4">
                         <span className="font-bold text-[#3e2723]">Total: ₱{order.total_amount}</span>
                     </div>
+                    
                 </div>
             ))}
         </div>
