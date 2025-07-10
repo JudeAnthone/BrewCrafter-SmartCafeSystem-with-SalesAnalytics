@@ -29,4 +29,7 @@ dist-ssr
 **/.env.production
 .env
 
- 
+sql/
+test-codes/
+admin-frontend-dashboard/
+dashboard.txt
