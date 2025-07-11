@@ -32,3 +32,5 @@ routes.js → Handles React Router navigation.
 App.jsx → Main React component tying everything together.
 
  
+ 
+ 
