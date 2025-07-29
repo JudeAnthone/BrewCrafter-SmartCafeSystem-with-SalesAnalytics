@@ -13,33 +13,39 @@ On the admin side, the system uses café staff to manage menus, monitor inventor
 - To enhance customer engagement through personalized drink options.
 - To provide café managers with actionable insights via real-time analytics and inventory alerts.
 - To implement secure authentication for both users and admins, including OTP verification and step-up security layers.
-
----
+----
 # *System Architecture*
 BrewCrafter is mainly design for both customer and admin side of a Caffe with the help of the following technologies:
-### Frontend (Customer Side) :
-- React.JS
-- Vite
-- Axios
-- Tailwind CSS
+### *Tech Stack:*
+### Frontend (Customer Side)
+![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white)
+![Axios](https://img.shields.io/badge/axios-%230072C6.svg?style=for-the-badge&logo=axios&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
 
-### Admin-Dashboard (Admin Side):
-- React.JSX
-- TypeScript
-- Framer Motion
-- Axios
-- Multer
+### Admin Dashboard (Admin Side)
+![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+![JSX](https://img.shields.io/badge/jsx-%2361DAFB.svg?style=for-the-badge&logo=react&logoColor=white)
+![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
+![Framer Motion](https://img.shields.io/badge/framer--motion-%23000000.svg?style=for-the-badge&logo=framer&logoColor=white)
+![Axios](https://img.shields.io/badge/axios-%230072C6.svg?style=for-the-badge&logo=axios&logoColor=white)
+![Multer](https://img.shields.io/badge/multer-%23000000.svg?style=for-the-badge&logo=npm&logoColor=white)
 
-### Backend (Both client and admin API Endpoints and Business logic):
-- Node.JS and Express.JS
-- JWT Authentication
-- Email, Facebook, Github, jsonwebtoken, mode-mailer (Authentication)
-- Multer (File and Images handler)
+### Backend (API & Business Logic)
+![Node.js](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
+![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=white)
+![JWT](https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens&logoColor=white)
+![OAuth (Facebook)](https://img.shields.io/badge/Facebook_Login-1877F2?style=for-the-badge&logo=facebook&logoColor=white)
+![OAuth (Github)](https://img.shields.io/badge/GitHub_Login-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)
+![OAuth (Email)](https://img.shields.io/badge/Email-0078D4?style=for-the-badge&logo=gmail&logoColor=white)
+![Nodemailer](https://img.shields.io/badge/nodemailer-%230077B5.svg?style=for-the-badge&logo=maildotru&logoColor=white)
+![Multer](https://img.shields.io/badge/multer-%23000000.svg?style=for-the-badge&logo=npm&logoColor=white)
 
-### Database:
-- POstgreSQL
+### 🗄Database
+![PostgreSQL](https://img.shields.io/badge/postgresql-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)
 
----
+----
+
 # *Development Environment & Dependencies*
 ### Core Dependencies: 
 Client-Side Dependencies (/frontend):
@@ -82,7 +88,7 @@ Backend Dependencies (/backend):
 }
 ```
 
----
+----
 # *System Features Overview*
 ## 1. Client-Side Features 🧑‍💻
 
@@ -184,13 +190,13 @@ Backend Dependencies (/backend):
 - Inventory tracking
 - Sales analytics computation
 
----
+----
 # *System Walkthrough & User Flow*
 ### I provide the GOOGLE DRIVE link below for all the images and screenshots of every part of the system. This is to ensure that all the parts, including the customer, admin, and authentication can be seen in one folder to avoid confusion. 
 GOOGLE DRIVE LINK: 
 https://drive.google.com/drive/folders/1454MwAXWY-DHvL2d0Pjh8C6moxJ8JsJe?usp=sharing
 
----
+----
 # *Installation & Setup Guide*
 ### Cloning the repository
 git clone https://github.com/JudeAnthone/BrewCrafter-SmartCafeSystem-with-SalesAnalytics.git
@@ -204,7 +210,7 @@ cd BREWCRAFTER-INFOMGMT-FINALS
 - npm run dev (admin and frontend server starter)
 - node server.js (backend server starter)
 
----
+----
 # *Materials & External Resources*
 ### Project Inspirations:
 (Custom drink builder inspiration)
@@ -219,7 +225,7 @@ cd BREWCRAFTER-INFOMGMT-FINALS
 - https://nodejs.org/en
 - https://www.postgresql.org/
 
----
+----
 # *Project Contributors*
 - Me as fuck
 - Jude Anthone R. Duarte (Full Stack developer)
