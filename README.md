@@ -193,7 +193,7 @@ https://drive.google.com/drive/folders/1454MwAXWY-DHvL2d0Pjh8C6moxJ8JsJe?usp=sha
 ---
 # *Installation & Setup Guide*
 ### Cloning the repository
-git clone [repo link]
+git clone https://github.com/JudeAnthone/BrewCrafter-SmartCafeSystem-with-SalesAnalytics.git
 cd BREWCRAFTER-INFOMGMT-FINALS
 
 ### Backend Setup:
