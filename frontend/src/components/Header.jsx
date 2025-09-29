@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import React, { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import ProfileDrawer from "./ProfileDrawer";
@@ -8,73 +8,107 @@ const Header = () => {
 	const [drawerOpen, setDrawerOpen] = useState(false);
 	const location = useLocation();
 
-	// Hiding header on login/register/forgot-password pages
+	// Hides header on login/register/forgot-password pages
 	if (["/login", "/register", "/forgot-password"].includes(location.pathname)) {
 		return null;
 	}
 
 	return (
 		<header className="sticky top-0 z-50 bg-white shadow-md px-4 py-2">
-			<div className="max-w-7xl mx-auto flex items-center justify-between h-10 px-4 rounded-lg">
-			
+			<div className="max-w-7xl mx-auto flex items-center justify-between h-10 px-20 rounded-lg">
 				{/* Logo */}
 				<div className="flex items-center">
-					<img
-						src="/LOGO_brewcrafter.png"
-						alt="BrewCrafter Logo"
-						className="h-17 w-auto"
-					/>
+					<Link to="/">
+						<img
+							src="/LOGO_brewcrafter.png"
+							alt="BrewCrafter Logo"
+							className="h-17 w-auto"
+						/>
+					</Link>
 				</div>
 
 				{/* Navbar Links */}
-				<nav className="absolute left-1/2 transform -translate-x-1/2 flex space-x-4">
-					<Link
+				<nav className="absolute left-1/2 transform -translate-x-1/2 flex space-x-5">
+					<NavLink
 						to="/"
-						className="px-3 py-2 text-[#3e2723] hover:bg-[#f8e8d0] rounded-lg transition-all duration-200 font-medium"
+						className={({ isActive }) =>
+							`px-3 py-2 rounded-lg transition-all duration-200 font-medium ${
+								isActive
+									? "bg-[#cc6d2d] text-white"
+									: "text-[#3e2723] hover:bg-[#cc6d2d] hover:text-white"
+							}`
+						}
 					>
 						Home
-					</Link>
-					
-					<Link
+					</NavLink>
+
+					<NavLink
 						to="/about"
-						className="px-3 py-2 text-[#3e2723] hover:bg-[#f8e8d0] rounded-lg transition-all duration-200 font-medium"
+						className={({ isActive }) =>
+							`px-3 py-2 rounded-lg transition-all duration-200 font-medium ${
+								isActive
+									? "bg-[#cc6d2d] text-white"
+									: "text-[#3e2723] hover:bg-[#cc6d2d] hover:text-white"
+							}`
+						}
 					>
 						About Us
-					</Link>
-					
+					</NavLink>
+
 					{currentUser && (
 						<>
-							<Link
+							<NavLink
 								to="/menu"
-								className="px-3 py-2 text-[#3e2723] hover:bg-[#f8e8d0] rounded-lg transition-all duration-200 font-medium"
+								className={({ isActive }) =>
+									`px-3 py-2 rounded-lg transition-all duration-200 font-medium ${
+										isActive
+											? "bg-[#cc6d2d] text-white"
+											: "text-[#3e2723] hover:bg-[#cc6d2d] hover:text-white"
+									}`
+								}
 							>
 								Menu
-							</Link>
-							
-							<Link
+							</NavLink>
+							<NavLink
 								to="/craft"
-								className="px-3 py-2 text-[#3e2723] hover:bg-[#f8e8d0] rounded-lg transition-all duration-200 font-medium"
+								className={({ isActive }) =>
+									`px-3 py-2 rounded-lg transition-all duration-200 font-medium ${
+										isActive
+											? "bg-[#cc6d2d] text-white"
+											: "text-[#3e2723] hover:bg-[#cc6d2d] hover:text-white"
+									}`
+								}
 							>
 								Craft
-							</Link>
-							
-							<Link
+							</NavLink>
+							<NavLink
 								to="/cart"
-								className="px-3 py-2 text-[#3e2723] hover:bg-[#f8e8d0] rounded-lg transition-all duration-200 font-medium"
+								className={({ isActive }) =>
+									`px-3 py-2 rounded-lg transition-all duration-200 font-medium ${
+										isActive
+											? "bg-[#cc6d2d] text-white"
+											: "text-[#3e2723] hover:bg-[#cc6d2d] hover:text-white"
+									}`
+								}
 							>
 								Cart
-							</Link>
-
-							<Link
+							</NavLink>
+							<NavLink
 								to="/order-history"
-								className="px-3 py-2 text-[#3e2723] hover:bg-[#f8e8d0] rounded-lg transition-all duration-200 font-medium"
+								className={({ isActive }) =>
+									`px-3 py-2 rounded-lg transition-all duration-200 font-medium ${
+										isActive
+											? "bg-[#cc6d2d] text-white"
+											: "text-[#3e2723] hover:bg-[#cc6d2d] hover:text-white"
+									}`
+								}
 							>
 								Order History
-							</Link>
+							</NavLink>
 						</>
 					)}
 				</nav>
-
+				
 
 				{/* Auth/Profile */}
 				<div className="flex items-center space-x-4">
@@ -86,7 +120,7 @@ const Header = () => {
 							>
 								Login
 							</Link>
-							
+
 							<Link
 								to="/register"
 								className="px-4 py-2 bg-[#cc6d2d] text-white hover:bg-[#3e2723] rounded-lg transition-all duration-200 font-medium"

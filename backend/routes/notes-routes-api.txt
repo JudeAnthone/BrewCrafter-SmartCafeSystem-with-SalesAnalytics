@@ -1,0 +1,53 @@
+Routes (API Endpoints):
+These files define your REST API endpoints.
+Each file maps URLs to controller functions.
+
+- routes/auth-routes.js
+/api/auth/* (login, register, verify OTP, etc.)
+
+- routes/product-routes.js
+api/products/* (get products, add/edit/delete products)
+
+- routes/cart-routes.js
+/api/cart/* (add to cart, view cart, remove items)
+
+- routes/order-routes.js
+/api/orders/* (place order, get orders)
+
+- routes/order-history-routes.js
+/api/order-history/* (view past orders)
+
+- routes/customer-routes.js
+/api/customers/* (customer profile, update info)
+
+- routes/custom-drink-routes.js
+/api/custom-drink/* (customize drinks)
+
+- routes/inventory-routes.js
+/api/inventory/* (admin: manage inventory)
+
+- routes/admin-routes.js
+/api/admin/* (admin login, dashboard)
+
+- routes/admin-order-routes.js
+/api/admin/orders/* (admin: manage orders)
+
+- routes/dashboard-routes.js
+/api/dashboard/* (admin: analytics, stats)
+
+
+
+-Routes define the API endpoints (URLs) and map them to each of the controller functions
+whats inside; 
+const express = require('express');
+const router = express.Router();
+const authController = require('../controllers/auth-controller');
+
+router.post('/register', authController.register);
+router.post('/login', authController.login);
+module.exports = router;
+
+HOW THEY WORK TOGETHER (Controllers & Routes (API)):
+Routers handle incoming request at specific URLs
+Controllers process those request and send responses 
+

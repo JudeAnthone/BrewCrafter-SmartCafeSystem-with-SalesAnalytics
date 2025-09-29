@@ -1,3 +1,5 @@
+// AppRoutes
+
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 
@@ -21,8 +23,9 @@ const AppRoutes = () => {
   return (
     <Router>
       <AuthProvider>
+        
         <Routes>
-          {/* Public Routes */}
+          {/* Public Routes => not logged users*/}
           <Route element={<MainLayout />}>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
@@ -31,7 +34,7 @@ const AppRoutes = () => {
             <Route path="/about" element={<AboutUs />} />
             <Route path="/social-auth" element={<SocialAuth />} />
 
-            {/* Protected Routes - for logged in users*/}
+            {/* Protected Routes => for logged in users*/}
             <Route element={<ProtectedRoute />}>
               <Route path="/menu" element={<Menu />} />
               <Route path="/craft" element={<Craft />} />
@@ -45,6 +48,7 @@ const AppRoutes = () => {
           {/* Catch all - 404 */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
+        
       </AuthProvider>
     </Router>
   );

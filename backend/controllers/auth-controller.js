@@ -39,7 +39,7 @@ const sendVerificationEmail = async (userEmail, otp) => {
 // Register new user
 exports.register = async (req, res) => {
     try {
-        const { user_name, user_email, user_password, user_phone, user_address, birthday } = req.body; // <-- Add birthday
+        const { user_name, user_email, user_password, user_phone, user_address, birthday } = req.body;
 
         // Check if user exists
         const userExists = await pool.query(
@@ -68,7 +68,7 @@ exports.register = async (req, res) => {
             });
         }
 
-        // Before inserting, always store birthday as YYYY-MM-DD string
+        // store birthday as YYYY-MM-DD string
         const birthdayStr = birthday ? birthday.slice(0, 10) : null;
 
         // Insert new user (add birthday)
@@ -93,7 +93,7 @@ exports.register = async (req, res) => {
                 user_address,
                 birthdayStr, 
                 verificationToken,
-                false // false because not yet verified
+                false // false - not yet verified
             ]
         );
         // message if succesfull
@@ -165,6 +165,7 @@ exports.verifyOTP = async (req, res) => {
     }
 };
 
+//------------------------------------------------------------------------------------------------------------------//
 
 //Login 
 exports.login = async (req, res) => {
@@ -270,6 +271,8 @@ exports.login = async (req, res) => {
     }
 };
 
+//-------------------------------------------------------------------------------------------------------------//
+
 // Step-up: Birthday verification and send OTP
 exports.verifyBirthdayStepUp = async (req, res) => {
     try {
@@ -322,7 +325,7 @@ exports.verifyStepUpOTP = async (req, res) => {
     }
 };
 
-
+//-------------------------------------------------------------------------------------------------------------------//
 
 // Admin registration
 exports.adminRegister = async (req, res) => {
@@ -390,7 +393,7 @@ exports.adminRegister = async (req, res) => {
 };
 
 
-/*-------------------------------------------------*/
+/*--------------------------------------------------------------------------------------*/
 
 // Get admin profile
 exports.getAdminProfile = async (req, res) => {
