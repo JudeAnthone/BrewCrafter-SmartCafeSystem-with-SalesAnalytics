@@ -1,3 +1,28 @@
+The Standard Flow:
+Frontend (React, Vue, Angular, etc.)
+
+1. User interacts with UI (fills forms, clicks buttons).
+Frontend code sends HTTP requests (using fetch, axios, etc.) to backend API endpoints.
+Backend Routes (API Endpoints)
+
+2. Express (or similar framework) defines routes like /api/auth/register, /api/auth/login, etc.
+Each route listens for requests and maps them to a controller function.
+
+3. Controllers contain the business logic: validate data, interact with the database, send emails, etc.
+They process the request and send a response back to the frontend.
+
+
+Example Flow (Register):
+Frontend:
+axios.post('/api/auth/register', formData)
+⬇️
+Route:
+router.post('/register', authController.register)
+⬇️
+Controller(has the database too):
+exports.register = async (req, res) => { ... }
+
+
 Routes (API Endpoints):
 These files define your REST API endpoints.
 Each file maps URLs to controller functions.
